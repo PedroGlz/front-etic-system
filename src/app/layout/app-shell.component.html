@@ -1,0 +1,26 @@
+<div class="app-frame">
+  <aside>
+    <div class="logo"><span>ETIC</span><small>SYSTEM</small></div>
+    <nav>
+      <p>Administración</p>
+      @for (catalog of catalogs; track catalog.key) {
+        <a [routerLink]="['/catalogos', catalog.key]" routerLinkActive="active">
+          <i class="pi" [class]="'pi ' + catalog.icon"></i><span>{{ catalog.label }}</span>
+        </a>
+      }
+    </nav>
+    <div class="sidebar-foot">v1.0 · Desarrollo</div>
+  </aside>
+
+  <section class="workspace">
+    <header>
+      <div><span class="mobile-logo">ETIC</span></div>
+      <div class="user-area">
+        <span class="avatar">{{ authService.currentUser()?.name?.charAt(0) ?? 'U' }}</span>
+        <div><strong>{{ authService.currentUser()?.name }}</strong><small>{{ authService.currentUser()?.groupName }}</small></div>
+        <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" ariaLabel="Cerrar sesión" />
+      </div>
+    </header>
+    <main><router-outlet /></main>
+  </section>
+</div>
