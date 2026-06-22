@@ -45,6 +45,17 @@ small {
   gap: .75rem;
 }
 
+:host-context(.app-dark) label {
+  color: #dbe7f1;
+}
+
+:host-context(.app-dark) select,
+:host-context(.app-dark) input {
+  background: #13212f;
+  color: #e4edf5;
+  border-color: #3b556a;
+}
+
 @media (max-width: 760px) {
   .two-columns {
     grid-template-columns: 1fr;

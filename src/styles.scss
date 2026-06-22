@@ -5,6 +5,19 @@ html, body { margin: 0; min-height: 100%; font-family: Inter, "Segoe UI", Arial,
 button, input, textarea, select { font: inherit; }
 .swal2-popup { font-family: Inter, "Segoe UI", Arial, sans-serif; }
 
+.app-data-table .p-datatable-table {
+  table-layout: auto;
+}
+
+.app-data-table .p-datatable-tbody > tr > td,
+.app-data-table .p-datatable-thead > tr > th {
+  box-sizing: border-box;
+}
+
+.app-data-table .p-datatable-tbody > tr > td {
+  vertical-align: middle;
+}
+
 html:not(.app-dark) .p-dialog, html:not(.app-dark) .p-dialog-content,
 html:not(.app-dark) .p-dialog-header, html:not(.app-dark) .p-dialog-footer,
 html:not(.app-dark) .p-datatable, html:not(.app-dark) .p-datatable-table-container,
@@ -21,3 +34,51 @@ html:not(.app-dark) .p-inputtext { background: #fff !important; color: #20384e !
 
 html.app-dark body { background: #0f1722; color: #dbe7f1; }
 html.app-dark .swal2-popup { background: #172331; color: #e4edf5; }
+html.app-dark .p-dialog,
+html.app-dark .p-dialog-content,
+html.app-dark .p-dialog-header,
+html.app-dark .p-dialog-footer,
+html.app-dark .p-datatable,
+html.app-dark .p-datatable-table-container,
+html.app-dark .p-datatable-header,
+html.app-dark .p-datatable-thead > tr > th,
+html.app-dark .p-datatable-tbody > tr > td,
+html.app-dark .p-paginator,
+html.app-dark .p-paginator .p-select,
+html.app-dark .p-select,
+html.app-dark .p-select-overlay,
+html.app-dark .p-inputtext,
+html.app-dark .p-inputwrapper,
+html.app-dark .p-dropdown,
+html.app-dark .p-multiselect {
+  background: #172331 !important;
+  color: #dbe7f1 !important;
+  border-color: #2a3b4c !important;
+}
+
+html.app-dark .p-datatable-thead > tr > th {
+  background: #1d2c3d !important;
+  color: #e4edf5 !important;
+  border-color: #304456 !important;
+}
+
+html.app-dark .p-datatable-tbody > tr > td {
+  border-color: #243546 !important;
+}
+
+html.app-dark .p-datatable-tbody > tr:nth-child(even) > td {
+  background: #152332 !important;
+}
+
+html.app-dark .p-datatable-tbody > tr:hover > td {
+  background: #203449 !important;
+  color: #f1f7fb !important;
+}
+
+html.app-dark .p-paginator {
+  border-top-color: #2a3b4c !important;
+}
+
+html.app-dark .p-inputtext::placeholder {
+  color: #8fa6b8 !important;
+}

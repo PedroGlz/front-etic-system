@@ -1,14 +1,13 @@
-<section class="templates-page">
-  <header class="page-header">
-    <div>
-      <h1>Plantillas de reportes</h1>
-      <p>Replica el explorador de plantillas del legacy para adjuntarlas a los paquetes de inspección exportados.</p>
-    </div>
-    <label class="upload-trigger">
-      <span>{{ uploading() ? 'Cargando...' : 'Subir plantillas' }}</span>
-      <input type="file" multiple accept=".pdf,.xlsx,.xls" (change)="onFilesSelected($event)" />
-    </label>
-  </header>
+<app-module-table-shell
+  eyebrow="PLANTILLAS"
+  title="Plantillas de reportes"
+  description="Administra los archivos de plantilla que se adjuntan a los paquetes exportados de inspecciones."
+  [total]="templates().length"
+  totalLabel="archivos disponibles">
+  <label header-actions class="upload-trigger">
+    <span>{{ uploading() ? 'Cargando...' : 'Subir plantillas' }}</span>
+    <input type="file" multiple accept=".pdf,.xlsx,.xls" (change)="onFilesSelected($event)" />
+  </label>
 
   <div class="templates-grid">
     @if (loading()) {
@@ -33,4 +32,4 @@
       }
     }
   </div>
-</section>
+</app-module-table-shell>

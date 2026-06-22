@@ -6,10 +6,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { BaseCatalogStore } from '@shared/utils/catalog-crud/base-catalog.store';
+import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
 
 @Component({
   selector: 'app-catalog-crud-page',
-  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule],
+  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent],
   templateUrl: './catalog-crud-page.component.html',
   styleUrl: './catalog-crud-page.component.scss',
 })

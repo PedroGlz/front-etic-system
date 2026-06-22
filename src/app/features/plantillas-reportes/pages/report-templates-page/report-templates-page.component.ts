@@ -4,10 +4,11 @@ import Swal from 'sweetalert2';
 import { InspectionApi } from '@features/inspecciones/data-access/inspection.api';
 import { InspectionService } from '@features/inspecciones/data-access/inspection.service';
 import { ReportTemplateFile } from '@features/inspecciones/models/inspection.model';
+import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
 
 @Component({
   selector: 'app-report-templates-page',
-  imports: [ButtonModule],
+  imports: [ButtonModule, ModuleTableShellComponent],
   templateUrl: './report-templates-page.component.html',
   styleUrl: './report-templates-page.component.scss',
   providers: [InspectionApi, InspectionService],

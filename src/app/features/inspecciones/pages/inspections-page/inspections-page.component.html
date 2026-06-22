@@ -1,16 +1,19 @@
-<section class="page-shell">
-  <header class="page-header">
-    <div>
-      <h1>Inspecciones</h1>
-      <p>Alta, edición, exportación, importación y reporte base alineados al flujo actual del ETIC Online legacy.</p>
-    </div>
-    <div class="header-actions">
-      @if (store.currentSelection()) {
-        <p-button label="Continuar inspección abierta" icon="pi pi-folder-open" severity="secondary" (onClick)="continueSelection()" />
-      }
-      <p-button label="Nueva inspección" icon="pi pi-plus" (onClick)="store.openCreate()" />
-    </div>
-  </header>
+<app-module-table-shell
+  eyebrow="INSPECCIONES"
+  title="Inspecciones"
+  description=""
+  [total]="store.inspections().length">
+  <div header-actions class="page-heading-actions">
+    @if (store.currentSelection()) {
+      <p-button label="Continuar inspección abierta" icon="pi pi-folder-open" severity="secondary" (onClick)="continueSelection()" />
+    }
+    <p-button label="Nueva inspección" icon="pi pi-plus" (onClick)="store.openCreate()" />
+  </div>
+
+  <div toolbar-right class="search-box">
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" placeholder="Buscar inspecciones" (input)="filterGlobal(table, $event)" />
+  </div>
 
   @if (store.selectedInspection(); as selectedInspection) {
     <section class="selection-toolbar">
@@ -30,43 +33,47 @@
     </section>
   }
 
-  <div class="table-card">
-    <p-table
-      [value]="store.inspections()"
-      [loading]="store.loading()"
-      [paginator]="true"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 20, 50]"
-      [rowTrackBy]="trackById"
-      responsiveLayout="scroll">
-      <ng-template pTemplate="header">
-        <tr>
-          <th># Inspección</th>
-          <th>Cliente</th>
-          <th>Grupo de sitios</th>
-          <th>Sitio</th>
-          <th>Fecha inicio</th>
-          <th>Fecha fin</th>
-          <th>Estatus inspección</th>
-          <th class="actions-column">Opciones</th>
-        </tr>
-      </ng-template>
+  <p-table
+    #table
+    [value]="store.inspections()"
+    [loading]="store.loading()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [rowTrackBy]="trackById"
+    [globalFilterFields]="['inspectionNumber', 'clientName', 'siteGroupName', 'siteName', 'statusName']"
+    styleClass="p-datatable-sm inspections-table app-data-table"
+    [tableStyle]="{ 'min-width': '48rem' }"
+    responsiveLayout="scroll">
+    <ng-template #header>
+      <tr>
+        <th># Inspección</th>
+        <th>Cliente</th>
+        <th>Grupo de sitios</th>
+        <th>Sitio</th>
+        <th>Fecha inicio</th>
+        <th>Fecha fin</th>
+        <th>Estatus inspección</th>
+        <th class="actions-column">Opciones</th>
+      </tr>
+    </ng-template>
 
-      <ng-template pTemplate="body" let-inspection>
-        <tr
-          class="inspection-row"
-          [class.selected]="store.selectedInspection()?.id === inspection.id"
-          (click)="store.selectInspection(inspection)">
-          <td>{{ inspection.inspectionNumber ?? '—' }}</td>
-          <td>{{ inspection.clientName ?? '—' }}</td>
-          <td>{{ inspection.siteGroupName ?? '—' }}</td>
-          <td>{{ inspection.siteName ?? '—' }}</td>
-          <td>{{ inspection.startDate ? (inspection.startDate | date:'short') : '—' }}</td>
-          <td>{{ inspection.endDate ? (inspection.endDate | date:'short') : '—' }}</td>
-          <td>
-            <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
-          </td>
-          <td class="actions-cell" (click)="$event.stopPropagation()">
+    <ng-template #body let-inspection>
+      <tr
+        class="inspection-row"
+        [class.selected]="store.selectedInspection()?.id === inspection.id"
+        (click)="store.selectInspection(inspection)">
+        <td><div class="table-cell-text">{{ inspection.inspectionNumber ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.clientName ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.siteGroupName ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.siteName ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.startDate ? (inspection.startDate | date:'short') : '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.endDate ? (inspection.endDate | date:'short') : '—' }}</div></td>
+        <td>
+          <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
+        </td>
+        <td (click)="$event.stopPropagation()">
+          <div class="table-cell-actions">
             @if (inspection.latestForSite) {
               <p-button
                 icon="pi pi-upload"
@@ -102,18 +109,18 @@
                   (onClick)="store.deactivate(inspection)" />
               }
             }
-          </td>
-        </tr>
-      </ng-template>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="8">No hay inspecciones registradas.</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-</section>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="8" class="empty">No hay inspecciones registradas.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</app-module-table-shell>
 
 <app-inspection-form-dialog [store]="store" />
 

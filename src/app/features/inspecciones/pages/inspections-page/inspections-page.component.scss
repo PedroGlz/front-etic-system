@@ -1,37 +1,26 @@
-.page-shell {
-  display: grid;
-  gap: 1.25rem;
+:host {
+  display: block;
 }
 
-.page-header,
-.selection-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.page-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #173a52;
-}
-
-.page-header p,
-.selection-copy span {
-  margin: .35rem 0 0;
-  color: #5b7388;
-}
-
-.header-actions,
+.page-heading-actions,
 .selection-actions {
   display: flex;
   gap: .75rem;
   flex-wrap: wrap;
 }
 
+.selection-copy span {
+  margin: 0;
+  color: #6b7e91;
+}
+
 .selection-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
   padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
   border-radius: 1rem;
   border: 1px solid #dbe7ee;
   background: rgba(255, 255, 255, .82);
@@ -42,13 +31,22 @@
   gap: .2rem;
 }
 
-.table-card {
-  padding: 1rem;
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, .82);
-  border: 1px solid #dbe7ee;
-  box-shadow: 0 18px 48px rgba(20, 53, 77, .08);
-  overflow: visible;
+.search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 320px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 0.8rem;
+  color: #8495a5;
+}
+
+.search-box input {
+  width: 100%;
+  padding-left: 2.4rem;
 }
 
 .inspection-row {
@@ -59,15 +57,29 @@
   background: #e8f5fb !important;
 }
 
-.actions-column,
-.actions-cell {
-  width: 12rem;
+.actions-column {
+  width: 140px;
+  text-align: center;
 }
 
-.actions-cell {
+.empty {
+  text-align: center;
+  padding: 3rem !important;
+  color: #75879a;
+}
+
+.table-cell-text {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.table-cell-actions {
   display: flex;
   gap: .15rem;
   align-items: center;
+  white-space: nowrap;
 }
 
 .import-dialog {
@@ -102,15 +114,69 @@
   cursor: pointer;
 }
 
-@media (max-width: 900px) {
-  .page-header,
-  .selection-toolbar {
-    flex-direction: column;
-  }
+:host ::ng-deep .inspections-table .p-datatable-table-container,
+:host ::ng-deep .inspections-table .p-paginator,
+:host ::ng-deep .inspections-table .p-paginator-rpp-options,
+:host ::ng-deep .inspections-table .p-select {
+  overflow: visible;
+}
 
-  .header-actions,
-  .selection-actions {
-    width: 100%;
-    justify-content: flex-start;
+:host ::ng-deep .inspections-table .p-paginator {
+  border-bottom-left-radius: 0.85rem;
+  border-bottom-right-radius: 0.85rem;
+}
+
+:host ::ng-deep .inspections-table .p-select-overlay {
+  z-index: 1200;
+}
+
+:host-context(.app-dark) .selection-copy span {
+  color: #9eb0c1;
+}
+
+:host-context(.app-dark) .selection-copy strong {
+  color: #f0f6fb;
+}
+
+:host-context(.app-dark) .selection-toolbar {
+  background: linear-gradient(180deg, #182736 0%, #14212f 100%);
+  border-color: #2b3e50;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+:host-context(.app-dark) .inspection-row.selected td {
+  background: #244157 !important;
+}
+
+:host-context(.app-dark) .import-dialog p {
+  color: #a9bac9;
+}
+
+:host-context(.app-dark) .file-picker {
+  background: #13212f;
+  border-color: #3b556a;
+  color: #e3edf5;
+}
+
+:host-context(.app-dark) ::ng-deep .inspections-table .p-datatable-header {
+  background: #1a2837 !important;
+  border-bottom: 1px solid #2f4355 !important;
+}
+
+:host-context(.app-dark) ::ng-deep .inspections-table .p-datatable-thead > tr > th {
+  background: #1e2d3d !important;
+  color: #edf4f9 !important;
+  border-color: #304557 !important;
+}
+
+:host-context(.app-dark) ::ng-deep .inspections-table .p-paginator {
+  background: #1a2837 !important;
+  border-top: 1px solid #2f4355 !important;
+}
+
+@media (max-width: 650px) {
+  .selection-toolbar {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

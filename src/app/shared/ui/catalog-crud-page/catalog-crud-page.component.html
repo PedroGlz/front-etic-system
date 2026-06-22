@@ -1,16 +1,14 @@
 @if (store().schema(); as currentSchema) {
-  <section class="page-heading">
-    <div>
-      <span class="eyebrow">CATÁLOGOS</span>
-      <h1>{{ currentSchema.title }}</h1>
-      <p>Administra los registros disponibles para la operación del sistema.</p>
-    </div>
-    <p-button label="Nuevo registro" icon="pi pi-plus" (onClick)="store().openCreate()" />
-  </section>
+  <app-module-table-shell
+    eyebrow="CATÁLOGOS"
+    [title]="currentSchema.title"
+    description=""
+    [total]="store().records().length">
+    <p-button header-actions label="Nuevo registro" icon="pi pi-plus" (onClick)="store().openCreate()" />
 
-  <section class="table-card">
-    <div class="table-tools">
-      <div><strong>{{ store().records().length }}</strong><span> registros totales</span></div>
+    <div toolbar-right class="search-box">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" placeholder="Buscar registros" (input)="filterGlobal(table, $event)" />
     </div>
 
     <p-table
@@ -21,16 +19,8 @@
       [rows]="10"
       [rowsPerPageOptions]="[10, 25, 50]"
       [globalFilterFields]="store().tableFieldNames()"
-      styleClass="p-datatable-sm catalog-table"
-      [tableStyle]="{ 'min-width': '48rem' }"
-    >
-      <ng-template #caption>
-        <div class="search-box">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" placeholder="Buscar registros" (input)="filterGlobal(table, $event)" />
-        </div>
-      </ng-template>
-
+      styleClass="p-datatable-sm catalog-table app-data-table"
+      [tableStyle]="{ 'min-width': '48rem' }">
       <ng-template #header>
         <tr>
           @for (field of store().tableFields(); track field.name) {
@@ -44,14 +34,20 @@
       <ng-template #body let-record>
         <tr>
           @for (field of store().tableFields(); track field.name) {
-            <td>{{ store().fieldValue(record, field) }}</td>
+            <td>
+              <div class="table-cell-text" [class.table-cell-text--multiline]="field.name === 'description'">
+                {{ store().fieldValue(record, field) }}
+              </div>
+            </td>
           }
           <td>
             <p-tag [value]="store().recordStatus(record)" [severity]="store().recordStatus(record) === 'Activo' ? 'success' : 'secondary'" />
           </td>
-          <td class="actions">
-            <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store().openEdit(record)" ariaLabel="Editar" />
-            <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" [disabled]="store().recordStatus(record) === 'Inactivo'" (onClick)="store().deactivate(record)" ariaLabel="Desactivar" />
+          <td>
+            <div class="table-cell-actions">
+              <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store().openEdit(record)" ariaLabel="Editar" />
+              <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" [disabled]="store().recordStatus(record) === 'Inactivo'" (onClick)="store().deactivate(record)" ariaLabel="Desactivar" />
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -62,7 +58,7 @@
         </tr>
       </ng-template>
     </p-table>
-  </section>
+  </app-module-table-shell>
 
   @if (store().dialogVisible()) {
     <p-dialog
@@ -71,8 +67,7 @@
       (visibleChange)="store().dialogVisible.set($event)"
       [modal]="true"
       [style]="{ width: 'min(92vw, 560px)' }"
-      [draggable]="false"
-    >
+      [draggable]="false">
       <form [formGroup]="store().form" class="catalog-form" (ngSubmit)="store().save()">
         @for (field of currentSchema.fields; track field.name) {
           <div class="form-field">

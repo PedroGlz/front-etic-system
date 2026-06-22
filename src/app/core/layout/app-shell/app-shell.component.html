@@ -6,31 +6,54 @@
         <small>SYSTEM</small>
       }
     </div>
+
     <nav>
       @for (group of menuGroups; track group.label) {
         @if (visibleItems(group).length) {
-          <details class="nav-group" open>
-            <summary>
-              <i class="pi" [class]="'pi ' + group.icon"></i>
-              @if (!sidebarCollapsed()) {
-                <span>{{ group.label }}</span>
-                <i class="pi pi-chevron-down arrow"></i>
-              }
-            </summary>
-            <div class="nav-items">
-              @for (item of visibleItems(group); track item.key) {
-                <a [routerLink]="itemRoute(item)" routerLinkActive="active" [attr.title]="sidebarCollapsed() ? item.label : null">
-                  <i class="pi" [class]="'pi ' + item.icon"></i>
-                  @if (!sidebarCollapsed()) {
-                    <span>{{ item.label }}</span>
+          @if (sidebarCollapsed()) {
+            <div class="nav-group nav-group-collapsed">
+              <button
+                type="button"
+                class="nav-group-trigger"
+                [pTooltip]="group.label"
+                tooltipPosition="right"
+                [showDelay]="150">
+                <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
+              </button>
+
+              <div class="nav-flyout">
+                <div class="nav-flyout-title">{{ group.label }}</div>
+                <div class="nav-items">
+                  @for (item of visibleItems(group); track item.key) {
+                    <a class="nav-link" [routerLink]="itemRoute(item)" routerLinkActive="active">
+                      <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
+                      <span class="nav-label">{{ item.label }}</span>
+                    </a>
                   }
-                </a>
-              }
+                </div>
+              </div>
             </div>
-          </details>
+          } @else {
+            <details class="nav-group" open>
+              <summary>
+                <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
+                <span class="nav-label">{{ group.label }}</span>
+                <i class="pi pi-chevron-down arrow"></i>
+              </summary>
+              <div class="nav-items">
+                @for (item of visibleItems(group); track item.key) {
+                  <a class="nav-link" [routerLink]="itemRoute(item)" routerLinkActive="active">
+                    <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
+                    <span class="nav-label">{{ item.label }}</span>
+                  </a>
+                }
+              </div>
+            </details>
+          }
         }
       }
     </nav>
+
     @if (!sidebarCollapsed()) {
       <div class="sidebar-foot">v1.0 · Desarrollo</div>
     }

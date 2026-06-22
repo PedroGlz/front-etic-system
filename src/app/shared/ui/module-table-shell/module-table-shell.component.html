@@ -1,0 +1,31 @@
+<section class="page-heading">
+  <div>
+    @if (eyebrow()) {
+      <span class="eyebrow">{{ eyebrow() }}</span>
+    }
+    <h1>{{ title() }}</h1>
+    @if (description()) {
+      <p>{{ description() }}</p>
+    }
+  </div>
+  <div class="page-heading-actions">
+    <ng-content select="[header-actions]"></ng-content>
+  </div>
+</section>
+
+<section class="table-card">
+  <div class="table-tools">
+    <div>
+      @if (total() !== null) {
+        <strong>{{ total() }}</strong><span> {{ totalLabel() }}</span>
+      }
+    </div>
+    <div class="table-tools-right">
+      <ng-content select="[toolbar-right]"></ng-content>
+    </div>
+  </div>
+
+  <div class="table-shell-body">
+    <ng-content></ng-content>
+  </div>
+</section>

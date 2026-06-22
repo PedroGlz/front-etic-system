@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '@core/auth/services/auth.service';
 import { APP_MENU_GROUPS } from '@core/layout/config/menu.config';
 import { MenuGroup, MenuItem } from '@core/layout/models/navigation.model';
@@ -8,7 +9,7 @@ import { ThemeService } from '@core/services/theme.service';
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ButtonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ButtonModule, TooltipModule],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss',
 })
