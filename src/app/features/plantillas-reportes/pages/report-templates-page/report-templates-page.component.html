@@ -1,0 +1,36 @@
+<section class="templates-page">
+  <header class="page-header">
+    <div>
+      <h1>Plantillas de reportes</h1>
+      <p>Replica el explorador de plantillas del legacy para adjuntarlas a los paquetes de inspección exportados.</p>
+    </div>
+    <label class="upload-trigger">
+      <span>{{ uploading() ? 'Cargando...' : 'Subir plantillas' }}</span>
+      <input type="file" multiple accept=".pdf,.xlsx,.xls" (change)="onFilesSelected($event)" />
+    </label>
+  </header>
+
+  <div class="templates-grid">
+    @if (loading()) {
+      <article class="empty-card">Cargando plantillas...</article>
+    } @else if (!templates().length) {
+      <article class="empty-card">No hay plantillas disponibles.</article>
+    } @else {
+      @for (template of templates(); track template.name) {
+        <article class="template-card">
+          <div class="template-meta">
+            <span class="template-icon">{{ template.extension.toLowerCase() === 'pdf' ? 'PDF' : 'XLS' }}</span>
+            <div>
+              <strong>{{ template.name }}</strong>
+              <small>{{ fileSize(template.size) }}</small>
+            </div>
+          </div>
+          <div class="template-actions">
+            <p-button icon="pi pi-download" [text]="true" [rounded]="true" title="Descargar" (onClick)="download(template)" />
+            <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" title="Eliminar" (onClick)="remove(template)" />
+          </div>
+        </article>
+      }
+    }
+  </div>
+</section>

@@ -1,0 +1,116 @@
+.page-shell {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.page-header,
+.selection-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #173a52;
+}
+
+.page-header p,
+.selection-copy span {
+  margin: .35rem 0 0;
+  color: #5b7388;
+}
+
+.header-actions,
+.selection-actions {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.selection-toolbar {
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid #dbe7ee;
+  background: rgba(255, 255, 255, .82);
+}
+
+.selection-copy {
+  display: grid;
+  gap: .2rem;
+}
+
+.table-card {
+  padding: 1rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, .82);
+  border: 1px solid #dbe7ee;
+  box-shadow: 0 18px 48px rgba(20, 53, 77, .08);
+  overflow: visible;
+}
+
+.inspection-row {
+  cursor: pointer;
+}
+
+.inspection-row.selected td {
+  background: #e8f5fb !important;
+}
+
+.actions-column,
+.actions-cell {
+  width: 12rem;
+}
+
+.actions-cell {
+  display: flex;
+  gap: .15rem;
+  align-items: center;
+}
+
+.import-dialog {
+  display: grid;
+  gap: 1rem;
+}
+
+.import-dialog p {
+  margin: 0;
+  color: #4f677a;
+}
+
+.file-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: .9rem 1rem;
+  border: 1px dashed #91b4c6;
+  border-radius: 1rem;
+  background: #f6fbfd;
+  color: #24435a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.file-picker input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .page-header,
+  .selection-toolbar {
+    flex-direction: column;
+  }
+
+  .header-actions,
+  .selection-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@core/auth/services/auth.service';
@@ -14,6 +14,7 @@ import { ThemeService } from '@core/services/theme.service';
 })
 export class AppShellComponent {
   readonly menuGroups: MenuGroup[] = APP_MENU_GROUPS;
+  readonly sidebarCollapsed = signal(false);
 
   constructor(
     readonly authService: AuthService,
@@ -27,6 +28,14 @@ export class AppShellComponent {
       return [];
     }
     return group.items.filter((item) => !item.adminOnly || isAdministrator);
+  }
+
+  itemRoute(item: MenuItem): string[] {
+    return item.route ? [item.route] : ['/catalogos', item.key];
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update((value) => !value);
   }
 
   logout(): void {

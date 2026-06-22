@@ -1,15 +1,29 @@
-<div class="app-frame">
+<div class="app-frame" [class.sidebar-collapsed]="sidebarCollapsed()">
   <aside>
-    <div class="logo"><span>ETIC</span><small>SYSTEM</small></div>
+    <div class="logo">
+      <span>ETIC</span>
+      @if (!sidebarCollapsed()) {
+        <small>SYSTEM</small>
+      }
+    </div>
     <nav>
       @for (group of menuGroups; track group.label) {
         @if (visibleItems(group).length) {
           <details class="nav-group" open>
-            <summary><i class="pi" [class]="'pi ' + group.icon"></i><span>{{ group.label }}</span><i class="pi pi-chevron-down arrow"></i></summary>
+            <summary>
+              <i class="pi" [class]="'pi ' + group.icon"></i>
+              @if (!sidebarCollapsed()) {
+                <span>{{ group.label }}</span>
+                <i class="pi pi-chevron-down arrow"></i>
+              }
+            </summary>
             <div class="nav-items">
               @for (item of visibleItems(group); track item.key) {
-                <a [routerLink]="['/catalogos', item.key]" routerLinkActive="active">
-                  <i class="pi" [class]="'pi ' + item.icon"></i><span>{{ item.label }}</span>
+                <a [routerLink]="itemRoute(item)" routerLinkActive="active" [attr.title]="sidebarCollapsed() ? item.label : null">
+                  <i class="pi" [class]="'pi ' + item.icon"></i>
+                  @if (!sidebarCollapsed()) {
+                    <span>{{ item.label }}</span>
+                  }
                 </a>
               }
             </div>
@@ -17,12 +31,23 @@
         }
       }
     </nav>
-    <div class="sidebar-foot">v1.0 · Desarrollo</div>
+    @if (!sidebarCollapsed()) {
+      <div class="sidebar-foot">v1.0 · Desarrollo</div>
+    }
   </aside>
 
   <section class="workspace">
     <header>
-      <div><span class="mobile-logo">ETIC</span></div>
+      <div class="header-left">
+        <p-button
+          icon="pi pi-bars"
+          [text]="true"
+          [rounded]="true"
+          severity="secondary"
+          (onClick)="toggleSidebar()"
+          ariaLabel="Mostrar u ocultar menú" />
+        <span class="mobile-logo">ETIC</span>
+      </div>
       <div class="user-area">
         <p-button
           [icon]="themeService.mode() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"

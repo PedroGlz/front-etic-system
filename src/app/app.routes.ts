@@ -11,6 +11,8 @@ export const routes: Routes = [
     loadComponent: () => import('@core/layout/app-shell/app-shell.component').then((module) => module.AppShellComponent),
     canActivate: [authGuard],
     children: [
+      { path: 'inspecciones', loadChildren: () => import('@features/inspecciones/inspecciones.routes').then((module) => module.INSPECCIONES_ROUTES) },
+      { path: 'plantillas-reportes', loadChildren: () => import('@features/plantillas-reportes/plantillas-reportes.routes').then((module) => module.PLANTILLAS_REPORTES_ROUTES) },
       { path: 'catalogos/clientes', loadChildren: () => import('@features/clientes/clientes.routes').then((module) => module.CLIENTES_ROUTES) },
       { path: 'catalogos/grupos-sitios', loadChildren: () => import('@features/grupos-sitios/grupos-sitios.routes').then((module) => module.GRUPOS_SITIOS_ROUTES) },
       { path: 'catalogos/sitios', loadChildren: () => import('@features/sitios/sitios.routes').then((module) => module.SITIOS_ROUTES) },

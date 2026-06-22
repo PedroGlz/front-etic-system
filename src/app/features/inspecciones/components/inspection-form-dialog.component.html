@@ -1,0 +1,97 @@
+<p-dialog
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '42rem', maxWidth: '95vw' }"
+  [visible]="store().dialogVisible()"
+  [header]="store().isEditing() ? 'Editar inspección' : 'Nueva inspección'"
+  (visibleChange)="!$event ? store().closeDialog() : null">
+  <form class="inspection-form" [formGroup]="store().form">
+    <div class="grid two-columns">
+      <label>
+        <span>Cliente</span>
+        <select formControlName="clientId" [disabled]="store().isEditing()" (change)="store().onClientChange()">
+          <option value="">Selecciona un cliente</option>
+          @for (option of store().clientOptions(); track option.id) {
+            <option [value]="option.id">{{ option.label }}</option>
+          }
+        </select>
+        @if (store().isInvalid('clientId')) {
+          <small>El cliente es obligatorio.</small>
+        }
+      </label>
+
+      <label>
+        <span>Grupo de sitios</span>
+        <select formControlName="siteGroupId" [disabled]="store().isEditing()" (change)="store().onSiteGroupChange()">
+          <option value="">Selecciona un grupo</option>
+          @for (option of store().siteGroupOptions(); track option.id) {
+            <option [value]="option.id">{{ option.label }}</option>
+          }
+        </select>
+        @if (store().isInvalid('siteGroupId')) {
+          <small>El grupo de sitios es obligatorio.</small>
+        }
+      </label>
+    </div>
+
+    <div class="grid two-columns">
+      <label>
+        <span>Sitio</span>
+        <select formControlName="siteId" [disabled]="store().isEditing()">
+          <option value="">Selecciona un sitio</option>
+          @for (option of store().siteOptions(); track option.id) {
+            <option [value]="option.id">{{ option.label }}</option>
+          }
+        </select>
+        @if (store().isInvalid('siteId')) {
+          <small>El sitio es obligatorio.</small>
+        }
+      </label>
+
+      <label>
+        <span>Estatus</span>
+        <select formControlName="statusId">
+          @for (option of store().statusOptions(); track option.id) {
+            <option [value]="option.id">{{ option.label }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="grid two-columns">
+      <label>
+        <span>Fecha de inicio</span>
+        <input type="datetime-local" formControlName="startDate" />
+        @if (store().isInvalid('startDate')) {
+          <small>La fecha de inicio es obligatoria.</small>
+        }
+      </label>
+
+      <label>
+        <span>Fecha final</span>
+        <input type="datetime-local" formControlName="endDate" [readOnly]="!store().isClosedSelected()" />
+        @if (store().isClosedSelected() && !store().form.controls.endDate.value && store().form.controls.endDate.touched) {
+          <small>La fecha final es obligatoria cuando la inspección se cierra.</small>
+        }
+      </label>
+    </div>
+
+    <div class="grid two-columns">
+      <label>
+        <span>Unidad de temperatura</span>
+        <select formControlName="temperatureUnit">
+          <option value="C">°C</option>
+          <option value="F">°F</option>
+        </select>
+      </label>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-actions">
+      <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="store().closeDialog()" />
+      <p-button [label]="store().isEditing() ? 'Guardar cambios' : 'Crear inspección'" [loading]="store().saving()" (onClick)="store().save()" />
+    </div>
+  </ng-template>
+</p-dialog>

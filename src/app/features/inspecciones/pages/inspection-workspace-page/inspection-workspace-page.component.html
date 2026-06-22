@@ -1,0 +1,44 @@
+<section class="workspace-page">
+  <div class="workspace-card">
+    <div class="card-header">
+      <div>
+        <h1>Inspección activa</h1>
+        <p>La sesión conserva el contexto de la inspección abierta, igual que en el sistema legacy.</p>
+      </div>
+      <div class="card-actions">
+        <a routerLink="/inspecciones"><p-button label="Volver al listado" icon="pi pi-arrow-left" severity="secondary" /></a>
+        <p-button label="Cerrar selección" icon="pi pi-times" severity="danger" [text]="true" (onClick)="closeSelection()" />
+      </div>
+    </div>
+
+    @if (store.currentSelection(); as selection) {
+      <div class="selection-grid">
+        <article>
+          <span>Número de inspección</span>
+          <strong>{{ selection.inspectionNumber ?? '—' }}</strong>
+        </article>
+        <article>
+          <span>Cliente</span>
+          <strong>{{ selection.clientName ?? '—' }}</strong>
+        </article>
+        <article>
+          <span>Sitio</span>
+          <strong>{{ selection.siteName ?? '—' }}</strong>
+        </article>
+        <article>
+          <span>Estatus</span>
+          <p-tag [value]="selection.statusName ?? 'Sin estatus'" severity="warn" />
+        </article>
+      </div>
+      <p class="workspace-note">
+        Este primer corte deja listo el contexto de sesión para conectar después los módulos operativos de inventarios,
+        captura de hallazgos, reportes y sincronización offline.
+      </p>
+    } @else {
+      <div class="empty-state">
+        <p>No hay una inspección abierta en la sesión actual.</p>
+        <a routerLink="/inspecciones"><p-button label="Ir al catálogo" icon="pi pi-search" /></a>
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,139 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <h1>Inspecciones</h1>
+      <p>Alta, edición, exportación, importación y reporte base alineados al flujo actual del ETIC Online legacy.</p>
+    </div>
+    <div class="header-actions">
+      @if (store.currentSelection()) {
+        <p-button label="Continuar inspección abierta" icon="pi pi-folder-open" severity="secondary" (onClick)="continueSelection()" />
+      }
+      <p-button label="Nueva inspección" icon="pi pi-plus" (onClick)="store.openCreate()" />
+    </div>
+  </header>
+
+  @if (store.selectedInspection(); as selectedInspection) {
+    <section class="selection-toolbar">
+      <div class="selection-copy">
+        <strong>Seleccionada:</strong>
+        <span>#{{ selectedInspection.inspectionNumber ?? '—' }} · {{ selectedInspection.clientName ?? '—' }} · {{ selectedInspection.siteName ?? '—' }}</span>
+      </div>
+      <div class="selection-actions">
+        <p-button label="Abrir" icon="pi pi-folder-open" severity="secondary" (onClick)="store.openInspection(selectedInspection)" />
+        @if (selectedInspection.editable) {
+          <p-button label="Editar" icon="pi pi-pencil" (onClick)="store.openEdit(selectedInspection)" />
+        }
+        @if (selectedInspection.latestForSite) {
+          <p-button label="Cambiar estatus" icon="pi pi-sync" severity="warn" (onClick)="store.updateStatus(selectedInspection)" />
+        }
+      </div>
+    </section>
+  }
+
+  <div class="table-card">
+    <p-table
+      [value]="store.inspections()"
+      [loading]="store.loading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [rowTrackBy]="trackById"
+      responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th># Inspección</th>
+          <th>Cliente</th>
+          <th>Grupo de sitios</th>
+          <th>Sitio</th>
+          <th>Fecha inicio</th>
+          <th>Fecha fin</th>
+          <th>Estatus inspección</th>
+          <th class="actions-column">Opciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-inspection>
+        <tr
+          class="inspection-row"
+          [class.selected]="store.selectedInspection()?.id === inspection.id"
+          (click)="store.selectInspection(inspection)">
+          <td>{{ inspection.inspectionNumber ?? '—' }}</td>
+          <td>{{ inspection.clientName ?? '—' }}</td>
+          <td>{{ inspection.siteGroupName ?? '—' }}</td>
+          <td>{{ inspection.siteName ?? '—' }}</td>
+          <td>{{ inspection.startDate ? (inspection.startDate | date:'short') : '—' }}</td>
+          <td>{{ inspection.endDate ? (inspection.endDate | date:'short') : '—' }}</td>
+          <td>
+            <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
+          </td>
+          <td class="actions-cell" (click)="$event.stopPropagation()">
+            @if (inspection.latestForSite) {
+              <p-button
+                icon="pi pi-upload"
+                [text]="true"
+                [rounded]="true"
+                severity="help"
+                title="Actualizar inspección"
+                (onClick)="store.openImportDialog(inspection)" />
+
+              @if (isClosed(inspection)) {
+                <p-button
+                  icon="pi pi-file-excel"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="success"
+                  title="Excel"
+                  (onClick)="store.downloadProblemsReport(inspection)" />
+              } @else {
+                <p-button
+                  icon="pi pi-download"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="warn"
+                  title="Exportar inspección"
+                  (onClick)="store.exportInspection(inspection)" />
+
+                <p-button
+                  icon="pi pi-trash"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="danger"
+                  title="Eliminar"
+                  (onClick)="store.deactivate(inspection)" />
+              }
+            }
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8">No hay inspecciones registradas.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>
+
+<app-inspection-form-dialog [store]="store" />
+
+<p-dialog
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="store.importDialogVisible()"
+  [style]="{ width: '30rem', maxWidth: '95vw' }"
+  header="Actualizar inspección"
+  (visibleChange)="!$event ? store.closeImportDialog() : null">
+  <div class="import-dialog">
+    <p>Selecciona el paquete ZIP generado por el inspector para actualizar la inspección.</p>
+    <label class="file-picker">
+      <span>{{ store.importFileName() || 'Elegir archivo ZIP' }}</span>
+      <input type="file" accept=".zip" (change)="onImportFileSelected($event)" />
+    </label>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cerrar" severity="secondary" [text]="true" (onClick)="store.closeImportDialog()" />
+  </ng-template>
+</p-dialog>

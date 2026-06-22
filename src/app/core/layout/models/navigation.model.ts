@@ -3,6 +3,7 @@ export interface MenuItem {
   label: string;
   icon: string;
   adminOnly?: boolean;
+  route?: string;
 }
 
 export interface MenuGroup {
