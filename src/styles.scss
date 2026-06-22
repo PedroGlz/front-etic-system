@@ -4,3 +4,20 @@
 html, body { margin: 0; min-height: 100%; font-family: Inter, "Segoe UI", Arial, sans-serif; color: #20384e; background: #f3f6f9; }
 button, input, textarea, select { font: inherit; }
 .swal2-popup { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+
+html:not(.app-dark) .p-dialog, html:not(.app-dark) .p-dialog-content,
+html:not(.app-dark) .p-dialog-header, html:not(.app-dark) .p-dialog-footer,
+html:not(.app-dark) .p-datatable, html:not(.app-dark) .p-datatable-table-container,
+html:not(.app-dark) .p-datatable-header, html:not(.app-dark) .p-datatable-thead > tr > th,
+html:not(.app-dark) .p-datatable-tbody > tr > td, html:not(.app-dark) .p-paginator {
+  background: #fff !important; color: #20384e !important;
+}
+html:not(.app-dark) .p-datatable-thead > tr > th { background: #eaf3f7 !important; color: #173a52 !important; border-color: #d5e2e9 !important; }
+html:not(.app-dark) .p-datatable-tbody > tr:nth-child(even) > td { background: #f7fafc !important; }
+html:not(.app-dark) .p-datatable-tbody > tr:hover > td { background: #edf7fa !important; }
+html:not(.app-dark) .p-dialog { border: 1px solid #d6e2e9 !important; box-shadow: 0 24px 65px rgba(22, 52, 76, .2) !important; }
+html:not(.app-dark) .p-dialog-header { border-bottom: 1px solid #e3ebf0; color: #153a52 !important; }
+html:not(.app-dark) .p-inputtext { background: #fff !important; color: #20384e !important; border-color: #bdccd7 !important; }
+
+html.app-dark body { background: #0f1722; color: #dbe7f1; }
+html.app-dark .swal2-popup { background: #172331; color: #e4edf5; }

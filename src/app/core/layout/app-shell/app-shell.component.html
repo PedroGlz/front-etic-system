@@ -1,0 +1,42 @@
+<div class="app-frame">
+  <aside>
+    <div class="logo"><span>ETIC</span><small>SYSTEM</small></div>
+    <nav>
+      @for (group of menuGroups; track group.label) {
+        @if (visibleItems(group).length) {
+          <details class="nav-group" open>
+            <summary><i class="pi" [class]="'pi ' + group.icon"></i><span>{{ group.label }}</span><i class="pi pi-chevron-down arrow"></i></summary>
+            <div class="nav-items">
+              @for (item of visibleItems(group); track item.key) {
+                <a [routerLink]="['/catalogos', item.key]" routerLinkActive="active">
+                  <i class="pi" [class]="'pi ' + item.icon"></i><span>{{ item.label }}</span>
+                </a>
+              }
+            </div>
+          </details>
+        }
+      }
+    </nav>
+    <div class="sidebar-foot">v1.0 · Desarrollo</div>
+  </aside>
+
+  <section class="workspace">
+    <header>
+      <div><span class="mobile-logo">ETIC</span></div>
+      <div class="user-area">
+        <p-button
+          [icon]="themeService.mode() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"
+          [text]="true"
+          [rounded]="true"
+          severity="secondary"
+          (onClick)="themeService.toggle()"
+          [attr.title]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'"
+          [ariaLabel]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'" />
+        <span class="avatar">{{ authService.currentUser()?.name?.charAt(0) ?? 'U' }}</span>
+        <div><strong>{{ authService.currentUser()?.name }}</strong><small>{{ authService.currentUser()?.groupName }}</small></div>
+        <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" ariaLabel="Cerrar sesión" />
+      </div>
+    </header>
+    <main><router-outlet /></main>
+  </section>
+</div>
