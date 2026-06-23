@@ -82,6 +82,14 @@
   white-space: nowrap;
 }
 
+:host ::ng-deep .zip-download-button .p-button-icon {
+  color: #1d4ed8;
+}
+
+:host ::ng-deep .zip-download-button:hover .p-button-icon {
+  color: #1e40af;
+}
+
 .import-dialog {
   display: grid;
   gap: 1rem;
@@ -156,6 +164,14 @@
   background: #13212f;
   border-color: #3b556a;
   color: #e3edf5;
+}
+
+:host-context(.app-dark) ::ng-deep .zip-download-button .p-button-icon {
+  color: #7dd3fc;
+}
+
+:host-context(.app-dark) ::ng-deep .zip-download-button:hover .p-button-icon {
+  color: #bae6fd;
 }
 
 :host-context(.app-dark) ::ng-deep .inspections-table .p-datatable-header {

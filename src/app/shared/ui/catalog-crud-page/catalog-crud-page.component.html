@@ -35,9 +35,19 @@
         <tr>
           @for (field of store().tableFields(); track field.name) {
             <td>
-              <div class="table-cell-text" [class.table-cell-text--multiline]="field.name === 'description'">
-                {{ store().fieldValue(record, field) }}
-              </div>
+              @if (field.type === 'boolean') {
+                <p-button
+                  [icon]="store().fieldValue(record, field) === 'Si' ? 'pi pi-check-circle' : 'pi pi-circle'"
+                  [text]="true"
+                  [rounded]="true"
+                  [severity]="store().fieldValue(record, field) === 'Si' ? 'success' : 'secondary'"
+                  (onClick)="store().setDefault(record, field)"
+                  ariaLabel="Marcar como default" />
+              } @else {
+                <div class="table-cell-text" [class.table-cell-text--multiline]="field.name === 'description'">
+                  {{ store().fieldValue(record, field) }}
+                </div>
+              }
             </td>
           }
           <td>
@@ -87,6 +97,11 @@
               @if (store().editingId()) {
                 <span class="field-help">Déjala vacía para conservar la contraseña actual.</span>
               }
+            } @else if (field.type === 'boolean') {
+              <label class="boolean-field">
+                <input [id]="field.name" type="checkbox" [formControlName]="field.name" />
+                <span>Marcar como default</span>
+              </label>
             } @else if (field.name === 'description' || field.maxLength && field.maxLength > 300) {
               <textarea pInputText [id]="field.name" rows="4" [formControlName]="field.name"></textarea>
             } @else {

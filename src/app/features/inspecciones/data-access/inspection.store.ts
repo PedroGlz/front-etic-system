@@ -257,20 +257,21 @@ export class InspectionStore {
 
   exportInspection(inspection: InspectionSummary): void {
     const fileName = this.buildExportFileName(inspection);
+    this.showExportProcessingAlert(inspection);
     this.service.exportInspection(inspection.id, inspection.siteId, fileName).subscribe({
       next: (response) => {
         this.service.downloadExport(response.fileName).subscribe({
           next: (blob) => {
             this.downloadBlob(blob, response.fileName);
-            void Swal.fire({ icon: 'success', title: 'Inspección exportada', timer: 1300, showConfirmButton: false });
+            this.showExportSuccessAlert(response.fileName);
           },
           error: (error: HttpErrorResponse) => {
-            void Swal.fire('No fue posible descargar el paquete exportado', this.errorMessage(error), 'error');
+            this.showExportErrorAlert('No fue posible descargar el paquete exportado', error);
           },
         });
       },
       error: (error: HttpErrorResponse) => {
-        void Swal.fire('No fue posible exportar la inspección', this.errorMessage(error), 'error');
+        this.showExportErrorAlert('No fue posible exportar la inspección', error);
       },
     });
   }
@@ -396,6 +397,33 @@ export class InspectionStore {
 
   private buildExportFileName(inspection: InspectionSummary): string {
     return `ETIC_${inspection.inspectionNumber ?? '0'}_${this.slug(inspection.clientName)}_${this.slug(inspection.siteName)}.zip`;
+  }
+
+  private showExportProcessingAlert(inspection: InspectionSummary): void {
+    const inspectionNumber = inspection.inspectionNumber ? ` ${inspection.inspectionNumber}` : '';
+    void Swal.fire({
+      title: 'Procesando exportación',
+      text: `Preparando el paquete ZIP de la inspección${inspectionNumber}.`,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
+    });
+  }
+
+  private showExportSuccessAlert(fileName: string): void {
+    void Swal.fire({
+      icon: 'success',
+      title: 'Inspección exportada',
+      text: `El paquete ${fileName} se descargó correctamente.`,
+      timer: 1700,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
+  }
+
+  private showExportErrorAlert(title: string, error: HttpErrorResponse): void {
+    void Swal.fire(title, this.errorMessage(error), 'error');
   }
 
   private slug(value: string | null): string {

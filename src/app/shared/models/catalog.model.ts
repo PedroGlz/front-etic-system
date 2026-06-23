@@ -1,7 +1,7 @@
 export interface CatalogField {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'reference' | 'password';
+  type: 'text' | 'number' | 'reference' | 'password' | 'boolean';
   required: boolean;
   maxLength: number | null;
   referenceCatalog: string | null;

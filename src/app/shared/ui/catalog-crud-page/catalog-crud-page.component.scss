@@ -87,6 +87,17 @@
   font-size: 0.78rem;
 }
 
+.boolean-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500 !important;
+}
+
+.boolean-field input {
+  width: auto;
+}
+
 .form-field input,
 .form-field textarea,
 .form-field select {

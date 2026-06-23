@@ -124,12 +124,28 @@ export abstract class BaseCatalogStore {
 
   fieldValue(record: CatalogRecord, field: CatalogField): string {
     const value = record.values[field.name];
+    if (field.type === 'boolean') {
+      return this.booleanValue(value) ? 'Si' : 'No';
+    }
     return field.type === 'reference' ? this.referenceLabel(field, value) : String(value ?? '—');
   }
 
   referenceOptions(field: CatalogField): CatalogRecord[] {
     const options = this.references()[field.referenceCatalog ?? ''] ?? [];
     return options.filter((option) => option.values['status'] === 'Activo' && !this.isDisallowedUserGroup(field, option));
+  }
+
+  setDefault(record: CatalogRecord, field: CatalogField): void {
+    const id = String(record.values['id']);
+    const nextValue = this.booleanValue(record.values[field.name]) ? '0' : '1';
+    this.service.update(id, { ...record.values, [field.name]: nextValue }).subscribe({
+      next: () => {
+        this.refreshRecords();
+      },
+      error: (error: HttpErrorResponse) => {
+        void Swal.fire('No fue posible actualizar el registro default', this.errorMessage(error), 'error');
+      },
+    });
   }
 
   optionLabel(record: CatalogRecord): string {
@@ -186,7 +202,8 @@ export abstract class BaseCatalogStore {
       if (field.maxLength) {
         validators.push(Validators.maxLength(field.maxLength));
       }
-      controls[field.name] = new FormControl(values[field.name] ?? (field.type === 'number' ? 0 : ''), validators);
+      const defaultValue = field.type === 'number' ? 0 : field.type === 'boolean' ? false : '';
+      controls[field.name] = new FormControl(this.controlValue(field, values[field.name] ?? defaultValue), validators);
     }
 
     this.form = new FormGroup(controls);
@@ -210,6 +227,14 @@ export abstract class BaseCatalogStore {
 
     const label = this.displayValue(option).trim().toLowerCase();
     return label === 'cliente' || label === 'clientes';
+  }
+
+  private controlValue(field: CatalogField, value: unknown): unknown {
+    return field.type === 'boolean' ? this.booleanValue(value) : value;
+  }
+
+  private booleanValue(value: unknown): boolean {
+    return value === true || value === 1 || value === '1' || value === 'true';
   }
 
   private errorMessage(error: HttpErrorResponse): string {
