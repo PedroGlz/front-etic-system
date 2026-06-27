@@ -11,9 +11,9 @@
 }
 
 aside {
-  background: #071d35;
+  background: #171717;
   color: #d7e3ee;
-  padding: 1.5rem 1rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -22,26 +22,35 @@ aside {
   overflow: visible;
 }
 
-.logo {
-  padding: .5rem 1rem 1.3rem;
+.brand-logo {
+  min-height: 58px;
+  padding: .5rem 1rem;
   display: flex;
-  align-items: baseline;
-  gap: .6rem;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
   border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
 
-.logo span,
+.brand-image {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.brand-text {
+  color: #d7e3ee;
+  font-size: 1.05rem;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
 .mobile-logo {
   color: #42bdd4;
   font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: .14em;
-}
-
-.logo small {
-  font-size: .65rem;
-  letter-spacing: .16em;
-  color: #91a9bd;
 }
 
 nav {
@@ -71,7 +80,7 @@ nav a,
   width: 100%;
   padding: .78rem 1rem;
   margin: .2rem 0;
-  border-radius: .55rem;
+  // border-radius: .55rem;
   font-size: .9rem;
   border: 0;
   background: transparent;
@@ -100,8 +109,9 @@ nav a:hover,
 
 nav a.active {
   color: #fff;
-  background: linear-gradient(90deg, #0b718a, #0a5c76);
-  box-shadow: inset 3px 0 #5bd1e5;
+  // background: linear-gradient(90deg, #0b718a, #0a5c76);
+  background: linear-gradient(93deg, #100087, #d0ac00);
+  // box-shadow: inset 3px 0 #5bd1e5;
 }
 
 nav i {
@@ -121,7 +131,7 @@ nav i {
   align-items: center;
   gap: .75rem;
   padding: .75rem 1rem;
-  color: #6ed1e3;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: .1em;
   font-size: .72rem;
@@ -186,7 +196,7 @@ nav i {
 
 .nav-flyout-title {
   padding: .35rem .55rem .55rem;
-  color: #6ed1e3;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: .1em;
   font-size: .72rem;
@@ -204,8 +214,10 @@ nav i {
   padding: 1rem;
 }
 
-.app-frame.sidebar-collapsed .logo {
+.app-frame.sidebar-collapsed .brand-logo {
   justify-content: center;
+  padding-left: .5rem;
+  padding-right: .5rem;
 }
 
 .workspace {
@@ -213,7 +225,7 @@ nav i {
 }
 
 header {
-  height: 72px;
+  height: 58px;
   background: #fff;
   border-bottom: 1px solid #e5ebf1;
   padding: 0 2rem;
