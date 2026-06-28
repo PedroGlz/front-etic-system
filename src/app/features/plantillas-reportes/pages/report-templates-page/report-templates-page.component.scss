@@ -2,25 +2,16 @@
   display: block;
 }
 
-.upload-trigger {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 3rem;
-  padding: 0 1.1rem;
-  border-radius: 999px;
-  background: #0b718a;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 600;
+.upload-actions {
+  display: flex;
 }
 
-.upload-trigger input {
+.upload-input {
   position: absolute;
-  inset: 0;
+  width: 1px;
+  height: 1px;
   opacity: 0;
-  cursor: pointer;
+  pointer-events: none;
 }
 
 .templates-grid {
@@ -90,9 +81,4 @@
 :host-context(.app-dark) .template-icon {
   background: #113244;
   color: #73d6e7;
-}
-
-:host-context(.app-dark) .upload-trigger {
-  background: #0d6177;
-  color: #f2f8fb;
 }

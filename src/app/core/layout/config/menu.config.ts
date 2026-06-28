@@ -6,7 +6,7 @@ export const APP_MENU_GROUPS: MenuGroup[] = [
     icon: 'pi-briefcase',
     items: [
       { key: 'inspecciones', label: 'Inspecciones', icon: 'pi-search', route: '/inspecciones', adminOnly: true },
-      { key: 'plantillas-reportes', label: 'Plantillas de reportes', icon: 'pi-file-edit', route: '/plantillas-reportes', adminOnly: true },
+      { key: 'plantillas-reportes', label: 'Plantillas de reportes', icon: 'pi-folder-open', route: '/plantillas-reportes', adminOnly: true },
     ],
   },
   {

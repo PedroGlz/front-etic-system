@@ -4,10 +4,14 @@
   description="Administra los archivos de plantilla que se adjuntan a los paquetes exportados de inspecciones."
   [total]="templates().length"
   totalLabel="archivos disponibles">
-  <label header-actions class="upload-trigger">
-    <span>{{ uploading() ? 'Cargando...' : 'Subir plantillas' }}</span>
-    <input type="file" multiple accept=".pdf,.xlsx,.xls" (change)="onFilesSelected($event)" />
-  </label>
+  <div header-actions class="upload-actions">
+    <input #templateFiles class="upload-input" type="file" multiple accept=".pdf,.xlsx,.xls" (change)="onFilesSelected($event)" />
+    <p-button
+      label="Subir plantillas"
+      icon="pi pi-upload"
+      [loading]="uploading()"
+      (onClick)="templateFiles.click()" />
+  </div>
 
   <div class="templates-grid">
     @if (loading()) {
