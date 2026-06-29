@@ -100,7 +100,7 @@ export class InspectionStore {
       siteGroupId: inspection.siteGroupId,
       siteId: inspection.siteId,
       statusId: inspection.statusId,
-      temperatureUnit: inspection.temperatureUnit ?? 'C',
+      temperatureUnit: 'C',
       startDate: this.toDateTimeLocal(inspection.startDate),
       endDate: this.toDateTimeLocal(inspection.endDate),
     });
@@ -368,7 +368,7 @@ export class InspectionStore {
       siteGroupId: this.form.controls.siteGroupId.value,
       siteId: this.form.controls.siteId.value,
       statusId: this.form.controls.statusId.value,
-      temperatureUnit: this.form.controls.temperatureUnit.value,
+      temperatureUnit: 'C',
       startDate: this.toApiDateTime(this.form.controls.startDate.value),
       endDate: this.form.controls.endDate.value ? this.toApiDateTime(this.form.controls.endDate.value) : null,
     };
