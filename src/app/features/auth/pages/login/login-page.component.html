@@ -7,7 +7,9 @@
     severity="secondary"
     (onClick)="themeService.toggle()"
     [attr.title]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'"
-    [ariaLabel]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'" />
+    [ariaLabel]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'" 
+  />
+
   <section class="login-brand">
     <div class="brand-mark">ETIC</div>
     <!-- <p>Engineering · Thermography · Inspection · Consulting</p> -->
@@ -19,7 +21,6 @@
     <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
       <span class="eyebrow">ETIC SYSTEM</span>
       <h2>Iniciar sesión</h2>
-      <p>Ingresa con las credenciales de ETIC Online.</p>
 
       <label for="username">Usuario <strong>*</strong></label>
       <input pInputText id="username" formControlName="username" autocomplete="username" />

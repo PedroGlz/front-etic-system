@@ -1,8 +1,8 @@
 .login-page { min-height: 100vh; display: grid; grid-template-columns: 1.15fr 0.85fr; background: #f4f7fb; }
-.theme-toggle { position: fixed; z-index: 5; top: 1.25rem; right: 1.25rem; }
+.theme-toggle { position: fixed; z-index: 5; top: 1.25rem; right: 1.25rem; width: 41px;}
 .login-brand { padding: clamp(3rem, 8vw, 8rem); color: #fff; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(140deg, #071a33 0%, #0d3c61 65%, #0b6680 100%); position: relative; overflow: hidden; }
 .login-brand::after { content: ''; position: absolute; width: 32rem; height: 32rem; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; right: -12rem; bottom: -13rem; box-shadow: 0 0 0 5rem rgba(255,255,255,.025), 0 0 0 10rem rgba(255,255,255,.02); }
-.brand-mark { font-size: 2.4rem; font-weight: 800; letter-spacing: .16em; color: #48c1d8; }
+.brand-mark { font-size: 2.4rem; font-weight: 800; letter-spacing: .16em; color: #ffffff; }
 .login-brand > p:first-of-type { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; opacity: .72; }
 .login-brand h1 { max-width: 650px; font-size: clamp(2.4rem, 4vw, 4.6rem); line-height: 1.05; margin: 4rem 0 1.5rem; }
 .brand-copy { max-width: 520px; color: #c9d9e8; font-size: 1.05rem; line-height: 1.7; }

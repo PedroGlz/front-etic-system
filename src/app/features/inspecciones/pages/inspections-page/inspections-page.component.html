@@ -15,24 +15,6 @@
     <input pInputText type="text" placeholder="Buscar inspecciones" (input)="filterGlobal(table, $event)" />
   </div>
 
-  @if (store.selectedInspection(); as selectedInspection) {
-    <section class="selection-toolbar">
-      <div class="selection-copy">
-        <strong>Seleccionada:</strong>
-        <span>#{{ selectedInspection.inspectionNumber ?? '—' }} · {{ selectedInspection.clientName ?? '—' }} · {{ selectedInspection.siteName ?? '—' }}</span>
-      </div>
-      <div class="selection-actions">
-        <p-button label="Abrir" icon="pi pi-folder-open" severity="secondary" (onClick)="store.openInspection(selectedInspection)" />
-        @if (selectedInspection.editable) {
-          <p-button label="Editar" icon="pi pi-pencil" (onClick)="store.openEdit(selectedInspection)" />
-        }
-        @if (selectedInspection.latestForSite) {
-          <p-button label="Cambiar estatus" icon="pi pi-sync" severity="warn" (onClick)="store.updateStatus(selectedInspection)" />
-        }
-      </div>
-    </section>
-  }
-
   <p-table
     #table
     [value]="store.inspections()"
@@ -59,10 +41,7 @@
     </ng-template>
 
     <ng-template #body let-inspection>
-      <tr
-        class="inspection-row"
-        [class.selected]="store.selectedInspection()?.id === inspection.id"
-        (click)="store.selectInspection(inspection)">
+      <tr>
         <td><div class="table-cell-text">{{ inspection.inspectionNumber ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.clientName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteGroupName ?? '—' }}</div></td>
@@ -72,26 +51,42 @@
         <td>
           <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
         </td>
-        <td (click)="$event.stopPropagation()">
+        <td>
           <div class="table-cell-actions">
             @if (inspection.latestForSite) {
-              <p-button
-                icon="pi pi-upload"
-                [text]="true"
-                [rounded]="true"
-                severity="help"
-                title="Actualizar inspección"
-                (onClick)="store.openImportDialog(inspection)" />
-
               @if (isClosed(inspection)) {
+                <p-button
+                  icon="pi pi-upload"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="help"
+                  title="Actualizar inspección"
+                  (onClick)="store.openImportDialog(inspection)" />
+
                 <p-button
                   icon="pi pi-file-excel"
                   [text]="true"
                   [rounded]="true"
                   severity="success"
-                  title="Excel"
+                  title="Exportar lista de problemas"
                   (onClick)="store.downloadProblemsReport(inspection)" />
               } @else {
+                <p-button
+                  icon="pi pi-trash"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="danger"
+                  title="Eliminar"
+                  (onClick)="store.deactivate(inspection)" />
+
+                <p-button
+                  icon="pi pi-upload"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="help"
+                  title="Actualizar inspección"
+                  (onClick)="store.openImportDialog(inspection)" />
+
                 <p-button
                   icon="pi pi-download"
                   [text]="true"
@@ -100,14 +95,6 @@
                   styleClass="zip-download-button"
                   title="Exportar inspección"
                   (onClick)="store.exportInspection(inspection)" />
-
-                <p-button
-                  icon="pi pi-trash"
-                  [text]="true"
-                  [rounded]="true"
-                  severity="danger"
-                  title="Eliminar"
-                  (onClick)="store.deactivate(inspection)" />
               }
             }
           </div>

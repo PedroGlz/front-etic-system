@@ -2,33 +2,10 @@
   display: block;
 }
 
-.page-heading-actions,
-.selection-actions {
+.page-heading-actions {
   display: flex;
   gap: .75rem;
   flex-wrap: wrap;
-}
-
-.selection-copy span {
-  margin: 0;
-  color: #6b7e91;
-}
-
-.selection-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem 1.1rem;
-  margin-bottom: 1rem;
-  border-radius: 1rem;
-  border: 1px solid #dbe7ee;
-  background: rgba(255, 255, 255, .82);
-}
-
-.selection-copy {
-  display: grid;
-  gap: .2rem;
 }
 
 .search-box {
@@ -47,14 +24,6 @@
 .search-box input {
   width: 100%;
   padding-left: 2.4rem;
-}
-
-.inspection-row {
-  cursor: pointer;
-}
-
-.inspection-row.selected td {
-  background: #e8f5fb !important;
 }
 
 .actions-column {
@@ -138,24 +107,6 @@
   z-index: 1200;
 }
 
-:host-context(.app-dark) .selection-copy span {
-  color: #9eb0c1;
-}
-
-:host-context(.app-dark) .selection-copy strong {
-  color: #f0f6fb;
-}
-
-:host-context(.app-dark) .selection-toolbar {
-  background: linear-gradient(180deg, #182736 0%, #14212f 100%);
-  border-color: #2b3e50;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
-}
-
-:host-context(.app-dark) .inspection-row.selected td {
-  background: #244157 !important;
-}
-
 :host-context(.app-dark) .import-dialog p {
   color: #a9bac9;
 }
@@ -188,11 +139,4 @@
 :host-context(.app-dark) ::ng-deep .inspections-table .p-paginator {
   background: #1a2837 !important;
   border-top: 1px solid #2f4355 !important;
-}
-
-@media (max-width: 650px) {
-  .selection-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
 }

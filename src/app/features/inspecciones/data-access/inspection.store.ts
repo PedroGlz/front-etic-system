@@ -29,7 +29,6 @@ const CLOSED_STATUS = '73F27007-76B3-11D3-82BF-00104BC75DC2';
 export class InspectionStore {
   readonly inspections = signal<InspectionSummary[]>([]);
   readonly currentSelection = signal<InspectionSession | null>(null);
-  readonly selectedInspection = signal<InspectionSummary | null>(null);
   readonly clients = signal<CatalogOption[]>([]);
   readonly siteGroups = signal<CatalogOption[]>([]);
   readonly sites = signal<CatalogOption[]>([]);
@@ -57,7 +56,6 @@ export class InspectionStore {
     }).subscribe({
       next: ({ inspections, references }) => {
         this.inspections.set(inspections);
-        this.keepSelectedInspection(inspections);
         this.clients.set(references.clients.map((item) => this.service.toOption(item)).filter((item) => item.status === 'Activo'));
         this.siteGroups.set(references.siteGroups.map((item) => this.service.toOption(item)).filter((item) => item.status === 'Activo'));
         this.sites.set(references.sites.map((item) => this.service.toOption(item)).filter((item) => item.status === 'Activo'));
@@ -76,10 +74,6 @@ export class InspectionStore {
       next: (selection) => this.currentSelection.set(selection),
       error: () => this.currentSelection.set(null),
     });
-  }
-
-  selectInspection(inspection: InspectionSummary | null): void {
-    this.selectedInspection.set(inspection);
   }
 
   openCreate(): void {
@@ -112,7 +106,6 @@ export class InspectionStore {
   }
 
   openImportDialog(inspection: InspectionSummary): void {
-    this.selectedInspection.set(inspection);
     this.importFileName.set('');
     this.importDialogVisible.set(true);
   }
@@ -144,10 +137,9 @@ export class InspectionStore {
       : this.service.create(payload);
 
     request.subscribe({
-      next: (inspection) => {
+      next: () => {
         this.saving.set(false);
         this.dialogVisible.set(false);
-        this.selectedInspection.set(inspection);
         this.load();
         void Swal.fire({
           icon: 'success',
@@ -192,9 +184,6 @@ export class InspectionStore {
 
     this.service.deactivate(inspection.id).subscribe({
       next: () => {
-        if (this.selectedInspection()?.id === inspection.id) {
-          this.selectedInspection.set(null);
-        }
         this.load();
         void Swal.fire({ icon: 'success', title: 'Inspección desactivada', timer: 1200, showConfirmButton: false });
       },
@@ -243,8 +232,7 @@ export class InspectionStore {
     }
 
     this.service.updateStatus(inspection.id, { statusId: selection.value, endDate }).subscribe({
-      next: (updated) => {
-        this.selectedInspection.set(updated);
+      next: () => {
         this.load();
         this.loadCurrentSelection();
         void Swal.fire({ icon: 'success', title: 'Estatus actualizado', timer: 1200, showConfirmButton: false });
@@ -300,7 +288,7 @@ export class InspectionStore {
     const endDate = this.reportDate(inspection.endDate ?? inspection.startDate);
     this.service.downloadProblemsReport(inspection.id, startDate, endDate).subscribe({
       next: (blob) => {
-        const fileName = `ETIC_LISTADO_DE_PROBLEMAS_${this.slug(inspection.siteName)}_INSPECCION_${inspection.inspectionNumber ?? '0'}.csv`;
+        const fileName = `ETIC_LISTADO_DE_PROBLEMAS_${this.slug(inspection.siteName)}_INSPECCION_${inspection.inspectionNumber ?? '0'}.xlsx`;
         this.downloadBlob(blob, fileName);
       },
       error: (error: HttpErrorResponse) => {
@@ -384,15 +372,6 @@ export class InspectionStore {
       startDate: new FormControl(values?.startDate ?? this.currentDateTime(), { nonNullable: true, validators: [Validators.required] }),
       endDate: new FormControl(values?.endDate ?? '', { nonNullable: true }),
     });
-  }
-
-  private keepSelectedInspection(inspections: InspectionSummary[]): void {
-    const selectedId = this.selectedInspection()?.id;
-    if (!selectedId) {
-      return;
-    }
-    const updatedSelection = inspections.find((inspection) => inspection.id === selectedId) ?? null;
-    this.selectedInspection.set(updatedSelection);
   }
 
   private buildExportFileName(inspection: InspectionSummary): string {
