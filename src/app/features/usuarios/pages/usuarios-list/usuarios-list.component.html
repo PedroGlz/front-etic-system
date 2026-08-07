@@ -4,6 +4,7 @@
   description=""
   [total]="visibleUsers().length">
   <p-button header-actions label="Nuevo usuario" icon="pi pi-plus" (onClick)="store.openCreate()" />
+  <p-button header-actions styleClass="bulk-delete-button" [label]="'Desactivar seleccionados (' + selectedUsers.length + ')'" icon="pi pi-trash" severity="danger" [outlined]="true" [disabled]="selectedUsers.length === 0" (onClick)="deactivateSelected()" />
 
   <div toolbar-right class="catalog-filters">
     <div class="search-box"><i class="pi pi-search"></i><input pInputText type="text" placeholder="Buscar usuarios" (input)="filterGlobal($event)" /></div>
@@ -13,6 +14,8 @@
   <p-table
     #table
     [value]="visibleUsers()"
+    [(selection)]="selectedUsers"
+    [metaKeySelection]="false"
     [loading]="store.loading()"
     [paginator]="true"
     [rows]="10"
@@ -23,19 +26,21 @@
     [tableStyle]="{ 'min-width': '56rem' }">
     <ng-template #header>
       <tr>
-        <th>Grupo</th>
-        <th>Usuario</th>
-        <th>Nombre</th>
-        <th>Correo electrónico</th>
-        <th>Teléfono</th>
-        <th>Nivel de certificación</th>
-        <th>Estatus</th>
+        <th class="selection-column"><p-tableHeaderCheckbox /></th>
+        <th pSortableColumn="groupName"><div class="filterable-header"><span class="filterable-header__title">Grupo <p-sortIcon field="groupName" /></span><p-columnFilter field="groupName" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)"><option value="">Todos</option>@for (option of groupFilterOptions(); track option) { <option [value]="option">{{ option }}</option> }</select></ng-template></p-columnFilter></div></th>
+        <th pSortableColumn="username"><div class="filterable-header"><span class="filterable-header__title">Usuario <p-sortIcon field="username" /></span><p-columnFilter type="text" display="row" field="username" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="name"><div class="filterable-header"><span class="filterable-header__title">Nombre <p-sortIcon field="name" /></span><p-columnFilter type="text" display="row" field="name" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="email"><div class="filterable-header"><span class="filterable-header__title">Correo electrónico <p-sortIcon field="email" /></span><p-columnFilter type="text" display="row" field="email" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="phone"><div class="filterable-header"><span class="filterable-header__title">Teléfono <p-sortIcon field="phone" /></span><p-columnFilter type="text" display="row" field="phone" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="certificationLevel"><div class="filterable-header"><span class="filterable-header__title">Nivel de certificación <p-sortIcon field="certificationLevel" /></span><p-columnFilter type="text" display="row" field="certificationLevel" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="status"><div class="filterable-header"><span class="filterable-header__title">Estatus <p-sortIcon field="status" /></span><p-columnFilter field="status" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)"><option value="">Todos</option><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></ng-template></p-columnFilter></div></th>
         <th class="actions-column">Acciones</th>
       </tr>
     </ng-template>
 
     <ng-template #body let-user>
       <tr>
+        <td class="selection-column"><p-tableCheckbox [value]="user" [disabled]="user.status !== 'Activo'" /></td>
         <td><div class="table-cell-text">{{ user.groupName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ user.username }}</div></td>
         <td><div class="table-cell-text">{{ user.name }}</div></td>
@@ -58,7 +63,7 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="8" class="empty">No hay usuarios registrados.</td>
+        <td colspan="9" class="empty">No hay usuarios registrados.</td>
       </tr>
     </ng-template>
   </p-table>

@@ -10,10 +10,11 @@ import { Cliente } from '@features/clientes/models/cliente.model';
 import { ClientesFormComponent } from '@features/clientes/pages/clientes-form/clientes-form.component';
 import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
 import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-clientes-list',
-  imports: [ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, ClientesFormComponent, InactiveRecordsFilterComponent],
+  imports: [ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, ClientesFormComponent, InactiveRecordsFilterComponent, CatalogColumnFilterInteractionDirective],
   templateUrl: './clientes-list.component.html',
   styleUrl: './clientes-list.component.scss',
   providers: [ClientesApi, ClientesStore],
@@ -21,6 +22,7 @@ import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filt
 export class ClientesListComponent {
   @ViewChild('table') table?: Table;
   readonly showInactive = signal(false);
+  selectedRecords: Cliente[] = [];
   readonly visibleRecords = computed(() => this.filterActive(this.store.records()));
 
   constructor(readonly store: ClientesStore) {
@@ -43,6 +45,10 @@ export class ClientesListComponent {
   toggleInactive(checked: boolean): void {
     this.showInactive.set(checked);
     if (this.table) this.table.first = 0;
+  }
+
+  deactivateSelected(): void {
+    void this.store.deactivateMany(this.selectedRecords, () => { this.selectedRecords = []; });
   }
 
   private filterActive(records: Cliente[]): Cliente[] {

@@ -14,7 +14,6 @@ export abstract class BaseCatalogStore {
   readonly dialogVisible = signal(false);
   readonly editingId = signal<string | null>(null);
   readonly references = signal<Record<string, CatalogRecord[]>>({});
-  readonly recordsVersion = signal(0);
 
   form = new FormGroup<Record<string, FormControl<unknown>>>({});
 
@@ -31,7 +30,6 @@ export abstract class BaseCatalogStore {
         this.schema.set(currentSchema);
         this.buildForm();
         this.records.set(records);
-        this.recordsVersion.update((version) => version + 1);
         this.loading.set(false);
         this.loadReferences(currentSchema);
       },
@@ -116,6 +114,21 @@ export abstract class BaseCatalogStore {
     });
   }
 
+  async deactivateMany(records: CatalogRecord[], onSuccess: () => void): Promise<void> {
+    const activeRecords = records.filter((record) => this.recordStatus(record) === 'Activo');
+    if (!activeRecords.length) return;
+    const confirmation = await Swal.fire({
+      icon: 'warning', title: `¿Desactivar ${activeRecords.length} registros?`,
+      text: 'Los registros permanecerán en la base de datos con estatus Inactivo.',
+      showCancelButton: true, confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318',
+    });
+    if (!confirmation.isConfirmed) return;
+    forkJoin(activeRecords.map((record) => this.service.deactivate(String(record.values['id'])))).subscribe({
+      next: () => { onSuccess(); this.refreshRecords(); void Swal.fire({ icon: 'success', title: 'Registros desactivados', timer: 1200, showConfirmButton: false }); },
+      error: (error: HttpErrorResponse) => void Swal.fire('No fue posible desactivar los registros', this.errorMessage(error), 'error'),
+    });
+  }
+
   referenceLabel(field: CatalogField, value: unknown): string {
     const options = this.references()[field.referenceCatalog ?? ''] ?? [];
     const record = options.find((option) => option.values['id'] === value);
@@ -160,7 +173,20 @@ export abstract class BaseCatalogStore {
   }
 
   tableFieldNames(): string[] {
-    return [...this.tableFields().map((field) => `values.${field.name}`), 'values.status'];
+    return [...this.tableFields().map((field) => this.tableFieldPath(field)), 'values.status'];
+  }
+
+  tableFieldPath(field: CatalogField): string {
+    return field.type === 'reference' ? `values.${field.name}Label` : `values.${field.name}`;
+  }
+
+  referenceFilterOptions(field: CatalogField): string[] {
+    const labelField = `${field.name}Label`;
+    return [...new Set(
+      this.records()
+        .map((record) => String(record.values[labelField] ?? '').trim())
+        .filter(Boolean),
+    )].sort((left, right) => left.localeCompare(right, 'es'));
   }
 
   recordStatus(record: CatalogRecord): string {
@@ -175,7 +201,6 @@ export abstract class BaseCatalogStore {
   private refreshRecords(): void {
     this.service.records().subscribe((records) => {
       this.records.set(records);
-      this.recordsVersion.update((version) => version + 1);
     });
   }
 

@@ -5,6 +5,7 @@
     description=""
     [total]="visibleRecords().length">
     <p-button header-actions label="Nuevo registro" icon="pi pi-plus" (onClick)="store().openCreate()" />
+    <p-button header-actions styleClass="bulk-delete-button" [label]="'Desactivar seleccionados (' + selectedRecords.length + ')'" icon="pi pi-trash" severity="danger" [outlined]="true" [disabled]="selectedRecords.length === 0" (onClick)="deactivateSelected()" />
 
     <div toolbar-right class="catalog-filters">
       <div class="search-box">
@@ -17,6 +18,8 @@
     <p-table
       #table
       [value]="visibleRecords()"
+      [(selection)]="selectedRecords"
+      [metaKeySelection]="false"
       [loading]="store().loading()"
       [paginator]="true"
       [rows]="10"
@@ -26,16 +29,47 @@
       [tableStyle]="{ 'min-width': '48rem' }">
       <ng-template #header>
         <tr>
+          <th class="selection-column"><p-tableHeaderCheckbox /></th>
           @for (field of store().tableFields(); track field.name) {
-            <th>{{ field.label }}</th>
+            <th>
+              <div class="filterable-header">
+                <span class="filterable-header__title" [pSortableColumn]="store().tableFieldPath(field)">{{ field.label }} <p-sortIcon [field]="store().tableFieldPath(field)" /></span>
+                @if (field.type === 'reference') {
+                  <p-columnFilter [field]="store().tableFieldPath(field)" matchMode="equals" [showMenu]="false">
+                    <ng-template #filter let-value let-filter="filterCallback">
+                      <select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)">
+                        <option value="">Todos</option>
+                        @for (option of store().referenceFilterOptions(field); track option) {
+                          <option [value]="option">{{ option }}</option>
+                        }
+                      </select>
+                    </ng-template>
+                  </p-columnFilter>
+                } @else {
+                  <p-columnFilter type="text" display="row" [field]="store().tableFieldPath(field)" matchMode="contains" [showMenu]="false" />
+                }
+              </div>
+            </th>
           }
-          <th>Estatus</th>
+          <th>
+            <div class="filterable-header">
+              <span class="filterable-header__title" pSortableColumn="values.status">Estatus <p-sortIcon field="values.status" /></span>
+              <p-columnFilter field="values.status" matchMode="equals" [showMenu]="false">
+                <ng-template #filter let-value let-filter="filterCallback">
+                  <select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)">
+                    <option value="">Todos</option><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option>
+                  </select>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
           <th class="actions-column">Acciones</th>
         </tr>
       </ng-template>
 
       <ng-template #body let-record>
         <tr>
+          <td class="selection-column"><p-tableCheckbox [value]="record" [disabled]="store().recordStatus(record) !== 'Activo'" /></td>
           @for (field of store().tableFields(); track field.name) {
             <td>
               @if (field.type === 'boolean') {
@@ -67,7 +101,7 @@
 
       <ng-template #emptymessage>
         <tr>
-          <td [attr.colspan]="store().tableFields().length + 2" class="empty">No hay registros para mostrar.</td>
+          <td [attr.colspan]="store().tableFields().length + 3" class="empty">No hay registros para mostrar.</td>
         </tr>
       </ng-template>
     </p-table>

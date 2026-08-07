@@ -1,5 +1,6 @@
 <app-module-table-shell eyebrow="CATÁLOGOS" title="Sitios" description="" [total]="visibleRecords().length">
   <p-button header-actions label="Nuevo sitio" icon="pi pi-plus" (onClick)="store.openCreate()" />
+  <p-button header-actions styleClass="bulk-delete-button" [label]="'Desactivar seleccionados (' + selectedRecords.length + ')'" icon="pi pi-trash" severity="danger" [outlined]="true" [disabled]="selectedRecords.length === 0" (onClick)="deactivateSelected()" />
 
   <div toolbar-right class="catalog-filters">
     <div class="search-box"><i class="pi pi-search"></i><input pInputText type="text" placeholder="Buscar sitios" (input)="filterGlobal($event)" /></div>
@@ -9,6 +10,8 @@
   <p-table
     #table
     [value]="visibleRecords()"
+    [(selection)]="selectedRecords"
+    [metaKeySelection]="false"
     [loading]="store.loading()"
     [paginator]="true"
     [rows]="10"
@@ -19,19 +22,21 @@
     [tableStyle]="{ 'min-width': '64rem' }">
     <ng-template #header>
       <tr>
-        <th>Cliente</th>
-        <th>Grupo</th>
-        <th>Sitio</th>
-        <th>Dirección</th>
-        <th>Municipio</th>
-        <th>Estado</th>
-        <th>Estatus</th>
+        <th class="selection-column"><p-tableHeaderCheckbox /></th>
+        <th pSortableColumn="clientName"><div class="filterable-header"><span class="filterable-header__title">Cliente <p-sortIcon field="clientName" /></span><p-columnFilter field="clientName" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)"><option value="">Todos</option>@for (option of relationFilterOptions('clientName'); track option) { <option [value]="option">{{ option }}</option> }</select></ng-template></p-columnFilter></div></th>
+        <th pSortableColumn="siteGroupName"><div class="filterable-header"><span class="filterable-header__title">Grupo <p-sortIcon field="siteGroupName" /></span><p-columnFilter field="siteGroupName" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)"><option value="">Todos</option>@for (option of relationFilterOptions('siteGroupName'); track option) { <option [value]="option">{{ option }}</option> }</select></ng-template></p-columnFilter></div></th>
+        <th pSortableColumn="name"><div class="filterable-header"><span class="filterable-header__title">Sitio <p-sortIcon field="name" /></span><p-columnFilter type="text" display="row" field="name" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="address"><div class="filterable-header"><span class="filterable-header__title">Dirección <p-sortIcon field="address" /></span><p-columnFilter type="text" display="row" field="address" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="municipality"><div class="filterable-header"><span class="filterable-header__title">Municipio <p-sortIcon field="municipality" /></span><p-columnFilter type="text" display="row" field="municipality" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="state"><div class="filterable-header"><span class="filterable-header__title">Estado <p-sortIcon field="state" /></span><p-columnFilter type="text" display="row" field="state" matchMode="contains" [showMenu]="false" /></div></th>
+        <th pSortableColumn="status"><div class="filterable-header"><span class="filterable-header__title">Estatus <p-sortIcon field="status" /></span><p-columnFilter field="status" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (click)="$event.stopPropagation()" (change)="filter($any($event.target).value || null)"><option value="">Todos</option><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></ng-template></p-columnFilter></div></th>
         <th class="actions-column">Acciones</th>
       </tr>
     </ng-template>
 
     <ng-template #body let-record>
       <tr>
+        <td class="selection-column"><p-tableCheckbox [value]="record" [disabled]="record.status !== 'Activo'" /></td>
         <td><div class="table-cell-text">{{ record.clientName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ record.siteGroupName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ record.name }}</div></td>
@@ -54,7 +59,7 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="8" class="empty">No hay sitios registrados.</td>
+        <td colspan="9" class="empty">No hay sitios registrados.</td>
       </tr>
     </ng-template>
   </p-table>

@@ -18,6 +18,74 @@ button, input, textarea, select { font: inherit; }
   vertical-align: middle;
 }
 
+.app-data-table .selection-column {
+  width: 3.25rem;
+  min-width: 3.25rem;
+  text-align: center;
+}
+
+.app-data-table .selection-column .p-checkbox-box {
+  border-radius: 0.4rem;
+}
+
+.bulk-delete-button {
+  box-shadow: 0 1px 2px rgb(16 24 40 / 8%);
+}
+
+.bulk-delete-button:not(:disabled):hover {
+  box-shadow: 0 4px 12px rgb(180 35 24 / 16%);
+}
+
+.app-data-table .filterable-header {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 8.5rem;
+}
+
+.app-data-table .filterable-header__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.app-data-table .filterable-header p-columnfilter,
+.app-data-table .filterable-header .p-column-filter,
+.app-data-table .filterable-header .p-inputtext,
+.app-data-table .column-filter-select {
+  width: 100%;
+}
+
+.app-data-table .filterable-header .p-inputtext,
+.app-data-table .column-filter-select {
+  min-height: 2.15rem;
+  border: 1px solid #bdccd7;
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.35rem 0.55rem;
+  color: #20384e;
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.app-data-table .column-filter-select {
+  cursor: pointer;
+}
+
+.app-data-table .p-sortable-column:hover .filterable-header__title {
+  color: #126f83;
+}
+
+html.app-dark .app-data-table .p-sortable-column:hover .filterable-header__title {
+  color: #73c8d8;
+}
+
+html.app-dark .app-data-table .column-filter-select {
+  border-color: #415365;
+  background: #172331;
+  color: #dbe7f1;
+}
+
 html:not(.app-dark) .p-dialog, html:not(.app-dark) .p-dialog-content,
 html:not(.app-dark) .p-dialog-header, html:not(.app-dark) .p-dialog-footer,
 html:not(.app-dark) .p-datatable, html:not(.app-dark) .p-datatable-table-container,

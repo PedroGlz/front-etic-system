@@ -9,10 +9,11 @@ import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
 import { GruposSitiosFormComponent } from '@features/grupos-sitios/pages/grupos-sitios-form/grupos-sitios-form.component';
 import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
 import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-grupos-sitios-list',
-  imports: [ButtonModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, GruposSitiosFormComponent, InactiveRecordsFilterComponent],
+  imports: [ButtonModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, GruposSitiosFormComponent, InactiveRecordsFilterComponent, CatalogColumnFilterInteractionDirective],
   templateUrl: './grupos-sitios-list.component.html',
   styleUrl: './grupos-sitios-list.component.scss',
   providers: [GruposSitiosApi, GruposSitiosStore],
@@ -20,6 +21,7 @@ import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filt
 export class GruposSitiosListComponent {
   @ViewChild('table') table?: Table;
   readonly showInactive = signal(false);
+  selectedRecords: GrupoSitios[] = [];
   readonly visibleRecords = computed(() => this.filterActive(this.store.records()));
 
   constructor(readonly store: GruposSitiosStore) {
@@ -39,9 +41,18 @@ export class GruposSitiosListComponent {
     return record.id;
   }
 
+  clientFilterOptions(): string[] {
+    return [...new Set(this.store.records().map((record) => record.clientName).filter((value): value is string => !!value))]
+      .sort((left, right) => left.localeCompare(right, 'es'));
+  }
+
   toggleInactive(checked: boolean): void {
     this.showInactive.set(checked);
     if (this.table) this.table.first = 0;
+  }
+
+  deactivateSelected(): void {
+    void this.store.deactivateMany(this.selectedRecords, () => { this.selectedRecords = []; });
   }
 
   private filterActive(records: GrupoSitios[]): GrupoSitios[] {

@@ -23,6 +23,7 @@ export const APP_MENU_GROUPS: MenuGroup[] = [
       { key: 'equipos', label: 'Equipos', icon: 'pi-desktop' },
       { key: 'observaciones-linea-base', label: 'Observaciones BL', icon: 'pi-comment' },
       { key: 'fallas', label: 'Fallas', icon: 'pi-bolt' },
+      { key: 'tipos-falla', label: 'Tipos de falla', icon: 'pi-tags' },
       { key: 'recomendaciones', label: 'Recomendaciones', icon: 'pi-lightbulb' },
       { key: 'referencias-generales', label: 'Referencias generales', icon: 'pi-book' },
       { key: 'recomendaciones-generales', label: 'Recomendaciones generales', icon: 'pi-file-edit' },

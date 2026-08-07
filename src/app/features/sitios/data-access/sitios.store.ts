@@ -121,6 +121,14 @@ export class SitiosStore {
     });
   }
 
+  async deactivateMany(records: Sitio[], onSuccess: () => void): Promise<void> {
+    const activeRecords = records.filter((record) => record.status === 'Activo');
+    if (!activeRecords.length) return;
+    const confirmation = await Swal.fire({ icon: 'warning', title: `¿Desactivar ${activeRecords.length} sitios?`, text: 'Los sitios seleccionados quedarán con estatus Inactivo.', showCancelButton: true, confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318' });
+    if (!confirmation.isConfirmed) return;
+    forkJoin(activeRecords.map((record) => this.api.delete(record.id))).subscribe({ next: () => { onSuccess(); this.load(); void Swal.fire({ icon: 'success', title: 'Sitios desactivados', timer: 1200, showConfirmButton: false }); }, error: (error: HttpErrorResponse) => void Swal.fire('No fue posible desactivar los sitios', this.errorMessage(error), 'error') });
+  }
+
   activate(record: Sitio): void {
     this.api.changeStatus(record.id, 'Activo').subscribe({
       next: () => this.load(),

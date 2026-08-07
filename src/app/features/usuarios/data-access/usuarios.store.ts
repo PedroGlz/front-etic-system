@@ -123,6 +123,14 @@ export class UsuariosStore {
     });
   }
 
+  async deactivateMany(users: Usuario[], onSuccess: () => void): Promise<void> {
+    const activeUsers = users.filter((user) => user.status === 'Activo');
+    if (!activeUsers.length) return;
+    const confirmation = await Swal.fire({ icon: 'warning', title: `¿Desactivar ${activeUsers.length} usuarios?`, text: 'Los usuarios seleccionados quedarán con estatus Inactivo.', showCancelButton: true, confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318' });
+    if (!confirmation.isConfirmed) return;
+    forkJoin(activeUsers.map((user) => this.service.deleteUser(user.id))).subscribe({ next: () => { onSuccess(); this.load(); void Swal.fire({ icon: 'success', title: 'Usuarios desactivados', timer: 1200, showConfirmButton: false }); }, error: (error: HttpErrorResponse) => void Swal.fire('No fue posible desactivar los usuarios', this.errorMessage(error), 'error') });
+  }
+
   activate(user: Usuario): void {
     this.service.changeStatus(user.id, { status: 'Activo' }).subscribe({
       next: () => {
