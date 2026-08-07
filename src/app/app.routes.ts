@@ -20,6 +20,7 @@ export const routes: Routes = [
       { path: 'catalogos/causas-principales', loadChildren: () => import('@features/causas-principales/causas-principales.routes').then((module) => module.CAUSAS_PRINCIPALES_ROUTES) },
       { path: 'catalogos/estatus-inspeccion', loadChildren: () => import('@features/estatus-inspeccion/estatus-inspeccion.routes').then((module) => module.ESTATUS_INSPECCION_ROUTES) },
       { path: 'catalogos/fabricantes', loadChildren: () => import('@features/fabricantes/fabricantes.routes').then((module) => module.FABRICANTES_ROUTES) },
+      { path: 'catalogos/equipos', loadChildren: () => import('@features/equipos/equipos.routes').then((module) => module.EQUIPOS_ROUTES) },
       { path: 'catalogos/observaciones-linea-base', loadChildren: () => import('@features/observaciones-linea-base/observaciones-linea-base.routes').then((module) => module.OBSERVACIONES_LINEA_BASE_ROUTES) },
       { path: 'catalogos/fallas', loadChildren: () => import('@features/fallas/fallas.routes').then((module) => module.FALLAS_ROUTES) },
       { path: 'catalogos/recomendaciones', loadChildren: () => import('@features/recomendaciones/recomendaciones.routes').then((module) => module.RECOMENDACIONES_ROUTES) },

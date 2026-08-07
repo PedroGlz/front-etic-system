@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 
 export const SITIOS_ROUTES: Routes = [
-  { path: '', data: { catalogKey: 'sitios' }, loadComponent: () => import('@features/catalogs/shared/pages/catalog-route-page.component').then((module) => module.CatalogRoutePageComponent) },
+  {
+    path: '',
+    loadComponent: () => import('@features/sitios/pages/sitios-list/sitios-list.component').then((module) => module.SitiosListComponent),
+  },
 ];

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { InspectionApi } from '@features/inspecciones/data-access/inspection.api';
+import { Cliente } from '@features/clientes/models/cliente.model';
+import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
 import {
   CatalogOption,
   CatalogRecordResponse,
@@ -12,6 +14,7 @@ import {
   ReportTemplateFile,
   UpdateInspectionStatusRequest,
 } from '@features/inspecciones/models/inspection.model';
+import { Sitio } from '@features/sitios/models/sitio.model';
 
 @Injectable()
 export class InspectionService {
@@ -67,9 +70,9 @@ export class InspectionService {
 
   loadReferenceData() {
     return forkJoin({
-      clients: this.api.catalog('clientes'),
-      siteGroups: this.api.catalog('grupos-sitios'),
-      sites: this.api.catalog('sitios'),
+      clients: this.api.clients(),
+      siteGroups: this.api.siteGroups(),
+      sites: this.api.sites(),
       statuses: this.api.catalog('estatus-inspeccion'),
     });
   }
@@ -98,6 +101,33 @@ export class InspectionService {
       status: this.asString(values['status']),
       clientId: this.asString(values['clientId']),
       siteGroupId: this.asString(values['siteGroupId']),
+    };
+  }
+
+  clientToOption(client: Cliente): CatalogOption {
+    return {
+      id: client.id,
+      label: client.businessName,
+      status: client.status,
+    };
+  }
+
+  siteGroupToOption(group: GrupoSitios): CatalogOption {
+    return {
+      id: group.id,
+      label: group.name,
+      status: group.status,
+      clientId: group.clientId,
+    };
+  }
+
+  siteToOption(site: Sitio): CatalogOption {
+    return {
+      id: site.id,
+      label: site.name,
+      status: site.status,
+      clientId: site.clientId,
+      siteGroupId: site.siteGroupId,
     };
   }
 

@@ -1,7 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_BASE_URL, CATALOGS_API_URL, INSPECTIONS_API_URL } from '@core/http/api-endpoints';
+import { API_BASE_URL, CATALOGS_API_URL, CLIENTS_API_URL, INSPECTIONS_API_URL, SITES_API_URL, SITE_GROUPS_API_URL } from '@core/http/api-endpoints';
+import { Cliente } from '@features/clientes/models/cliente.model';
+import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
 import {
   CatalogRecordResponse,
   InspectionExportResponse,
@@ -12,6 +14,7 @@ import {
   ReportTemplateFile,
   UpdateInspectionStatusRequest,
 } from '@features/inspecciones/models/inspection.model';
+import { Sitio } from '@features/sitios/models/sitio.model';
 
 @Injectable()
 export class InspectionApi {
@@ -78,6 +81,18 @@ export class InspectionApi {
 
   catalog(key: string): Observable<CatalogRecordResponse[]> {
     return this.http.get<CatalogRecordResponse[]>(`${CATALOGS_API_URL}/${key}`, { withCredentials: true });
+  }
+
+  clients(): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(CLIENTS_API_URL, { withCredentials: true });
+  }
+
+  siteGroups(): Observable<GrupoSitios[]> {
+    return this.http.get<GrupoSitios[]>(SITE_GROUPS_API_URL, { withCredentials: true });
+  }
+
+  sites(): Observable<Sitio[]> {
+    return this.http.get<Sitio[]>(SITES_API_URL, { withCredentials: true });
   }
 
   listReportTemplates(): Observable<ReportTemplateFile[]> {

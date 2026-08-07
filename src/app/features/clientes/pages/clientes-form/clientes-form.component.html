@@ -1,0 +1,38 @@
+<p-dialog
+  [header]="store().editing() ? 'Editar cliente' : 'Nuevo cliente'"
+  [visible]="store().dialogVisible()"
+  (visibleChange)="!$event ? store().closeDialog() : null"
+  [modal]="true"
+  [style]="{ width: 'min(92vw, 560px)' }"
+  [draggable]="false">
+  <form [formGroup]="store().form" class="entity-form" (ngSubmit)="store().save()">
+    <div class="form-field">
+      <label for="businessName">Razón social <strong>*</strong></label>
+      <input pInputText id="businessName" maxlength="300" formControlName="businessName" />
+      @if (store().isInvalid('businessName')) {
+        <small>La razón social es obligatoria.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="commercialName">Nombre comercial <strong>*</strong></label>
+      <input pInputText id="commercialName" maxlength="300" formControlName="commercialName" />
+      @if (store().isInvalid('commercialName')) {
+        <small>El nombre comercial es obligatorio.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="rfc">RFC <strong>*</strong></label>
+      <input pInputText id="rfc" maxlength="50" formControlName="rfc" />
+      @if (store().isInvalid('rfc')) {
+        <small>El RFC es obligatorio.</small>
+      }
+    </div>
+
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="store().closeDialog()" />
+      <p-button type="submit" label="Guardar" icon="pi pi-check" [loading]="store().saving()" />
+    </div>
+  </form>
+</p-dialog>

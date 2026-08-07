@@ -29,6 +29,17 @@
   padding-left: 2.4rem;
 }
 
+.catalog-filters {
+  display: flex;
+  align-items: center;
+}
+
+.catalog-filters {
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
 .actions-column {
   width: 110px;
   text-align: center;

@@ -1,0 +1,63 @@
+<app-module-table-shell eyebrow="CATÁLOGOS" title="Sitios" description="" [total]="visibleRecords().length">
+  <p-button header-actions label="Nuevo sitio" icon="pi pi-plus" (onClick)="store.openCreate()" />
+
+  <div toolbar-right class="catalog-filters">
+    <div class="search-box"><i class="pi pi-search"></i><input pInputText type="text" placeholder="Buscar sitios" (input)="filterGlobal($event)" /></div>
+    <app-inactive-records-filter [checked]="showInactive()" (checkedChange)="toggleInactive($event)" />
+  </div>
+
+  <p-table
+    #table
+    [value]="visibleRecords()"
+    [loading]="store.loading()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [rowTrackBy]="trackById"
+    [globalFilterFields]="['clientName', 'siteGroupName', 'name', 'address', 'municipality', 'state', 'status']"
+    styleClass="p-datatable-sm app-data-table"
+    [tableStyle]="{ 'min-width': '64rem' }">
+    <ng-template #header>
+      <tr>
+        <th>Cliente</th>
+        <th>Grupo</th>
+        <th>Sitio</th>
+        <th>Dirección</th>
+        <th>Municipio</th>
+        <th>Estado</th>
+        <th>Estatus</th>
+        <th class="actions-column">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-record>
+      <tr>
+        <td><div class="table-cell-text">{{ record.clientName ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ record.siteGroupName ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ record.name }}</div></td>
+        <td><div class="table-cell-text">{{ record.address ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ record.municipality ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ record.state ?? '—' }}</div></td>
+        <td><p-tag [value]="record.status" [severity]="statusSeverity(record.status)" /></td>
+        <td>
+          <div class="table-cell-actions">
+            <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store.openEdit(record)" ariaLabel="Editar" />
+            @if (record.status === 'Activo') {
+              <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="store.deactivate(record)" ariaLabel="Desactivar" />
+            } @else {
+              <p-button icon="pi pi-check-circle" [text]="true" [rounded]="true" severity="success" (onClick)="store.activate(record)" ariaLabel="Activar" />
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="8" class="empty">No hay sitios registrados.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</app-module-table-shell>
+
+<app-sitios-form [store]="store" />

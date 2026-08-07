@@ -1,0 +1,35 @@
+<p-dialog
+  [header]="store().editing() ? 'Editar grupo' : 'Nuevo grupo'"
+  [visible]="store().dialogVisible()"
+  (visibleChange)="!$event ? store().closeDialog() : null"
+  [modal]="true"
+  [style]="{ width: 'min(92vw, 560px)' }"
+  [draggable]="false">
+  <form [formGroup]="store().form" class="entity-form" (ngSubmit)="store().save()">
+    <div class="form-field">
+      <label for="clientId">Cliente <strong>*</strong></label>
+      <select id="clientId" formControlName="clientId">
+        <option value="">Selecciona una opción</option>
+        @for (client of store().clients(); track client.id) {
+          <option [value]="client.id">{{ client.businessName }}</option>
+        }
+      </select>
+      @if (store().isInvalid('clientId')) {
+        <small>El cliente es obligatorio.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="name">Grupo <strong>*</strong></label>
+      <input pInputText id="name" maxlength="300" formControlName="name" />
+      @if (store().isInvalid('name')) {
+        <small>El grupo es obligatorio.</small>
+      }
+    </div>
+
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="store().closeDialog()" />
+      <p-button type="submit" label="Guardar" icon="pi pi-check" [loading]="store().saving()" />
+    </div>
+  </form>
+</p-dialog>

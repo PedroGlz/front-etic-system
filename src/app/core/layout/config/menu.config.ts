@@ -20,6 +20,7 @@ export const APP_MENU_GROUPS: MenuGroup[] = [
       { key: 'causas-principales', label: 'Causas principales', icon: 'pi-sitemap' },
       { key: 'estatus-inspeccion', label: 'Estatus de inspección', icon: 'pi-check-circle', adminOnly: true },
       { key: 'fabricantes', label: 'Fabricantes', icon: 'pi-building' },
+      { key: 'equipos', label: 'Equipos', icon: 'pi-desktop' },
       { key: 'observaciones-linea-base', label: 'Observaciones BL', icon: 'pi-comment' },
       { key: 'fallas', label: 'Fallas', icon: 'pi-bolt' },
       { key: 'recomendaciones', label: 'Recomendaciones', icon: 'pi-lightbulb' },

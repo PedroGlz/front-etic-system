@@ -3,17 +3,20 @@
     eyebrow="CATÁLOGOS"
     [title]="currentSchema.title"
     description=""
-    [total]="store().records().length">
+    [total]="visibleRecords().length">
     <p-button header-actions label="Nuevo registro" icon="pi pi-plus" (onClick)="store().openCreate()" />
 
-    <div toolbar-right class="search-box">
-      <i class="pi pi-search"></i>
-      <input pInputText type="text" placeholder="Buscar registros" (input)="filterGlobal(table, $event)" />
+    <div toolbar-right class="catalog-filters">
+      <div class="search-box">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" placeholder="Buscar registros" (input)="filterGlobal(table, $event)" />
+      </div>
+      <app-inactive-records-filter [checked]="showInactive()" (checkedChange)="toggleInactive($event)" />
     </div>
 
     <p-table
       #table
-      [value]="store().records()"
+      [value]="visibleRecords()"
       [loading]="store().loading()"
       [paginator]="true"
       [rows]="10"

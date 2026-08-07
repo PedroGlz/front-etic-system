@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 320px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 0.8rem;
+  color: #8495a5;
+}
+
+.search-box input {
+  width: 100%;
+  padding-left: 2.4rem;
+}
+
+.catalog-filters { display: flex; align-items: center; }
+.catalog-filters { gap: 1rem; flex-wrap: wrap; }
+
+.actions-column {
+  width: 110px;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem !important;
+  color: #75879a;
+}
+
+.table-cell-text {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.table-cell-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .usuarios-table .p-datatable-table-container,
+:host ::ng-deep .usuarios-table .p-paginator,
+:host ::ng-deep .usuarios-table .p-paginator-rpp-options,
+:host ::ng-deep .usuarios-table .p-select {
+  overflow: visible;
+}
+
+:host ::ng-deep .usuarios-table .p-paginator {
+  border-bottom-left-radius: 0.85rem;
+  border-bottom-right-radius: 0.85rem;
+}

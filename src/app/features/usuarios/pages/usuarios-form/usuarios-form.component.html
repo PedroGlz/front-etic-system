@@ -1,0 +1,78 @@
+<p-dialog
+  [header]="store().isEditing() ? 'Editar usuario' : 'Nuevo usuario'"
+  [visible]="store().dialogVisible()"
+  (visibleChange)="!$event ? store().closeDialog() : null"
+  [modal]="true"
+  [style]="{ width: 'min(92vw, 600px)' }"
+  [draggable]="false">
+  <form [formGroup]="store().form" class="usuario-form" (ngSubmit)="store().save()">
+    <div class="form-field">
+      <label for="groupId">Grupo <strong>*</strong></label>
+      <select id="groupId" formControlName="groupId">
+        <option value="">Selecciona una opción</option>
+        @for (group of store().groups(); track group.id) {
+          <option [value]="group.id">{{ group.name }}</option>
+        }
+      </select>
+      @if (store().isInvalid('groupId')) {
+        <small>El grupo es obligatorio.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="username">Usuario <strong>*</strong></label>
+      <input pInputText id="username" maxlength="50" formControlName="username" />
+      @if (store().isInvalid('username')) {
+        <small>El usuario es obligatorio y debe tener máximo 50 caracteres.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="name">Nombre <strong>*</strong></label>
+      <input pInputText id="name" maxlength="100" formControlName="name" />
+      @if (store().isInvalid('name')) {
+        <small>El nombre es obligatorio y debe tener máximo 100 caracteres.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="password">Contraseña @if (!store().isEditing()) { <strong>*</strong> }</label>
+      <input pInputText id="password" type="password" autocomplete="new-password" maxlength="100" formControlName="password" />
+      @if (store().isEditing()) {
+        <span class="field-help">Déjala vacía para conservar la contraseña actual.</span>
+      }
+      @if (store().isInvalid('password')) {
+        <small>La contraseña es obligatoria al crear y debe tener máximo 100 caracteres.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="email">Correo electrónico <strong>*</strong></label>
+      <input pInputText id="email" type="email" maxlength="300" formControlName="email" />
+      @if (store().isInvalid('email')) {
+        <small>Ingresa un correo electrónico válido.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Teléfono</label>
+      <input pInputText id="phone" maxlength="15" formControlName="phone" />
+      @if (store().isInvalid('phone')) {
+        <small>El teléfono debe tener máximo 15 caracteres.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="certificationLevel">Nivel de certificación</label>
+      <input pInputText id="certificationLevel" maxlength="50" formControlName="certificationLevel" />
+      @if (store().isInvalid('certificationLevel')) {
+        <small>El nivel de certificación debe tener máximo 50 caracteres.</small>
+      }
+    </div>
+
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="store().closeDialog()" />
+      <p-button type="submit" label="Guardar" icon="pi pi-check" [loading]="store().saving()" />
+    </div>
+  </form>
+</p-dialog>

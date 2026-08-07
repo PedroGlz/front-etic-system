@@ -1,0 +1,100 @@
+<p-dialog
+  [header]="store().editing() ? 'Editar sitio' : 'Nuevo sitio'"
+  [visible]="store().dialogVisible()"
+  (visibleChange)="!$event ? store().closeDialog() : null"
+  [modal]="true"
+  [style]="{ width: 'min(94vw, 760px)' }"
+  [draggable]="false">
+  <form [formGroup]="store().form" class="entity-form" (ngSubmit)="store().save()">
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="clientId">Cliente <strong>*</strong></label>
+        <select id="clientId" formControlName="clientId" (change)="store().onClientChange()">
+          <option value="">Selecciona una opción</option>
+          @for (client of store().clients(); track client.id) {
+            <option [value]="client.id">{{ client.businessName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="siteGroupId">Grupo de sitios</label>
+        <select id="siteGroupId" formControlName="siteGroupId">
+          <option value="">Sin grupo</option>
+          @for (group of store().siteGroupOptions(); track group.id) {
+            <option [value]="group.id">{{ group.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="name">Sitio <strong>*</strong></label>
+        <input pInputText id="name" maxlength="300" formControlName="name" />
+      </div>
+
+      <div class="form-field">
+        <label for="state">Estado</label>
+        <input pInputText id="state" maxlength="150" formControlName="state" />
+      </div>
+
+      <div class="form-field">
+        <label for="municipality">Municipio</label>
+        <input pInputText id="municipality" maxlength="150" formControlName="municipality" />
+      </div>
+
+      <div class="form-field">
+        <label for="neighborhood">Colonia</label>
+        <input pInputText id="neighborhood" maxlength="200" formControlName="neighborhood" />
+      </div>
+
+      <div class="form-field form-field--wide">
+        <label for="address">Dirección</label>
+        <input pInputText id="address" maxlength="500" formControlName="address" />
+      </div>
+
+      <div class="form-field form-field--wide">
+        <label for="description">Descripción</label>
+        <textarea id="description" rows="3" maxlength="1000" formControlName="description"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="contact1">Contacto 1</label>
+        <input pInputText id="contact1" maxlength="200" formControlName="contact1" />
+      </div>
+
+      <div class="form-field">
+        <label for="contactRole1">Puesto contacto 1</label>
+        <input pInputText id="contactRole1" maxlength="200" formControlName="contactRole1" />
+      </div>
+
+      <div class="form-field">
+        <label for="contact2">Contacto 2</label>
+        <input pInputText id="contact2" maxlength="200" formControlName="contact2" />
+      </div>
+
+      <div class="form-field">
+        <label for="contactRole2">Puesto contacto 2</label>
+        <input pInputText id="contactRole2" maxlength="200" formControlName="contactRole2" />
+      </div>
+
+      <div class="form-field">
+        <label for="contact3">Contacto 3</label>
+        <input pInputText id="contact3" maxlength="200" formControlName="contact3" />
+      </div>
+
+      <div class="form-field">
+        <label for="contactRole3">Puesto contacto 3</label>
+        <input pInputText id="contactRole3" maxlength="200" formControlName="contactRole3" />
+      </div>
+    </div>
+
+    @if (store().isInvalid('clientId') || store().isInvalid('name')) {
+      <small>Cliente y sitio son obligatorios.</small>
+    }
+
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="store().closeDialog()" />
+      <p-button type="submit" label="Guardar" icon="pi pi-check" [loading]="store().saving()" />
+    </div>
+  </form>
+</p-dialog>

@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 
 export const CLIENTES_ROUTES: Routes = [
-  { path: '', data: { catalogKey: 'clientes' }, loadComponent: () => import('@features/catalogs/shared/pages/catalog-route-page.component').then((module) => module.CatalogRoutePageComponent) },
+  {
+    path: '',
+    loadComponent: () => import('@features/clientes/pages/clientes-list/clientes-list.component').then((module) => module.ClientesListComponent),
+  },
 ];

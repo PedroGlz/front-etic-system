@@ -32,8 +32,8 @@ export abstract class BaseCatalogStore {
         this.buildForm();
         this.records.set(records);
         this.recordsVersion.update((version) => version + 1);
-        this.loadReferences(currentSchema);
         this.loading.set(false);
+        this.loadReferences(currentSchema);
       },
       error: (error: HttpErrorResponse) => {
         this.loading.set(false);
@@ -127,12 +127,15 @@ export abstract class BaseCatalogStore {
     if (field.type === 'boolean') {
       return this.booleanValue(value) ? 'Si' : 'No';
     }
-    return field.type === 'reference' ? this.referenceLabel(field, value) : String(value ?? '—');
+    if (field.type === 'reference') {
+      return String(record.values[`${field.name}Label`] ?? this.referenceLabel(field, value));
+    }
+    return String(value ?? '—');
   }
 
   referenceOptions(field: CatalogField): CatalogRecord[] {
     const options = this.references()[field.referenceCatalog ?? ''] ?? [];
-    return options.filter((option) => option.values['status'] === 'Activo' && !this.isDisallowedUserGroup(field, option));
+    return options.filter((option) => option.values['status'] === 'Activo');
   }
 
   setDefault(record: CatalogRecord, field: CatalogField): void {
@@ -186,8 +189,13 @@ export abstract class BaseCatalogStore {
       return;
     }
 
-    forkJoin(Object.fromEntries(keys.map((key) => [key, this.service.recordsByCatalogKey(key)]))).subscribe((references) => {
-      this.references.set(references);
+    forkJoin(Object.fromEntries(keys.map((key) => [key, this.service.recordsByCatalogKey(key)]))).subscribe({
+      next: (references) => {
+        this.references.set(references);
+      },
+      error: (error: HttpErrorResponse) => {
+        void Swal.fire('No fue posible cargar las relaciones del catálogo', this.errorMessage(error), 'error');
+      },
     });
   }
 
@@ -218,15 +226,6 @@ export abstract class BaseCatalogStore {
     }
 
     return String(record.values['id'] ?? '');
-  }
-
-  private isDisallowedUserGroup(field: CatalogField, option: CatalogRecord): boolean {
-    if (this.service.catalogKey !== 'usuarios' || field.name !== 'groupId') {
-      return false;
-    }
-
-    const label = this.displayValue(option).trim().toLowerCase();
-    return label === 'cliente' || label === 'clientes';
   }
 
   private controlValue(field: CatalogField, value: unknown): unknown {

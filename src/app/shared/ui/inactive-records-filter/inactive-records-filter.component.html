@@ -1,0 +1,16 @@
+<button
+  type="button"
+  class="inactive-filter"
+  role="switch"
+  [class.inactive-filter--checked]="checked()"
+  [attr.aria-checked]="checked()"
+  aria-label="Mostrar registros inactivos"
+  (click)="toggle()">
+  <span class="inactive-filter__track" aria-hidden="true">
+    <span class="inactive-filter__thumb"></span>
+  </span>
+  <span class="inactive-filter__content">
+    <span class="inactive-filter__label">Mostrar inactivos</span>
+    <span class="inactive-filter__hint">{{ checked() ? 'Visibles' : 'Ocultos' }}</span>
+  </span>
+</button>
