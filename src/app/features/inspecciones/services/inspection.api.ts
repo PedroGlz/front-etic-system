@@ -64,10 +64,10 @@ export class InspectionApi {
     });
   }
 
-  importInspection(file: File): Observable<InspectionImportResponse> {
+  importInspection(id: string, file: File): Observable<InspectionImportResponse> {
     const formData = new FormData();
     formData.append('bd_inspeccion', file);
-    return this.http.post<InspectionImportResponse>(`${INSPECTIONS_API_URL}/importar`, formData, { withCredentials: true });
+    return this.http.post<InspectionImportResponse>(`${INSPECTIONS_API_URL}/${id}/importar`, formData, { withCredentials: true });
   }
 
   downloadProblemsReport(id: string, startDate: string, endDate: string): Observable<Blob> {

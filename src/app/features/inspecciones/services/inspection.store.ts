@@ -18,7 +18,7 @@ type InspectionFormGroup = FormGroup<{
   siteId: FormControl<string>;
   statusId: FormControl<string>;
   temperatureUnit: FormControl<string>;
-  startDate: FormControl<string>;
+  startDate: FormControl<Date | null>;
   endDate: FormControl<string>;
 }>;
 
@@ -38,7 +38,9 @@ export class InspectionStore {
   readonly dialogVisible = signal(false);
   readonly importDialogVisible = signal(false);
   readonly importFileName = signal('');
+  readonly importFile = signal<File | null>(null);
   readonly importing = signal(false);
+  readonly importingInspection = signal<InspectionSummary | null>(null);
   readonly editingInspection = signal<InspectionSummary | null>(null);
 
   form: InspectionFormGroup = this.createForm();
@@ -81,7 +83,7 @@ export class InspectionStore {
     this.form = this.createForm({
       statusId: IN_PROGRESS_STATUS,
       temperatureUnit: 'C',
-      startDate: this.currentDateTime(),
+      startDate: new Date(),
       endDate: '',
     });
     this.dialogVisible.set(true);
@@ -95,8 +97,8 @@ export class InspectionStore {
       siteId: inspection.siteId,
       statusId: inspection.statusId,
       temperatureUnit: 'C',
-      startDate: this.toDateTimeLocal(inspection.startDate),
-      endDate: this.toDateTimeLocal(inspection.endDate),
+      startDate: this.toDateValue(inspection.startDate),
+      endDate: this.toDateLocal(inspection.endDate),
     });
     this.dialogVisible.set(true);
   }
@@ -107,16 +109,24 @@ export class InspectionStore {
 
   openImportDialog(inspection: InspectionSummary): void {
     this.importFileName.set('');
+    this.importFile.set(null);
+    this.importingInspection.set(inspection);
     this.importDialogVisible.set(true);
   }
 
   closeImportDialog(): void {
+    if (this.importing()) {
+      return;
+    }
     this.importDialogVisible.set(false);
     this.importFileName.set('');
+    this.importFile.set(null);
+    this.importingInspection.set(null);
   }
 
-  setImportFileName(fileName: string): void {
-    this.importFileName.set(fileName);
+  setImportFile(file: File): void {
+    this.importFile.set(file);
+    this.importFileName.set(file.name);
   }
 
   save(): void {
@@ -170,10 +180,10 @@ export class InspectionStore {
   async deactivate(inspection: InspectionSummary): Promise<void> {
     const confirmation = await Swal.fire({
       icon: 'warning',
-      title: '¿Desactivar inspección?',
-      text: `La inspección ${inspection.inspectionNumber ?? ''} se conservará con estatus lógico inactivo.`,
+      title: '¿Eliminar inspección?',
+      text: `La inspección ${inspection.inspectionNumber ?? ''} y sus detalles se eliminarán permanentemente.`,
       showCancelButton: true,
-      confirmButtonText: 'Sí, desactivar',
+      confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#b42318',
     });
@@ -185,10 +195,10 @@ export class InspectionStore {
     this.service.deactivate(inspection.id).subscribe({
       next: () => {
         this.load();
-        void Swal.fire({ icon: 'success', title: 'Inspección desactivada', timer: 1200, showConfirmButton: false });
+        void Swal.fire({ icon: 'success', title: 'Inspección eliminada', timer: 1200, showConfirmButton: false });
       },
       error: (error: HttpErrorResponse) => {
-        void Swal.fire('No fue posible desactivar la inspección', this.errorMessage(error), 'error');
+        void Swal.fire('No fue posible eliminar la inspección', this.errorMessage(error), 'error');
       },
     });
   }
@@ -264,17 +274,32 @@ export class InspectionStore {
     });
   }
 
-  importInspection(file: File): void {
-    if (!file) {
+  importInspection(): void {
+    const file = this.importFile();
+    const inspection = this.importingInspection();
+    if (!file || !inspection) {
       return;
     }
     this.importing.set(true);
-    this.service.importInspection(file).subscribe({
-      next: () => {
+    void Swal.fire({
+      title: 'Actualizando inspección',
+      text: 'Validando el paquete ZIP y guardando la información. No cierres esta ventana.',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
+    });
+    this.service.importInspection(inspection.id, file).subscribe({
+      next: (result) => {
         this.importing.set(false);
         this.closeImportDialog();
         this.load();
-        void Swal.fire({ icon: 'success', title: 'Inspección importada', timer: 1300, showConfirmButton: false });
+        void Swal.fire({
+          icon: 'success',
+          title: 'Inspección actualizada',
+          text: `Se procesaron ${result.processedFiles} archivos del paquete.`,
+          confirmButtonText: 'Aceptar',
+        });
       },
       error: (error: HttpErrorResponse) => {
         this.importing.set(false);
@@ -357,19 +382,19 @@ export class InspectionStore {
       siteId: this.form.controls.siteId.value,
       statusId: this.form.controls.statusId.value,
       temperatureUnit: 'C',
-      startDate: this.toApiDateTime(this.form.controls.startDate.value),
+      startDate: this.toApiDateTime(this.toDateInputValue(this.form.controls.startDate.value!)),
       endDate: this.form.controls.endDate.value ? this.toApiDateTime(this.form.controls.endDate.value) : null,
     };
   }
 
-  private createForm(values?: Partial<Record<keyof InspectionUpsertRequest, string | null>>): InspectionFormGroup {
+  private createForm(values?: Partial<Omit<InspectionUpsertRequest, 'startDate'> & { startDate: Date | null }>): InspectionFormGroup {
     return new FormGroup({
       clientId: new FormControl(values?.clientId ?? '', { nonNullable: true, validators: [Validators.required] }),
       siteGroupId: new FormControl(values?.siteGroupId ?? '', { nonNullable: true, validators: [Validators.required] }),
       siteId: new FormControl(values?.siteId ?? '', { nonNullable: true, validators: [Validators.required] }),
       statusId: new FormControl(values?.statusId ?? IN_PROGRESS_STATUS, { nonNullable: true, validators: [Validators.required] }),
       temperatureUnit: new FormControl(values?.temperatureUnit ?? 'C', { nonNullable: true, validators: [Validators.required] }),
-      startDate: new FormControl(values?.startDate ?? this.currentDateTime(), { nonNullable: true, validators: [Validators.required] }),
+      startDate: new FormControl<Date | null>(values?.startDate ?? new Date(), { validators: [] }),
       endDate: new FormControl(values?.endDate ?? '', { nonNullable: true }),
     });
   }
@@ -423,11 +448,29 @@ export class InspectionStore {
   }
 
   private toApiDateTime(value: string): string {
+    if (value.length === 10) {
+      return `${value}T00:00:00`;
+    }
     return value.length === 16 ? `${value}:00` : value;
   }
 
-  private toDateTimeLocal(value: string | null): string {
-    return value ? value.slice(0, 16) : '';
+  private toDateLocal(value: string | null): string {
+    return value ? value.slice(0, 10) : '';
+  }
+
+  private toDateValue(value: string | null): Date | null {
+    if (!value) {
+      return null;
+    }
+    const [year, month, day] = value.slice(0, 10).split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  private toDateInputValue(value: Date): string {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   private currentDateTime(): string {

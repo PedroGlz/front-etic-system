@@ -60,8 +60,8 @@ export class InspectionService {
     return this.api.downloadExport(fileName);
   }
 
-  importInspection(file: File): Observable<InspectionImportResponse> {
-    return this.api.importInspection(file);
+  importInspection(id: string, file: File): Observable<InspectionImportResponse> {
+    return this.api.importInspection(id, file);
   }
 
   downloadProblemsReport(id: string, startDate: string, endDate: string): Observable<Blob> {

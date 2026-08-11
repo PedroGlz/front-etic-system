@@ -29,13 +29,13 @@
     responsiveLayout="scroll">
     <ng-template #header>
       <tr>
-        <th># Inspección</th>
-        <th>Cliente</th>
-        <th>Grupo de sitios</th>
-        <th>Sitio</th>
-        <th>Fecha inicio</th>
-        <th>Fecha fin</th>
-        <th>Estatus inspección</th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="inspectionNumber"># Inspección <p-sortIcon field="inspectionNumber" /></span><p-columnFilter type="text" display="row" field="inspectionNumber" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="clientName">Cliente <p-sortIcon field="clientName" /></span><p-columnFilter type="text" display="row" field="clientName" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="siteGroupName">Grupo de sitios <p-sortIcon field="siteGroupName" /></span><p-columnFilter type="text" display="row" field="siteGroupName" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="siteName">Sitio <p-sortIcon field="siteName" /></span><p-columnFilter type="text" display="row" field="siteName" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="startDate">Fecha inicio <p-sortIcon field="startDate" /></span><p-columnFilter type="text" display="row" field="startDate" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="endDate">Fecha fin <p-sortIcon field="endDate" /></span><p-columnFilter type="text" display="row" field="endDate" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="statusName">Estatus inspección <p-sortIcon field="statusName" /></span><p-columnFilter field="statusName" matchMode="equals" [showMenu]="false"><ng-template #filter let-value let-filter="filterCallback"><select class="column-filter-select" [value]="value ?? ''" (change)="filter($any($event.target).value || null)"><option value="">Todos</option>@for (option of store.statusOptions(); track option.id) {<option [value]="option.label">{{ option.label }}</option>}</select></ng-template></p-columnFilter></div></th>
         <th class="actions-column">Opciones</th>
       </tr>
     </ng-template>
@@ -46,8 +46,8 @@
         <td><div class="table-cell-text">{{ inspection.clientName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteGroupName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteName ?? '—' }}</div></td>
-        <td><div class="table-cell-text">{{ inspection.startDate ? (inspection.startDate | date:'short') : '—' }}</div></td>
-        <td><div class="table-cell-text">{{ inspection.endDate ? (inspection.endDate | date:'short') : '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.startDate ? (inspection.startDate | date:'dd/MM/yyyy') : '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.endDate ? (inspection.endDate | date:'dd/MM/yyyy') : '—' }}</div></td>
         <td>
           <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
         </td>
@@ -119,16 +119,22 @@
   [visible]="store.importDialogVisible()"
   [style]="{ width: '30rem', maxWidth: '95vw' }"
   header="Actualizar inspección"
-  (visibleChange)="!$event ? store.closeImportDialog() : null">
+  [closable]="!store.importing()"
+  [closeOnEscape]="!store.importing()"
+  (visibleChange)="!$event && !store.importing() ? store.closeImportDialog() : null">
   <div class="import-dialog">
-    <p>Selecciona el paquete ZIP generado por el inspector para actualizar la inspección.</p>
-    <label class="file-picker">
+    <p>
+      Selecciona el paquete ZIP generado por ETIC Android para la inspección
+      <strong>#{{ store.importingInspection()?.inspectionNumber }}</strong>.
+    </p>
+    <label class="file-picker" [class.file-picker--disabled]="store.importing()">
       <span>{{ store.importFileName() || 'Elegir archivo ZIP' }}</span>
-      <input type="file" accept=".zip" (change)="onImportFileSelected($event)" />
+      <input type="file" accept=".zip" [disabled]="store.importing()" (change)="onImportFileSelected($event)" />
     </label>
   </div>
 
   <ng-template pTemplate="footer">
-    <p-button label="Cerrar" severity="secondary" [text]="true" (onClick)="store.closeImportDialog()" />
+    <p-button label="Cancelar" severity="secondary" [text]="true" [disabled]="store.importing()" (onClick)="store.closeImportDialog()" />
+    <p-button label="Actualizar" icon="pi pi-upload" [loading]="store.importing()" [disabled]="!store.importFile()" (onClick)="store.importInspection()" />
   </ng-template>
 </p-dialog>

@@ -84,7 +84,7 @@ export class GruposSitiosStore {
       title: '¿Desactivar grupo?',
       text: `El grupo ${record.name} se conservará con estatus Inactivo.`,
       showCancelButton: true,
-      confirmButtonText: 'Sí, desactivar',
+      confirmButtonText: 'Si, desactivar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#b42318',
     });
@@ -100,7 +100,7 @@ export class GruposSitiosStore {
   async deactivateMany(records: GrupoSitios[], onSuccess: () => void): Promise<void> {
     const activeRecords = records.filter((record) => record.status === 'Activo');
     if (!activeRecords.length) return;
-    const confirmation = await Swal.fire({ icon: 'warning', title: `¿Desactivar ${activeRecords.length} grupos?`, text: 'Los grupos seleccionados quedarán con estatus Inactivo.', showCancelButton: true, confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318' });
+    const confirmation = await Swal.fire({ icon: 'warning', title: `¿Desactivar ${activeRecords.length} grupos?`, text: 'Los grupos seleccionados quedarán con estatus Inactivo.', showCancelButton: true, confirmButtonText: 'Si, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318' });
     if (!confirmation.isConfirmed) return;
     forkJoin(activeRecords.map((record) => this.api.delete(record.id))).subscribe({ next: () => { onSuccess(); this.load(); void Swal.fire({ icon: 'success', title: 'Grupos desactivados', timer: 1200, showConfirmButton: false }); }, error: (error: HttpErrorResponse) => void Swal.fire('No fue posible desactivar los grupos', this.errorMessage(error), 'error') });
   }

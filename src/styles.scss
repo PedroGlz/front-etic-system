@@ -4,6 +4,7 @@
 html, body { margin: 0; min-height: 100%; font-family: Inter, "Segoe UI", Arial, sans-serif; color: #20384e; background: #f3f6f9; }
 button, input, textarea, select { font: inherit; }
 .swal2-popup { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+.swal2-container { z-index: 20000 !important; }
 
 .app-data-table .p-datatable-table {
   table-layout: auto;
@@ -100,6 +101,29 @@ html:not(.app-dark) .p-dialog { border: 1px solid #d6e2e9 !important; box-shadow
 html:not(.app-dark) .p-dialog-header { border-bottom: 1px solid #e3ebf0; color: #153a52 !important; }
 html:not(.app-dark) .p-inputtext { background: #fff !important; color: #20384e !important; border-color: #bdccd7 !important; }
 
+.inspection-datepicker {
+  width: 100%;
+}
+
+.inspection-datepicker-input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: .7rem .85rem;
+  border: 1px solid #bdd0da;
+  border-radius: .85rem;
+  background: #fff;
+  color: #20384e;
+}
+
+.inspection-datepicker .p-datepicker-dropdown {
+  min-width: 2.8rem;
+  border-radius: 0 .85rem .85rem 0;
+}
+
+.inspection-datepicker-panel {
+  z-index: 1300 !important;
+}
+
 html.app-dark body { background: #0f1722; color: #dbe7f1; }
 html.app-dark .swal2-popup { background: #172331; color: #e4edf5; }
 html.app-dark .p-dialog,
@@ -149,4 +173,10 @@ html.app-dark .p-paginator {
 
 html.app-dark .p-inputtext::placeholder {
   color: #8fa6b8 !important;
+}
+
+html.app-dark .inspection-datepicker-input {
+  background: #13212f !important;
+  color: #e4edf5 !important;
+  border-color: #3b556a !important;
 }

@@ -14,10 +14,41 @@ export abstract class BaseCatalogStore {
   readonly dialogVisible = signal(false);
   readonly editingId = signal<string | null>(null);
   readonly references = signal<Record<string, CatalogRecord[]>>({});
+  readonly allowCreate = signal(true);
+  readonly allowDeactivate = signal(true);
+  private readonly excludedFieldNames = signal<Set<string>>(new Set());
+  private readonly referenceTextFilterFields = signal<Set<string>>(new Set());
+  private readonly conditionalRequiredFields = signal<Record<string, string>>({});
 
   form = new FormGroup<Record<string, FormControl<unknown>>>({});
 
   protected constructor(private readonly service: BaseCatalogService) {}
+
+  setExcludedFields(fieldNames: string[]): void {
+    this.excludedFieldNames.set(new Set(fieldNames));
+  }
+
+  setConditionalRequiredFields(fields: Record<string, string>): void {
+    this.conditionalRequiredFields.set(fields);
+  }
+
+  setActionsVisibility(create: boolean, deactivate: boolean): void {
+    this.allowCreate.set(create);
+    this.allowDeactivate.set(deactivate);
+  }
+
+  setReferenceTextFilterFields(fieldNames: string[]): void {
+    this.referenceTextFilterFields.set(new Set(fieldNames));
+  }
+
+  usesReferenceTextFilter(fieldName: string): boolean {
+    return this.referenceTextFilterFields().has(fieldName);
+  }
+
+  isConditionallyRequired(fieldName: string): boolean {
+    const sourceField = this.conditionalRequiredFields()[fieldName];
+    return sourceField ? this.booleanValue(this.form.controls[sourceField]?.value) : false;
+  }
 
   load(): void {
     this.loading.set(true);
@@ -94,7 +125,7 @@ export abstract class BaseCatalogStore {
       title: '¿Desactivar registro?',
       text: 'El registro permanecerá en la base de datos con estatus Inactivo.',
       showCancelButton: true,
-      confirmButtonText: 'Sí, desactivar',
+      confirmButtonText: 'Si, desactivar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#b42318',
     });
@@ -120,7 +151,7 @@ export abstract class BaseCatalogStore {
     const confirmation = await Swal.fire({
       icon: 'warning', title: `¿Desactivar ${activeRecords.length} registros?`,
       text: 'Los registros permanecerán en la base de datos con estatus Inactivo.',
-      showCancelButton: true, confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318',
+      showCancelButton: true, confirmButtonText: 'Si, desactivar', cancelButtonText: 'Cancelar', confirmButtonColor: '#b42318',
     });
     if (!confirmation.isConfirmed) return;
     forkJoin(activeRecords.map((record) => this.service.deactivate(String(record.values['id'])))).subscribe({
@@ -169,7 +200,12 @@ export abstract class BaseCatalogStore {
   }
 
   tableFields(): CatalogField[] {
-    return this.schema()?.fields.filter((field) => !field.writeOnly) ?? [];
+    return this.formFields().filter((field) => !field.writeOnly);
+  }
+
+  formFields(): CatalogField[] {
+    const excludedFields = this.excludedFieldNames();
+    return this.schema()?.fields.filter((field) => !excludedFields.has(field.name)) ?? [];
   }
 
   tableFieldNames(): string[] {
@@ -206,7 +242,7 @@ export abstract class BaseCatalogStore {
 
   private loadReferences(currentSchema: CatalogSchema | null): void {
     const keys = [
-      ...new Set(currentSchema?.fields.map((field) => field.referenceCatalog).filter((key): key is string => !!key) ?? []),
+      ...new Set(this.formFields().map((field) => field.referenceCatalog).filter((key): key is string => !!key)),
     ];
 
     if (!keys.length) {
@@ -227,7 +263,7 @@ export abstract class BaseCatalogStore {
   private buildForm(values: Record<string, unknown> = {}): void {
     const controls: Record<string, FormControl<unknown>> = {};
 
-    for (const field of this.schema()?.fields ?? []) {
+    for (const field of this.formFields()) {
       const validators = [];
       if (field.required) {
         validators.push(Validators.required);
@@ -240,6 +276,24 @@ export abstract class BaseCatalogStore {
     }
 
     this.form = new FormGroup(controls);
+
+    for (const [fieldName, sourceFieldName] of Object.entries(this.conditionalRequiredFields())) {
+      const fieldControl = this.form.controls[fieldName];
+      const sourceControl = this.form.controls[sourceFieldName];
+      if (!fieldControl || !sourceControl) continue;
+
+      const updateValidators = (required: unknown): void => {
+        if (this.booleanValue(required)) {
+          fieldControl.addValidators(Validators.required);
+        } else {
+          fieldControl.removeValidators(Validators.required);
+        }
+        fieldControl.updateValueAndValidity({ emitEvent: false });
+      };
+
+      updateValidators(sourceControl.value);
+      sourceControl.valueChanges.subscribe(updateValidators);
+    }
   }
 
   private displayValue(record: CatalogRecord): string {
@@ -258,7 +312,8 @@ export abstract class BaseCatalogStore {
   }
 
   private booleanValue(value: unknown): boolean {
-    return value === true || value === 1 || value === '1' || value === 'true';
+    return value === true || value === 1 || value === '1' || value === 'true'
+      || (typeof value === 'string' && ['si', 'si'].includes(value.trim().toLowerCase()));
   }
 
   private errorMessage(error: HttpErrorResponse): string {

@@ -11,10 +11,11 @@ import { InspectionService } from '@features/inspecciones/services/inspection.se
 import { InspectionStore } from '@features/inspecciones/services/inspection.store';
 import { InspectionSummary } from '@features/inspecciones/models/inspection.model';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-inspections-page',
-  imports: [DatePipe, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, InspectionFormDialogComponent],
+  imports: [DatePipe, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, InspectionFormDialogComponent, CatalogColumnFilterInteractionDirective],
   templateUrl: './inspections-page.component.html',
   styleUrl: './inspections-page.component.scss',
   providers: [InspectionApi, InspectionService, InspectionStore],
@@ -47,8 +48,7 @@ export class InspectionsPageComponent {
     if (!file) {
       return;
     }
-    this.store.setImportFileName(file.name);
-    this.store.importInspection(file);
+    this.store.setImportFile(file);
     (event.target as HTMLInputElement).value = '';
   }
 

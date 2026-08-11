@@ -2,12 +2,12 @@
   [modal]="true"
   [draggable]="false"
   [resizable]="false"
-  [style]="{ width: '42rem', maxWidth: '95vw' }"
+  [style]="{ width: '33rem', maxWidth: '95vw' }"
   [visible]="store().dialogVisible()"
   [header]="store().isEditing() ? 'Editar inspección' : 'Nueva inspección'"
   (visibleChange)="!$event ? store().closeDialog() : null">
   <form class="inspection-form" [formGroup]="store().form">
-    <div class="grid two-columns">
+    <div class="grid">
       <label>
         <span>Cliente</span>
         <select formControlName="clientId" [disabled]="store().isEditing()" (change)="store().onClientChange()">
@@ -35,7 +35,7 @@
       </label>
     </div>
 
-    <div class="grid two-columns">
+    <div class="grid">
       <label>
         <span>Sitio</span>
         <select formControlName="siteId" [disabled]="store().isEditing()">
@@ -49,32 +49,41 @@
         }
       </label>
 
-      <label>
+      <!-- <label>
         <span>Estatus</span>
         <select formControlName="statusId">
           @for (option of store().statusOptions(); track option.id) {
             <option [value]="option.id">{{ option.label }}</option>
           }
         </select>
-      </label>
+      </label> -->
     </div>
 
-    <div class="grid two-columns">
+    <div class="grid">
       <label>
         <span>Fecha de inicio</span>
-        <input type="datetime-local" formControlName="startDate" />
+        <p-datepicker
+          formControlName="startDate"
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          styleClass="inspection-datepicker"
+          inputStyleClass="inspection-datepicker-input"
+          panelStyleClass="inspection-datepicker-panel"
+          [baseZIndex]="1300"
+          [showIcon]="true"
+          [fluid]="true" />
         @if (store().isInvalid('startDate')) {
           <small>La fecha de inicio es obligatoria.</small>
         }
       </label>
 
-      <label>
+      <!-- <label>
         <span>Fecha final</span>
-        <input type="datetime-local" formControlName="endDate" [readOnly]="!store().isClosedSelected()" />
+        <input type="date" formControlName="endDate" [readOnly]="!store().isClosedSelected()" />
         @if (store().isClosedSelected() && !store().form.controls.endDate.value && store().form.controls.endDate.touched) {
           <small>La fecha final es obligatoria cuando la inspección se cierra.</small>
         }
-      </label>
+      </label> -->
     </div>
 
   </form>
