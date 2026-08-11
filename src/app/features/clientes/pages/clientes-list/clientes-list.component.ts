@@ -4,13 +4,13 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ClientesApi } from '@features/clientes/data-access/clientes.api';
-import { ClientesStore } from '@features/clientes/data-access/clientes.store';
+import { ClientesApi } from '@features/clientes/services/clientes.api';
+import { ClientesStore } from '@features/clientes/services/clientes.store';
 import { Cliente } from '@features/clientes/models/cliente.model';
-import { ClientesFormComponent } from '@features/clientes/pages/clientes-form/clientes-form.component';
-import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
-import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
+import { ClientesFormComponent } from '@features/clientes/components/clientes-form/clientes-form.component';
+import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
+import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-clientes-list',

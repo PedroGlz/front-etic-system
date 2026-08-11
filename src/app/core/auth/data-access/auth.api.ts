@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_BASE_URL } from '@core/http/api-endpoints';
+import { API_BASE_URL } from '@core/config/api-endpoints';
 import { AuthenticatedUser, LoginRequest } from '@core/auth/models/auth.model';
 
 @Injectable({ providedIn: 'root' })

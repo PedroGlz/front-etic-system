@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { InspectionApi } from '@features/inspecciones/data-access/inspection.api';
-import { InspectionService } from '@features/inspecciones/data-access/inspection.service';
-import { InspectionStore } from '@features/inspecciones/data-access/inspection.store';
+import { InspectionApi } from '@features/inspecciones/services/inspection.api';
+import { InspectionService } from '@features/inspecciones/services/inspection.service';
+import { InspectionStore } from '@features/inspecciones/services/inspection.store';
 
 @Component({
   selector: 'app-inspection-workspace-page',

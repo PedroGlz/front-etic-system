@@ -3,13 +3,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { GruposSitiosApi } from '@features/grupos-sitios/data-access/grupos-sitios.api';
-import { GruposSitiosStore } from '@features/grupos-sitios/data-access/grupos-sitios.store';
+import { GruposSitiosApi } from '@features/grupos-sitios/services/grupos-sitios.api';
+import { GruposSitiosStore } from '@features/grupos-sitios/services/grupos-sitios.store';
 import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
-import { GruposSitiosFormComponent } from '@features/grupos-sitios/pages/grupos-sitios-form/grupos-sitios-form.component';
-import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
-import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
+import { GruposSitiosFormComponent } from '@features/grupos-sitios/components/grupos-sitios-form/grupos-sitios-form.component';
+import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
+import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-grupos-sitios-list',

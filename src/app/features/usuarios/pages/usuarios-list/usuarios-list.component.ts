@@ -3,14 +3,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { UsuariosApi } from '@features/usuarios/data-access/usuarios.api';
-import { UsuariosService } from '@features/usuarios/data-access/usuarios.service';
-import { UsuariosStore } from '@features/usuarios/data-access/usuarios.store';
+import { UsuariosApi } from '@features/usuarios/services/usuarios.api';
+import { UsuariosService } from '@features/usuarios/services/usuarios.service';
+import { UsuariosStore } from '@features/usuarios/services/usuarios.store';
 import { Usuario } from '@features/usuarios/models/usuario.model';
-import { UsuariosFormComponent } from '@features/usuarios/pages/usuarios-form/usuarios-form.component';
-import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
-import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
+import { UsuariosFormComponent } from '@features/usuarios/components/usuarios-form/usuarios-form.component';
+import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
+import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-usuarios-list',

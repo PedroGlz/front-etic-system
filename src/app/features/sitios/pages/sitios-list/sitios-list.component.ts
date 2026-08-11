@@ -3,13 +3,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { SitiosApi } from '@features/sitios/data-access/sitios.api';
-import { SitiosStore } from '@features/sitios/data-access/sitios.store';
+import { SitiosApi } from '@features/sitios/services/sitios.api';
+import { SitiosStore } from '@features/sitios/services/sitios.store';
 import { Sitio } from '@features/sitios/models/sitio.model';
-import { SitiosFormComponent } from '@features/sitios/pages/sitios-form/sitios-form.component';
-import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
-import { InactiveRecordsFilterComponent } from '@shared/ui/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/ui/catalog-column-filter/catalog-column-filter-interaction.directive';
+import { SitiosFormComponent } from '@features/sitios/components/sitios-form/sitios-form.component';
+import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
+import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
+import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
 
 @Component({
   selector: 'app-sitios-list',

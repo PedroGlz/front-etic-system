@@ -5,12 +5,12 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { InspectionFormDialogComponent } from '@features/inspecciones/components/inspection-form-dialog.component';
-import { InspectionApi } from '@features/inspecciones/data-access/inspection.api';
-import { InspectionService } from '@features/inspecciones/data-access/inspection.service';
-import { InspectionStore } from '@features/inspecciones/data-access/inspection.store';
+import { InspectionFormDialogComponent } from '@features/inspecciones/components/inspection-form-dialog/inspection-form-dialog.component';
+import { InspectionApi } from '@features/inspecciones/services/inspection.api';
+import { InspectionService } from '@features/inspecciones/services/inspection.service';
+import { InspectionStore } from '@features/inspecciones/services/inspection.store';
 import { InspectionSummary } from '@features/inspecciones/models/inspection.model';
-import { ModuleTableShellComponent } from '@shared/ui/module-table-shell/module-table-shell.component';
+import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 
 @Component({
   selector: 'app-inspections-page',

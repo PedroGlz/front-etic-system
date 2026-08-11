@@ -43,7 +43,7 @@
         <td><p-tag [value]="record.status" [severity]="statusSeverity(record.status)" /></td>
         <td>
           <div class="table-cell-actions">
-            <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store.openEdit(record)" ariaLabel="Editar" />
+            <!-- <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store.openEdit(record)" ariaLabel="Editar" /> -->
             @if (record.status === 'Activo') {
               <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="store.deactivate(record)" ariaLabel="Desactivar" />
             } @else {
