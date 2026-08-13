@@ -50,8 +50,8 @@
         <td><p-tag [value]="user.status" [severity]="statusSeverity(user.status)" /></td>
         <td>
           <div class="table-cell-actions">
-            <!-- <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store.openEdit(user)" ariaLabel="Editar" /> -->
             @if (user.status === 'Activo') {
+              <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="store.openEdit(user)" ariaLabel="Editar" />
               <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="store.deactivate(user)" ariaLabel="Desactivar" />
             } @else {
               <p-button icon="pi pi-check-circle" [text]="true" [rounded]="true" severity="success" (onClick)="store.activate(user)" ariaLabel="Activar" />
