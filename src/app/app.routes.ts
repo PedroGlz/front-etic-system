@@ -14,6 +14,7 @@ export const routes: Routes = [
       { path: 'inspecciones', loadComponent: () => import('@features/inspecciones/pages/inspections-page/inspections-page.component').then((module) => module.InspectionsPageComponent) },
       { path: 'inspecciones/actual', loadComponent: () => import('@features/inspecciones/pages/inspection-workspace-page/inspection-workspace-page.component').then((module) => module.InspectionWorkspacePageComponent) },
       { path: 'plantillas-reportes', loadComponent: () => import('@features/plantillas-reportes/pages/report-templates-page/report-templates-page.component').then((module) => module.ReportTemplatesPageComponent) },
+      { path: 'legacy-import', loadComponent: () => import('@features/legacy-import/pages/legacy-import-page/legacy-import-page.component').then((module) => module.LegacyImportPageComponent) },
       { path: 'catalogos/categorias-equipos', data: { catalogKey: 'categorias-equipos' }, loadComponent: () => import('@features/categorias-equipos/pages/categorias-equipos-list/categorias-equipos-list.component').then((module) => module.CategoriasEquiposListComponent) },
       { path: 'catalogos/clientes', loadComponent: () => import('@features/clientes/pages/clientes-list/clientes-list.component').then((module) => module.ClientesListComponent) },
       { path: 'catalogos/grupos-sitios', loadComponent: () => import('@features/grupos-sitios/pages/grupos-sitios-list/grupos-sitios-list.component').then((module) => module.GruposSitiosListComponent) },

@@ -24,6 +24,14 @@ export class AuthService {
     return this.currentUserSignal() !== null;
   }
 
+  validateSession(): Observable<AuthenticatedUser> {
+    return this.authApi.currentUser().pipe(tap((user) => this.storeUser(user)));
+  }
+
+  clearSession(): void {
+    this.clearUser();
+  }
+
   private storeUser(user: AuthenticatedUser): void {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
     this.currentUserSignal.set(user);

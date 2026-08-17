@@ -12,6 +12,10 @@ export class AuthApi {
     return this.http.post<AuthenticatedUser>(`${API_BASE_URL}/auth/login`, request, { withCredentials: true });
   }
 
+  currentUser(): Observable<AuthenticatedUser> {
+    return this.http.get<AuthenticatedUser>(`${API_BASE_URL}/auth/me`, { withCredentials: true });
+  }
+
   logout(): Observable<void> {
     return this.http.post<void>(`${API_BASE_URL}/auth/logout`, {}, { withCredentials: true });
   }

@@ -271,7 +271,7 @@ export abstract class BaseCatalogStore {
       if (field.maxLength) {
         validators.push(Validators.maxLength(field.maxLength));
       }
-      const defaultValue = field.type === 'number' ? 0 : field.type === 'boolean' ? false : '';
+      const defaultValue = field.type === 'number' && field.required ? 0 : field.type === 'boolean' ? false : '';
       controls[field.name] = new FormControl(this.controlValue(field, values[field.name] ?? defaultValue), validators);
     }
 

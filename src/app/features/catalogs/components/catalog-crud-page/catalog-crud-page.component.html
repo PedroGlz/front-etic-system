@@ -153,7 +153,7 @@
                 }
               </select>
             } @else if (field.type === 'number') {
-              <input pInputText [id]="field.name" type="number" step="0.01" [formControlName]="field.name" />
+              <input pInputText [id]="field.name" type="number" [step]="field.name === 'mta' ? '1' : '0.01'" [formControlName]="field.name" />
             } @else if (field.type === 'password') {
               <input pInputText [id]="field.name" type="password" autocomplete="new-password" [formControlName]="field.name" />
               @if (store().editingId()) {

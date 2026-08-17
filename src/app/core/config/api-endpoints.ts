@@ -7,3 +7,4 @@ export const USERS_API_URL = `${API_BASE_URL}/usuarios`;
 export const CLIENTS_API_URL = `${API_BASE_URL}/clientes`;
 export const SITE_GROUPS_API_URL = `${API_BASE_URL}/grupos-sitios`;
 export const SITES_API_URL = `${API_BASE_URL}/sitios`;
+export const LEGACY_IMPORTS_API_URL = `${API_BASE_URL}/legacy-imports`;
