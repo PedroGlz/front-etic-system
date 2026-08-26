@@ -4,6 +4,7 @@ export interface MenuItem {
   icon: string;
   adminOnly?: boolean;
   route?: string;
+  children?: MenuItem[];
 }
 
 export interface MenuGroup {

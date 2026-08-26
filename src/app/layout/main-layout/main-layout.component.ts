@@ -31,6 +31,11 @@ export class MainLayoutComponent {
     return group.items.filter((item) => !item.adminOnly || isAdministrator);
   }
 
+  visibleChildren(item: MenuItem): MenuItem[] {
+    const isAdministrator = this.authService.currentUser()?.groupName === 'Administradores';
+    return (item.children ?? []).filter((child) => !child.adminOnly || isAdministrator);
+  }
+
   itemRoute(item: MenuItem): string[] {
     return item.route ? [item.route] : ['/catalogos', item.key];
   }

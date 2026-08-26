@@ -23,13 +23,14 @@
     [rows]="10"
     [rowsPerPageOptions]="[10, 20, 50]"
     [rowTrackBy]="trackById"
-    [globalFilterFields]="['inspectionNumber', 'clientName', 'siteGroupName', 'siteName', 'statusName']"
+    [globalFilterFields]="['inspectionNumber', 'previousInspectionNumber', 'clientName', 'siteGroupName', 'siteName', 'statusName']"
     styleClass="p-datatable-sm inspections-table app-data-table"
     [tableStyle]="{ 'min-width': '48rem' }"
     responsiveLayout="scroll">
     <ng-template #header>
       <tr>
         <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="inspectionNumber"># Inspección <p-sortIcon field="inspectionNumber" /></span><p-columnFilter type="text" display="row" field="inspectionNumber" matchMode="contains" [showMenu]="false" /></div></th>
+        <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="previousInspectionNumber"># Inspección anterior <p-sortIcon field="previousInspectionNumber" /></span><p-columnFilter type="text" display="row" field="previousInspectionNumber" matchMode="contains" [showMenu]="false" /></div></th>
         <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="clientName">Cliente <p-sortIcon field="clientName" /></span><p-columnFilter type="text" display="row" field="clientName" matchMode="contains" [showMenu]="false" /></div></th>
         <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="siteGroupName">Grupo de sitios <p-sortIcon field="siteGroupName" /></span><p-columnFilter type="text" display="row" field="siteGroupName" matchMode="contains" [showMenu]="false" /></div></th>
         <th><div class="filterable-header"><span class="filterable-header__title" pSortableColumn="siteName">Sitio <p-sortIcon field="siteName" /></span><p-columnFilter type="text" display="row" field="siteName" matchMode="contains" [showMenu]="false" /></div></th>
@@ -42,7 +43,8 @@
 
     <ng-template #body let-inspection>
       <tr>
-        <td><div class="table-cell-text">{{ inspection.inspectionNumber ?? '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.inspectionNumber ? inspection.inspectionNumber : '-' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.previousInspectionNumber ? inspection.previousInspectionNumber : '-' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.clientName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteGroupName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteName ?? '—' }}</div></td>
@@ -71,13 +73,13 @@
                   title="Exportar lista de problemas"
                   (onClick)="store.downloadProblemsReport(inspection)" />
               } @else {
-                <p-button
+                <!-- <p-button
                   icon="pi pi-pencil"
                   [text]="true"
                   [rounded]="true"
                   severity="secondary"
                   title="Editar inspección"
-                  (onClick)="store.openEdit(inspection)" />
+                  (onClick)="store.openEdit(inspection)" /> -->
 
                 <p-button
                   icon="pi pi-trash"
@@ -112,7 +114,7 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="8" class="empty">No hay inspecciones registradas.</td>
+        <td colspan="9" class="empty">No hay inspecciones registradas.</td>
       </tr>
     </ng-template>
   </p-table>
