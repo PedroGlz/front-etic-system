@@ -27,8 +27,12 @@ export class LegacyImportApi {
     return this.http.get<LegacyImportJobStatus>(`${LEGACY_IMPORTS_API_URL}/${id}`, { withCredentials: true });
   }
 
-  execute(id: string): Observable<LegacyEtlReport> {
-    return this.http.post<LegacyEtlReport>(`${LEGACY_IMPORTS_API_URL}/${id}/execute`, {}, { withCredentials: true });
+  active(): Observable<LegacyImportJobStatus | null> {
+    return this.http.get<LegacyImportJobStatus | null>(`${LEGACY_IMPORTS_API_URL}/active`, { withCredentials: true });
+  }
+
+  execute(id: string): Observable<void> {
+    return this.http.post<void>(`${LEGACY_IMPORTS_API_URL}/${id}/execute`, {}, { withCredentials: true });
   }
 
   result(id: string): Observable<LegacyEtlReport> {

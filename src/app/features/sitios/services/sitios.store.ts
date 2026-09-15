@@ -8,6 +8,8 @@ import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
 import { SitiosApi } from '@features/sitios/services/sitios.api';
 import { Sitio, SitioRequest } from '@features/sitios/models/sitio.model';
 
+const SITE_NAME_PATTERN = /^[^,/\\:;*?"<>|áéíóúÁÉÍÓÚñÑ()\[\]&%]*$/;
+
 type SitioForm = FormGroup<{
   clientId: FormControl<string>;
   siteGroupId: FormControl<string>;
@@ -164,7 +166,7 @@ export class SitiosStore {
     return new FormGroup({
       clientId: new FormControl(record?.clientId ?? '', { nonNullable: true, validators: [Validators.required] }),
       siteGroupId: new FormControl(record?.siteGroupId ?? '', { nonNullable: true }),
-      name: new FormControl(record?.name ?? '', { nonNullable: true, validators: [Validators.required, Validators.maxLength(300)] }),
+      name: new FormControl(record?.name ?? '', { nonNullable: true, validators: [Validators.required, Validators.maxLength(300), Validators.pattern(SITE_NAME_PATTERN)] }),
       description: new FormControl(record?.description ?? '', { nonNullable: true, validators: [Validators.maxLength(1000)] }),
       address: new FormControl(record?.address ?? '', { nonNullable: true, validators: [Validators.maxLength(500)] }),
       neighborhood: new FormControl(record?.neighborhood ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),

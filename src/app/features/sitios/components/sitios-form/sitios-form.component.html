@@ -88,7 +88,9 @@
       </div>
     </div>
 
-    @if (store().isInvalid('clientId') || store().isInvalid('name')) {
+    @if (store().form.controls.name.touched && store().form.controls.name.hasError('pattern')) {
+      <small>El nombre del sitio contiene caracteres no permitidos.</small>
+    } @else if (store().isInvalid('clientId') || store().isInvalid('name')) {
       <small>Cliente y sitio son obligatorios.</small>
     }
 
