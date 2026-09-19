@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CLIENTS_API_URL, SITE_GROUPS_API_URL } from '@core/config/api-endpoints';
-import { Cliente } from '@features/clientes/models/cliente.model';
+import { ClienteLookup } from '@shared/contracts/catalog-lookups.model';
 import { GrupoSitios, GrupoSitiosRequest } from '@features/grupos-sitios/models/grupo-sitios.model';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class GruposSitiosApi {
     return this.http.get<GrupoSitios[]>(SITE_GROUPS_API_URL, { withCredentials: true });
   }
 
-  clients(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(CLIENTS_API_URL, { withCredentials: true });
+  clients(): Observable<ClienteLookup[]> {
+    return this.http.get<ClienteLookup[]>(CLIENTS_API_URL, { withCredentials: true });
   }
 
   create(request: GrupoSitiosRequest): Observable<GrupoSitios> {

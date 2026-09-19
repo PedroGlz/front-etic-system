@@ -13,10 +13,6 @@ export class UsuariosApi {
     return this.http.get<UsuarioResponseDto[]>(USERS_API_URL, { withCredentials: true });
   }
 
-  getUserById(id: string): Observable<UsuarioResponseDto> {
-    return this.http.get<UsuarioResponseDto>(`${USERS_API_URL}/${id}`, { withCredentials: true });
-  }
-
   getGroups(): Observable<GrupoUsuarioResponseDto[]> {
     return this.http.get<GrupoUsuarioResponseDto[]>(`${USERS_API_URL}/grupos`, { withCredentials: true });
   }

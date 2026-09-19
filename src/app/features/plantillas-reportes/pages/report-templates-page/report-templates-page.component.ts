@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import Swal from 'sweetalert2';
-import { InspectionApi } from '@features/inspecciones/services/inspection.api';
-import { InspectionService } from '@features/inspecciones/services/inspection.service';
-import { ReportTemplateFile } from '@features/inspecciones/models/inspection.model';
+import { ReportTemplateFile } from '@features/plantillas-reportes/models/report-template.model';
+import { ReportTemplatesApi } from '@features/plantillas-reportes/services/report-templates.api';
+import { ReportTemplatesService } from '@features/plantillas-reportes/services/report-templates.service';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 
 @Component({
@@ -11,20 +11,20 @@ import { ModuleTableShellComponent } from '@shared/components/module-table-shell
   imports: [ButtonModule, ModuleTableShellComponent],
   templateUrl: './report-templates-page.component.html',
   styleUrl: './report-templates-page.component.scss',
-  providers: [InspectionApi, InspectionService],
+  providers: [ReportTemplatesApi, ReportTemplatesService],
 })
 export class ReportTemplatesPageComponent {
   readonly templates = signal<ReportTemplateFile[]>([]);
   readonly loading = signal(true);
   readonly uploading = signal(false);
 
-  constructor(private readonly service: InspectionService) {
+  constructor(private readonly service: ReportTemplatesService) {
     this.load();
   }
 
   load(): void {
     this.loading.set(true);
-    this.service.listReportTemplates().subscribe({
+    this.service.list().subscribe({
       next: (templates) => {
         this.templates.set(templates);
         this.loading.set(false);
@@ -42,7 +42,7 @@ export class ReportTemplatesPageComponent {
       return;
     }
     this.uploading.set(true);
-    this.service.uploadReportTemplates(files).subscribe({
+    this.service.upload(files).subscribe({
       next: () => {
         this.uploading.set(false);
         this.load();
@@ -57,7 +57,7 @@ export class ReportTemplatesPageComponent {
   }
 
   remove(template: ReportTemplateFile): void {
-    this.service.deleteReportTemplates([template.name]).subscribe({
+    this.service.delete([template.name]).subscribe({
       next: () => {
         this.load();
         void Swal.fire({ icon: 'success', title: 'Plantilla eliminada', timer: 1200, showConfirmButton: false });
@@ -69,7 +69,7 @@ export class ReportTemplatesPageComponent {
   }
 
   download(template: ReportTemplateFile): void {
-    this.service.downloadReportTemplate(template.name).subscribe({
+    this.service.download(template.name).subscribe({
       next: (blob) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');

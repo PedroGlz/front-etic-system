@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CatalogRoutePageComponent } from '@features/catalogs/pages/catalog-route-page/catalog-route-page.component';
+import { CatalogPageComponent } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-equipos-list',
-  imports: [CatalogRoutePageComponent],
+  imports: [CatalogPageComponent],
   templateUrl: './equipos-list.component.html',
   styleUrl: './equipos-list.component.scss',
 })

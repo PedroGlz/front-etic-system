@@ -9,7 +9,7 @@ import { Sitio } from '@features/sitios/models/sitio.model';
 import { SitiosFormComponent } from '@features/sitios/components/sitios-form/sitios-form.component';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
+import { CatalogColumnFilterInteractionDirective } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-sitios-list',

@@ -19,7 +19,8 @@
       <app-inactive-records-filter [checked]="showInactive()" (checkedChange)="toggleInactive($event)" />
     </div>
 
-    <p-table
+  <p-table
+    responsiveLayout="scroll"
       #table
       [value]="visibleRecords()"
       [(selection)]="selectedRecords"

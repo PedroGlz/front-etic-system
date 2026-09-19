@@ -8,7 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { BaseCatalogStore } from '@features/catalogs/services/base-catalog.store';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
+import { CatalogColumnFilterInteractionDirective } from '@features/catalogs/public-api';
 import { CatalogRecord } from '@features/catalogs/models/catalog.model';
 
 @Component({

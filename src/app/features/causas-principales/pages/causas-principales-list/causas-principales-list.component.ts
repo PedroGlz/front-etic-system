@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { CatalogRoutePageComponent } from '@features/catalogs/pages/catalog-route-page/catalog-route-page.component';
+import { CatalogPageComponent } from '@features/catalogs/public-api';
+import { CAUSAS_PRINCIPALES_EXCLUDED_FIELDS } from '@features/causas-principales/config/causas-principales.config';
 
 @Component({
   selector: 'app-causas-principales-list',
-  imports: [CatalogRoutePageComponent],
+  imports: [CatalogPageComponent],
   templateUrl: './causas-principales-list.component.html',
   styleUrl: './causas-principales-list.component.scss',
 })
-export class CausasPrincipalesListComponent {}
+export class CausasPrincipalesListComponent {
+  readonly excludedFields = CAUSAS_PRINCIPALES_EXCLUDED_FIELDS;
+}

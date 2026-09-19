@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CatalogRoutePageComponent } from '@features/catalogs/pages/catalog-route-page/catalog-route-page.component';
+import { CatalogPageComponent } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-tipos-inspeccion-list',
-  imports: [CatalogRoutePageComponent],
+  imports: [CatalogPageComponent],
   templateUrl: './tipos-inspeccion-list.component.html',
   styleUrl: './tipos-inspeccion-list.component.scss',
 })

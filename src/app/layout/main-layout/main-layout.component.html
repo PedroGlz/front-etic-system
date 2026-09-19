@@ -1,119 +1,76 @@
-<div class="app-frame" [class.sidebar-collapsed]="sidebarCollapsed()">
-  <aside>
+<div class="app-frame" [class.sidebar-collapsed]="sidebarCollapsed()" [class.mobile-menu-open]="mobileMenuOpen()">
+  <button class="menu-backdrop" type="button" aria-label="Cerrar menú" (click)="closeNavigation()"></button>
+  <aside id="main-navigation" [attr.aria-hidden]="!mobileMenuOpen() ? null : false">
     <div class="brand-logo">
       <img src="/img/sistema/img_etic_menu.png" alt="ETIC Logo" class="brand-image">
-      @if (!sidebarCollapsed()) {
-        <span class="brand-text">ETIC - System</span>
-      }
+      @if (!sidebarCollapsed() || mobileMenuOpen()) { <span class="brand-text">ETIC - System</span> }
     </div>
 
-    <nav>
+    <nav aria-label="Navegación principal" (scroll)="closeSubmenuOnScroll()">
       @for (group of menuGroups; track group.label) {
         @if (visibleItems(group).length) {
-          @if (sidebarCollapsed()) {
-            <div class="nav-group nav-group-collapsed">
-              <button
-                type="button"
-                class="nav-group-trigger"
-                [pTooltip]="group.label"
-                tooltipPosition="right"
-                [showDelay]="150">
-                <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
-              </button>
-
-              <div class="nav-flyout">
-                <div class="nav-flyout-title">{{ group.label }}</div>
-                <div class="nav-items">
-                  @for (item of visibleItems(group); track item.key) {
-                    @if (visibleChildren(item).length) {
-                      <div class="nav-submenu">
-                        <button type="button" class="nav-submenu-trigger">
-                          <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
-                          <span class="nav-label">{{ item.label }}</span>
-                          <i class="pi pi-chevron-right arrow"></i>
-                        </button>
-                        <div class="nav-submenu-flyout">
-                          @for (child of visibleChildren(item); track child.key) {
-                            <a class="nav-link" [routerLink]="itemRoute(child)" routerLinkActive="active">
-                              <span class="nav-icon"><i class="pi" [class]="'pi ' + child.icon"></i></span>
-                              <span class="nav-label">{{ child.label }}</span>
-                            </a>
-                          }
-                        </div>
-                      </div>
-                    } @else {
-                      <a class="nav-link" [routerLink]="itemRoute(item)" routerLinkActive="active">
-                        <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
-                        <span class="nav-label">{{ item.label }}</span>
-                      </a>
-                    }
-                  }
-                </div>
-              </div>
-            </div>
-          } @else {
-            <details class="nav-group" open>
-              <summary>
-                <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
-                <span class="nav-label">{{ group.label }}</span>
-                <i class="pi pi-chevron-down arrow"></i>
-              </summary>
-              <div class="nav-items">
-                @for (item of visibleItems(group); track item.key) {
-                  @if (visibleChildren(item).length) {
-                    <div class="nav-submenu">
-                      <button type="button" class="nav-submenu-trigger">
-                        <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
-                        <span class="nav-label">{{ item.label }}</span>
+          <details class="nav-group" open>
+            <summary [pTooltip]="sidebarCollapsed() && !mobileMenuOpen() ? group.label : ''" tooltipPosition="right">
+              <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
+              <span class="nav-label">{{ group.label }}</span>
+              <i class="pi pi-chevron-down arrow"></i>
+            </summary>
+            <div class="nav-items">
+              @for (item of visibleItems(group); track item.key) {
+                @if (visibleChildren(item).length) {
+                  <div class="nav-submenu" [class.open]="isSubmenuOpen(item)">
+                    <button
+                      type="button"
+                      class="nav-submenu-trigger"
+                      aria-haspopup="true"
+                      [attr.aria-expanded]="isSubmenuOpen(item)"
+                      [attr.aria-controls]="item.key + '-submenu'"
+                      [pTooltip]="sidebarCollapsed() && !mobileMenuOpen() ? item.label : ''"
+                      tooltipPosition="right"
+                      (click)="toggleSubmenu(item)">
+                      <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
+                      <span class="nav-label">{{ item.label }}</span>
+                      @if (!sidebarCollapsed() || mobileMenuOpen()) {
                         <i class="pi pi-chevron-right arrow"></i>
-                      </button>
-                      <div class="nav-submenu-flyout">
+                      }
+                    </button>
+                    @if (isSubmenuOpen(item)) {
+                      <div class="nav-submenu-panel" [id]="item.key + '-submenu'">
                         @for (child of visibleChildren(item); track child.key) {
-                          <a class="nav-link" [routerLink]="itemRoute(child)" routerLinkActive="active">
+                          <a class="nav-link" [routerLink]="itemRoute(child)" routerLinkActive="active" (click)="closeNavigation()">
                             <span class="nav-icon"><i class="pi" [class]="'pi ' + child.icon"></i></span>
                             <span class="nav-label">{{ child.label }}</span>
                           </a>
                         }
                       </div>
-                    </div>
-                  } @else {
-                    <a class="nav-link" [routerLink]="itemRoute(item)" routerLinkActive="active">
-                      <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
-                      <span class="nav-label">{{ item.label }}</span>
-                    </a>
-                  }
+                    }
+                  </div>
+                } @else {
+                  <a class="nav-link" [routerLink]="itemRoute(item)" routerLinkActive="active" (click)="closeNavigation()">
+                    <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
+                    <span class="nav-label">{{ item.label }}</span>
+                  </a>
                 }
-              </div>
-            </details>
-          }
+              }
+            </div>
+          </details>
         }
       }
     </nav>
-
-    @if (!sidebarCollapsed()) {
-      <div class="sidebar-foot">v1.0 · Desarrollo</div>
-    }
+    @if (!sidebarCollapsed() || mobileMenuOpen()) { <div class="sidebar-foot">v1.0 · Desarrollo</div> }
   </aside>
 
   <section class="workspace">
     <header>
       <div class="header-left">
-        <p-button
-          icon="pi pi-bars"
-          [text]="true"
-          [rounded]="true"
-          severity="secondary"
-          (onClick)="toggleSidebar()"
-          ariaLabel="Mostrar u ocultar menú" />
+        <p-button icon="pi pi-bars" [text]="true" [rounded]="true" severity="secondary"
+          (onClick)="toggleSidebar()" ariaLabel="Mostrar u ocultar menú"
+          [attr.aria-controls]="'main-navigation'" [attr.aria-expanded]="mobileMenuOpen()" />
         <span class="mobile-logo">ETIC</span>
       </div>
       <div class="user-area">
-        <p-button
-          [icon]="themeService.mode() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"
-          [text]="true"
-          [rounded]="true"
-          severity="secondary"
-          (onClick)="themeService.toggle()"
+        <p-button [icon]="themeService.mode() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'" [text]="true" [rounded]="true"
+          severity="secondary" (onClick)="themeService.toggle()"
           [attr.title]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'"
           [ariaLabel]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'" />
         <span class="avatar">{{ authService.currentUser()?.name?.charAt(0) ?? 'U' }}</span>

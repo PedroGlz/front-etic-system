@@ -11,7 +11,7 @@ import { InspectionService } from '@features/inspecciones/services/inspection.se
 import { InspectionStore } from '@features/inspecciones/services/inspection.store';
 import { InspectionSummary } from '@features/inspecciones/models/inspection.model';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
+import { CatalogColumnFilterInteractionDirective } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-inspections-page',

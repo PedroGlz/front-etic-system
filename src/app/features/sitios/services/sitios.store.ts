@@ -3,8 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Cliente } from '@features/clientes/models/cliente.model';
-import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
+import { ClienteLookup, GrupoSitioLookup } from '@shared/contracts/catalog-lookups.model';
 import { SitiosApi } from '@features/sitios/services/sitios.api';
 import { Sitio, SitioRequest } from '@features/sitios/models/sitio.model';
 
@@ -30,8 +29,8 @@ type SitioForm = FormGroup<{
 @Injectable()
 export class SitiosStore {
   readonly records = signal<Sitio[]>([]);
-  readonly clients = signal<Cliente[]>([]);
-  readonly siteGroups = signal<GrupoSitios[]>([]);
+  readonly clients = signal<ClienteLookup[]>([]);
+  readonly siteGroups = signal<GrupoSitioLookup[]>([]);
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly dialogVisible = signal(false);
@@ -73,7 +72,7 @@ export class SitiosStore {
     this.dialogVisible.set(false);
   }
 
-  siteGroupOptions(): GrupoSitios[] {
+  siteGroupOptions(): GrupoSitioLookup[] {
     const clientId = this.form.controls.clientId.value;
     return this.siteGroups().filter((group) => group.clientId === clientId);
   }

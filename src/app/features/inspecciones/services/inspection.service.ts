@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { InspectionApi } from '@features/inspecciones/services/inspection.api';
-import { Cliente } from '@features/clientes/models/cliente.model';
-import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
 import {
   CatalogOption,
   CatalogRecordResponse,
@@ -11,10 +9,9 @@ import {
   InspectionSession,
   InspectionSummary,
   InspectionUpsertRequest,
-  ReportTemplateFile,
   UpdateInspectionStatusRequest,
 } from '@features/inspecciones/models/inspection.model';
-import { Sitio } from '@features/sitios/models/sitio.model';
+import { ClienteLookup, GrupoSitioLookup, SitioLookup } from '@shared/contracts/catalog-lookups.model';
 
 @Injectable()
 export class InspectionService {
@@ -77,22 +74,6 @@ export class InspectionService {
     });
   }
 
-  listReportTemplates(): Observable<ReportTemplateFile[]> {
-    return this.api.listReportTemplates();
-  }
-
-  uploadReportTemplates(files: File[]): Observable<void> {
-    return this.api.uploadReportTemplates(files);
-  }
-
-  deleteReportTemplates(fileNames: string[]): Observable<void> {
-    return this.api.deleteReportTemplates(fileNames);
-  }
-
-  downloadReportTemplate(fileName: string): Observable<Blob> {
-    return this.api.downloadReportTemplate(fileName);
-  }
-
   toOption(record: CatalogRecordResponse): CatalogOption {
     const values = record.values;
     return {
@@ -104,7 +85,7 @@ export class InspectionService {
     };
   }
 
-  clientToOption(client: Cliente): CatalogOption {
+  clientToOption(client: ClienteLookup): CatalogOption {
     return {
       id: client.id,
       label: client.businessName,
@@ -112,7 +93,7 @@ export class InspectionService {
     };
   }
 
-  siteGroupToOption(group: GrupoSitios): CatalogOption {
+  siteGroupToOption(group: GrupoSitioLookup): CatalogOption {
     return {
       id: group.id,
       label: group.name,
@@ -121,7 +102,7 @@ export class InspectionService {
     };
   }
 
-  siteToOption(site: Sitio): CatalogOption {
+  siteToOption(site: SitioLookup): CatalogOption {
     return {
       id: site.id,
       label: site.name,

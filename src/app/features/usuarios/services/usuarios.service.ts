@@ -13,10 +13,6 @@ export class UsuariosService {
     return this.api.getUsers().pipe(map((users) => users.map(mapUsuario)));
   }
 
-  getUserById(id: string): Observable<Usuario> {
-    return this.api.getUserById(id).pipe(map(mapUsuario));
-  }
-
   getGroups(): Observable<GrupoUsuario[]> {
     return this.api.getGroups().pipe(map((groups) => groups.map(mapGrupoUsuario)));
   }

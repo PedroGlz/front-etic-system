@@ -1,0 +1,47 @@
+@media (max-width: 900px) {
+  .app-frame, .app-frame.sidebar-collapsed { grid-template-columns: minmax(0, 1fr); }
+  aside {
+    position: fixed;
+    left: 0;
+    width: min(82vw, 300px);
+    transform: translateX(-105%);
+    transition: transform .2s ease;
+  }
+  .mobile-menu-open aside { transform: translateX(0); }
+  .mobile-menu-open .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: block;
+    border: 0;
+    background: rgb(0 0 0 / 48%);
+  }
+  .sidebar-collapsed .nav-label,
+  .sidebar-collapsed .nav-group summary .arrow { display: block; }
+  .sidebar-collapsed .nav-group summary,
+  .sidebar-collapsed .nav-submenu-trigger,
+  .sidebar-collapsed nav > .nav-group .nav-link {
+    justify-content: flex-start;
+    padding-inline: 1rem;
+  }
+  .sidebar-collapsed .nav-submenu-panel {
+    position: static;
+    width: auto;
+    margin: 0 .45rem .4rem 1.1rem;
+    border-width: 0 0 0 2px;
+    box-shadow: none;
+  }
+  .mobile-logo { display: inline; }
+  header { padding: 0 1rem; }
+  main { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .user-area div, .avatar { display: none; }
+}
+
+:host-context(.app-dark) .app-frame { background: #0f1722; }
+:host-context(.app-dark) header { background: #172331; border-bottom-color: #2a3b4c; }
+:host-context(.app-dark) .user-area div { color: #e0e9f1; }
+:host-context(.app-dark) .user-area small { color: #95a8ba; }
+:host-context(.app-dark) .avatar { background: #123c4b; color: #6ed6e7; }

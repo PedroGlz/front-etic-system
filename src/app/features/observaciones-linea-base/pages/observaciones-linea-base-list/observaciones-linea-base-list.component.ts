@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CatalogRoutePageComponent } from '@features/catalogs/pages/catalog-route-page/catalog-route-page.component';
+import { CatalogPageComponent } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-observaciones-linea-base-list',
-  imports: [CatalogRoutePageComponent],
+  imports: [CatalogPageComponent],
   templateUrl: './observaciones-linea-base-list.component.html',
   styleUrl: './observaciones-linea-base-list.component.scss',
 })

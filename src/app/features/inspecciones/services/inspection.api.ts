@@ -1,9 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_BASE_URL, CATALOGS_API_URL, CLIENTS_API_URL, INSPECTIONS_API_URL, SITES_API_URL, SITE_GROUPS_API_URL } from '@core/config/api-endpoints';
-import { Cliente } from '@features/clientes/models/cliente.model';
-import { GrupoSitios } from '@features/grupos-sitios/models/grupo-sitios.model';
+import { CATALOGS_API_URL, CLIENTS_API_URL, INSPECTIONS_API_URL, SITES_API_URL, SITE_GROUPS_API_URL } from '@core/config/api-endpoints';
 import {
   CatalogRecordResponse,
   InspectionExportResponse,
@@ -11,10 +9,9 @@ import {
   InspectionSession,
   InspectionSummary,
   InspectionUpsertRequest,
-  ReportTemplateFile,
   UpdateInspectionStatusRequest,
 } from '@features/inspecciones/models/inspection.model';
-import { Sitio } from '@features/sitios/models/sitio.model';
+import { ClienteLookup, GrupoSitioLookup, SitioLookup } from '@shared/contracts/catalog-lookups.model';
 
 @Injectable()
 export class InspectionApi {
@@ -83,40 +80,15 @@ export class InspectionApi {
     return this.http.get<CatalogRecordResponse[]>(`${CATALOGS_API_URL}/${key}`, { withCredentials: true });
   }
 
-  clients(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(CLIENTS_API_URL, { withCredentials: true });
+  clients(): Observable<ClienteLookup[]> {
+    return this.http.get<ClienteLookup[]>(CLIENTS_API_URL, { withCredentials: true });
   }
 
-  siteGroups(): Observable<GrupoSitios[]> {
-    return this.http.get<GrupoSitios[]>(SITE_GROUPS_API_URL, { withCredentials: true });
+  siteGroups(): Observable<GrupoSitioLookup[]> {
+    return this.http.get<GrupoSitioLookup[]>(SITE_GROUPS_API_URL, { withCredentials: true });
   }
 
-  sites(): Observable<Sitio[]> {
-    return this.http.get<Sitio[]>(SITES_API_URL, { withCredentials: true });
-  }
-
-  listReportTemplates(): Observable<ReportTemplateFile[]> {
-    return this.http.get<ReportTemplateFile[]>(`${API_BASE_URL}/plantillas-reportes`, { withCredentials: true });
-  }
-
-  uploadReportTemplates(files: File[]): Observable<void> {
-    const formData = new FormData();
-    files.forEach((file) => formData.append('files', file));
-    return this.http.post<void>(`${API_BASE_URL}/plantillas-reportes`, formData, { withCredentials: true });
-  }
-
-  deleteReportTemplates(fileNames: string[]): Observable<void> {
-    let params = new HttpParams();
-    fileNames.forEach((fileName) => {
-      params = params.append('files', fileName);
-    });
-    return this.http.delete<void>(`${API_BASE_URL}/plantillas-reportes`, { params, withCredentials: true });
-  }
-
-  downloadReportTemplate(fileName: string): Observable<Blob> {
-    return this.http.get(`${API_BASE_URL}/plantillas-reportes/descargar/${encodeURIComponent(fileName)}`, {
-      responseType: 'blob',
-      withCredentials: true,
-    });
+  sites(): Observable<SitioLookup[]> {
+    return this.http.get<SitioLookup[]>(SITES_API_URL, { withCredentials: true });
   }
 }

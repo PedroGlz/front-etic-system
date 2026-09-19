@@ -62,7 +62,7 @@ export abstract class BaseCatalogStore {
         this.buildForm();
         this.records.set(records);
         this.loading.set(false);
-        this.loadReferences(currentSchema);
+        this.loadReferences();
       },
       error: (error: HttpErrorResponse) => {
         this.loading.set(false);
@@ -240,7 +240,7 @@ export abstract class BaseCatalogStore {
     });
   }
 
-  private loadReferences(currentSchema: CatalogSchema | null): void {
+  private loadReferences(): void {
     const keys = [
       ...new Set(this.formFields().map((field) => field.referenceCatalog).filter((key): key is string => !!key)),
     ];

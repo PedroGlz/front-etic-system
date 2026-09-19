@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Cliente } from '@features/clientes/models/cliente.model';
+import { ClienteLookup } from '@shared/contracts/catalog-lookups.model';
 import { GruposSitiosApi } from '@features/grupos-sitios/services/grupos-sitios.api';
 import { GrupoSitios, GrupoSitiosRequest } from '@features/grupos-sitios/models/grupo-sitios.model';
 
@@ -15,7 +15,7 @@ type GrupoSitiosForm = FormGroup<{
 @Injectable()
 export class GruposSitiosStore {
   readonly records = signal<GrupoSitios[]>([]);
-  readonly clients = signal<Cliente[]>([]);
+  readonly clients = signal<ClienteLookup[]>([]);
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly dialogVisible = signal(false);

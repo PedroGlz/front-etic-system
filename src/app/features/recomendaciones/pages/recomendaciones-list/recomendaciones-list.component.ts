@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { CatalogRoutePageComponent } from '@features/catalogs/pages/catalog-route-page/catalog-route-page.component';
+import { CatalogPageComponent } from '@features/catalogs/public-api';
+import { RECOMENDACIONES_EXCLUDED_FIELDS } from '@features/recomendaciones/config/recomendaciones.config';
 
 @Component({
   selector: 'app-recomendaciones-list',
-  imports: [CatalogRoutePageComponent],
+  imports: [CatalogPageComponent],
   templateUrl: './recomendaciones-list.component.html',
   styleUrl: './recomendaciones-list.component.scss',
 })
-export class RecomendacionesListComponent {}
+export class RecomendacionesListComponent {
+  readonly excludedFields = RECOMENDACIONES_EXCLUDED_FIELDS;
+}

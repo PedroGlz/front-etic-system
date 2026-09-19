@@ -10,7 +10,7 @@ import { Cliente } from '@features/clientes/models/cliente.model';
 import { ClientesFormComponent } from '@features/clientes/components/clientes-form/clientes-form.component';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 import { InactiveRecordsFilterComponent } from '@shared/components/inactive-records-filter/inactive-records-filter.component';
-import { CatalogColumnFilterInteractionDirective } from '@shared/directives/catalog-column-filter-interaction.directive';
+import { CatalogColumnFilterInteractionDirective } from '@features/catalogs/public-api';
 
 @Component({
   selector: 'app-clientes-list',
