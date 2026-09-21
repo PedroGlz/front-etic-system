@@ -1,0 +1,22 @@
+.brand-section { position: relative; z-index: 2; min-height: 100vh; padding: clamp(40px, 6vh, 75px) clamp(50px, 7vw, 130px); display: flex; flex-direction: column; }
+.brand-header { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 1rem; }
+.brand-logo { width: 380px; height: auto; object-fit: contain; }
+.brand-header p { grid-column: 1 / -1; margin: 1rem 0 0; color: #65748d; font-size: .72rem; font-weight: 500; letter-spacing: .32em; }
+.hero-content { margin-top: clamp(40px, 6vh, 70px); }
+.hero-content h1 { margin: 0; color: #071426; font-size: clamp(3.5rem, 5vw, 5.4rem); font-weight: 400; line-height: .95; letter-spacing: -.05em; }
+.hero-content p { margin: 1.75rem 0 0; color: #62718b; font-size: clamp(1.3rem, 1.8vw, 1.9rem); line-height: 1.17; }
+.features { margin-top: clamp(45px, 6vh, 70px); max-width: 620px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.feature { display: flex; flex-direction: column; align-items: center; color: #52617a; text-align: center; font-size: .86rem; line-height: 1.55; }
+.feature-icon { width: 50px; height: 50px; margin-bottom: .75rem; display: grid; place-items: center; border-radius: 50%; color: #425570; background: rgba(239, 244, 250, .88); box-shadow: 0 4px 14px rgba(33, 46, 70, .04); }
+.feature-icon i { font-size: 1.45rem; }
+.bottom-message { margin-top: auto; padding-top: 2.5rem; display: flex; flex-direction: column; color: #677792; font-size: .72rem; letter-spacing: .3em; line-height: 1.6; }
+.brand-line { width: 174px; height: 3px; margin-top: .55rem; display: grid; grid-template-columns: repeat(4, 1fr); }
+.brand-line i:nth-child(1) { background: #0c4ae8; }.brand-line i:nth-child(2) { background: #9f13b8; }.brand-line i:nth-child(3) { background: #ef2313; }.brand-line i:nth-child(4) { background: #fbb026; }
+@media (max-width: 1100px) { .features { max-width: 380px; grid-template-columns: repeat(2, 1fr); }.brand-header p { letter-spacing: .2em; } }
+:host-context(.app-dark) {
+  .hero-content h1 { color: #e4edf5; }
+  .brand-header p, .bottom-message { color: #717a83; }
+  .hero-content p { color: #626262; }
+  .feature { color: #304e6b; }
+  .feature-icon { background: rgb(18 15 39 / 48%); color: #ececec; }
+}

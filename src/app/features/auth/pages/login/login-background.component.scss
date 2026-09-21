@@ -1,0 +1,19 @@
+.corporate-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: url('/img/login/login_1.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+:host-context(.app-dark) .corporate-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 20, 38, .28);
+  pointer-events: none;
+}

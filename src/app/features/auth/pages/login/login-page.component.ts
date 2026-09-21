@@ -12,7 +12,7 @@ import { ThemeService } from '@core/services/theme.service';
   selector: 'app-login-page',
   imports: [ReactiveFormsModule, ButtonModule, InputTextModule],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss',
+  styleUrls: ['./login-page.component.scss', './login-brand.component.scss', './login-background.component.scss'],
 })
 export class LoginPageComponent {
   readonly loading = signal(false);

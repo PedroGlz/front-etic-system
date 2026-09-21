@@ -1,5 +1,46 @@
 @import 'primeicons/primeicons.css';
 
+:root {
+  --brand-primary: #1753e7;
+  --brand-primary-hover: #1448cc;
+  --brand-primary-active: #123dae;
+  --brand-primary-focus: rgba(23, 83, 231, 0.20);
+  --brand-primary-contrast: #ffffff;
+  --brand-primary-50: #eff6ff;
+  --brand-primary-100: #dbeafe;
+  --brand-primary-200: #bfdbfe;
+  --brand-primary-300: #93c5fd;
+  --brand-primary-400: #60a5fa;
+  --brand-primary-500: #1753e7;
+  --brand-primary-600: #1448cc;
+  --brand-primary-700: #123dae;
+  --brand-primary-800: #11358e;
+  --brand-primary-900: #102f73;
+  --brand-primary-950: #071426;
+  --brand-surface-0: #ffffff;
+  --brand-surface-50: #f7fafc;
+  --brand-surface-100: #f3f6f9;
+  --brand-surface-200: #edf1f5;
+  --brand-surface-300: #cbd5df;
+  --brand-surface-500: #71809b;
+  --brand-surface-700: #29435c;
+  --brand-surface-900: #172331;
+  --brand-text-primary: #20384e;
+  --brand-text-secondary: #5b7388;
+  --brand-text-muted: #71809b;
+  --brand-border-default: #cbd5df;
+  --brand-border-hover: #91b4c6;
+  --brand-border-focus: #1753e7;
+}
+
+html.app-dark {
+  --brand-primary: #60a5fa;
+  --brand-primary-hover: #93c5fd;
+  --brand-primary-active: #bfdbfe;
+  --brand-primary-focus: rgba(96, 165, 250, 0.25);
+  --brand-primary-contrast: #172331;
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; font-family: Inter, "Segoe UI", Arial, sans-serif; color: #20384e; background: #f3f6f9; }
 button, input, textarea, select { font: inherit; }
