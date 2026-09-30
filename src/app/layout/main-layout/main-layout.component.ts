@@ -18,6 +18,7 @@ export class MainLayoutComponent {
   readonly sidebarCollapsed = signal(false);
   readonly mobileMenuOpen = signal(false);
   readonly openSubmenuKey = signal<string | null>(null);
+  readonly submenuFlyoutTop = signal(0);
 
   constructor(
     readonly authService: AuthService,
@@ -49,7 +50,12 @@ export class MainLayoutComponent {
     this.sidebarCollapsed.update((value) => !value);
   }
 
-  toggleSubmenu(item: MenuItem): void {
+  toggleSubmenu(item: MenuItem, event: MouseEvent): void {
+    if (this.sidebarCollapsed() && !this.mobileMenuOpen()) {
+      const triggerTop = (event.currentTarget as HTMLElement).getBoundingClientRect().top;
+      const flyoutHeight = Math.min(352, window.innerHeight - 64);
+      this.submenuFlyoutTop.set(Math.max(8, Math.min(triggerTop, window.innerHeight - flyoutHeight - 8)));
+    }
     this.openSubmenuKey.update((key) => key === item.key ? null : item.key);
   }
 
@@ -63,7 +69,9 @@ export class MainLayoutComponent {
   }
 
   closeSubmenuOnScroll(): void {
-    this.openSubmenuKey.set(null);
+    if (this.sidebarCollapsed() && !this.mobileMenuOpen()) {
+      this.openSubmenuKey.set(null);
+    }
   }
 
   @HostListener('document:keydown.escape')

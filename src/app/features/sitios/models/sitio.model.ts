@@ -10,13 +10,18 @@ export interface Sitio {
   neighborhood: string | null;
   state: string | null;
   municipality: string | null;
-  contact1: string | null;
-  contactRole1: string | null;
-  contact2: string | null;
-  contactRole2: string | null;
-  contact3: string | null;
-  contactRole3: string | null;
   status: string;
+  contacts: SitioContacto[];
 }
 
-export type SitioRequest = Omit<Sitio, 'id' | 'clientName' | 'siteGroupName' | 'status'>;
+export interface SitioContacto {
+  id: string | null;
+  name: string | null;
+  role: string | null;
+  status?: string;
+  order?: number;
+}
+
+export type SitioRequest = Omit<Sitio, 'id' | 'clientName' | 'siteGroupName' | 'status' | 'contacts'> & {
+  contacts: SitioContacto[];
+};

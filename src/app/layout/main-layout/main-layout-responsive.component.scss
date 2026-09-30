@@ -27,6 +27,8 @@
   .sidebar-collapsed .nav-submenu-panel {
     position: static;
     width: auto;
+    max-height: none;
+    overflow: visible;
     margin: 0 .45rem .4rem 1.1rem;
     border-width: 0 0 0 2px;
     box-shadow: none;

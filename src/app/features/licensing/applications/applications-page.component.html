@@ -1,0 +1,21 @@
+<app-module-table-shell eyebrow="LICENCIAMIENTO" title="Aplicaciones" description="Administra las aplicaciones y su modalidad de licencia." [total]="records().length">
+  <p-button header-actions label="Nueva aplicación" icon="pi pi-plus" (onClick)="open()" />
+  <div toolbar-right class="listing-filters">
+    <input pInputText aria-label="Buscar aplicaciones" placeholder="Buscar aplicaciones" (input)="table.filterGlobal($any($event.target).value, 'contains')" />
+    <select aria-label="Filtrar por estado" (change)="table.filter($any($event.target).value, 'status', 'equals')"><option value="">Todos los estados</option><option value="ACTIVE">Activas</option><option value="INACTIVE">Inactivas</option></select>
+  </div>
+  <p-table #table [value]="records()" [loading]="loading()" [globalFilterFields]="['code','name','packageName','licensingMode']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]" responsiveLayout="scroll" styleClass="p-datatable-sm app-data-table licensing-table" [tableStyle]="{'min-width':'55rem'}">
+    <ng-template #header><tr><th>Nombre</th><th>Código</th><th>Package name</th><th>Modalidad</th><th>Estado</th><th>Acciones</th></tr></ng-template>
+    <ng-template #body let-r><tr><td class="main-cell">{{r.name}}</td><td class="secondary-cell"><code>{{r.code}}</code></td><td class="secondary-cell">{{r.packageName}}</td><td>{{r.licensingMode==='USER_DEVICE'?'Usuario y dispositivo':'Solo dispositivo'}}</td><td><p-tag [value]="r.status==='ACTIVE'?'Activa':'Inactiva'" [severity]="r.status==='ACTIVE'?'success':'secondary'" /></td><td class="actions"><p-button icon="pi pi-pencil" [text]="true" [rounded]="true" size="small" (onClick)="open(r)" ariaLabel="Editar aplicación" pTooltip="Editar" /><p-button [icon]="r.status==='ACTIVE'?'pi pi-ban':'pi pi-check'" [text]="true" [rounded]="true" size="small" (onClick)="toggle(r)" [ariaLabel]="r.status==='ACTIVE'?'Desactivar aplicación':'Activar aplicación'" [pTooltip]="r.status==='ACTIVE'?'Desactivar':'Activar'" /></td></tr></ng-template>
+    <ng-template #emptymessage><tr><td colspan="6" class="empty"><i class="pi pi-mobile" aria-hidden="true"></i>No hay aplicaciones para mostrar.</td></tr></ng-template>
+  </p-table>
+</app-module-table-shell>
+<p-dialog [header]="editing()?'Editar aplicación':'Nueva aplicación'" [visible]="dialog()" (visibleChange)="!$event?close():null" [modal]="true" styleClass="licensing-dialog" [style]="{width:'min(94vw,680px)'}">
+  <form [formGroup]="form" class="entity-form" (ngSubmit)="save()">
+    <div class="form-field full-width"><label for="name">Nombre *</label><input pInputText id="name" formControlName="name" /><small>@if(form.controls.name.touched && form.controls.name.invalid){Ingresa un nombre válido.}</small></div>
+    <div class="form-field full-width"><label for="package">Package name *</label><input pInputText id="package" formControlName="packageName" /><small>@if(form.controls.packageName.touched && form.controls.packageName.invalid){Ingresa un package válido.}</small></div>
+    <div class="form-field full-width"><label for="mode">Modalidad *</label><select id="mode" formControlName="licensingMode"><option value="USER_DEVICE">USER_DEVICE</option><option value="DEVICE_ONLY">DEVICE_ONLY</option></select></div>
+    <div class="form-field full-width"><label for="status">Estado *</label><select id="status" formControlName="status"><option value="ACTIVE">Activo</option><option value="INACTIVE">Inactivo</option></select></div>
+    <div class="dialog-actions"><p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="close()"/><p-button type="submit" label="Guardar" [loading]="saving()"/></div>
+  </form>
+</p-dialog>

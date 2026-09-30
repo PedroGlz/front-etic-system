@@ -1,0 +1,4 @@
+@use '../licensing-page' as *;
+@include licensing-page;
+.pending-warning { grid-column: 1/-1; display: flex; gap: .65rem; padding: .85rem 1rem; border: 1px solid #f0b429; border-radius: .55rem; background: #fff8e1; color: #7a4d00; font-size: .85rem; }
+:host-context(.app-dark) .pending-warning { background: #332a16; color: #ffd98a; border-color: #8a681f; }

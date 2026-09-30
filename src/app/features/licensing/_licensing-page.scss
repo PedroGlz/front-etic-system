@@ -1,0 +1,51 @@
+@mixin licensing-page {
+  :host { display: block; min-width: 0; }
+  .listing-filters { display: flex; flex-wrap: nowrap; gap: .65rem; align-items: center; width: min(100%, 34rem); }
+  .listing-filters input, .listing-filters select { min-height: 2.6rem; }
+  .listing-filters input { flex: 1 1 auto; min-width: 0; width: auto; }
+  .listing-filters select { flex: 0 0 auto; min-width: 9rem; }
+  .listing-filters select, .form-field select, .form-field textarea, .form-field input[type=file] {
+    border: 1px solid var(--brand-border-default);
+    border-radius: .55rem;
+    background: var(--brand-surface-0);
+    color: var(--brand-text-primary);
+    padding: .65rem .8rem;
+  }
+  .form-field select { min-height: 2.75rem; }
+  .form-field textarea, .form-field input[type=file] { width: 100%; }
+  .entity-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.25rem; padding-top: .35rem; }
+  .form-field { min-width: 0; display: flex; flex-direction: column; gap: .4rem; }
+  .form-field.full-width { grid-column: 1 / -1; }
+  .form-field label { color: var(--brand-surface-700); font-size: .85rem; font-weight: 650; }
+  .form-field input, .form-field select { width: 100%; }
+  .form-field input[pInputText] { min-height: 2.75rem; }
+  .form-field small { min-height: 1rem; color: #b42318; font-size: .75rem; }
+  .form-field input.ng-invalid.ng-touched, .form-field select.ng-invalid.ng-touched { border-color: #b42318; }
+  .date-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.25rem; }
+  .option-field { grid-column: 1 / -1; display: flex; align-items: center; gap: .6rem; font-size: .85rem; }
+  .option-field input { accent-color: var(--brand-primary); }
+  .dialog-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: .65rem; margin-top: .25rem; padding-top: 1rem; border-top: 1px solid var(--brand-border-default); }
+  .actions { display: flex; align-items: center; gap: .1rem; white-space: nowrap; }
+  .actions .p-button { min-width: 2.25rem; min-height: 2.25rem; }
+  .empty { padding: 3rem 1rem !important; text-align: center; color: var(--brand-text-secondary); }
+  .empty i { display: block; margin-bottom: .6rem; color: var(--brand-primary); font-size: 1.5rem; }
+  .hash { max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, monospace; font-size: .8rem; }
+  .main-cell { font-weight: 650; }
+  .main-cell, .secondary-cell { max-width: 18rem; overflow: hidden; text-overflow: ellipsis; }
+  .secondary-cell { color: var(--brand-text-secondary); font-size: .82rem; }
+  :host-context(.app-dark) .listing-filters select,
+  :host-context(.app-dark) .form-field select,
+  :host-context(.app-dark) .form-field textarea,
+  :host-context(.app-dark) .form-field input[type=file] { background: var(--brand-surface-900); color: #dbe7f1; border-color: #415365; }
+  :host-context(.app-dark) .form-field label { color: #dbe7f1; }
+  :host-context(.app-dark) .form-field small { color: #ffb4aa; }
+  @media (max-width: 650px) {
+    .entity-form { grid-template-columns: minmax(0, 1fr); }
+    .date-grid { grid-template-columns: minmax(0, 1fr); }
+    :host ::ng-deep .table-tools-right { width: 100%; }
+    .listing-filters { flex-direction: column; align-items: stretch; }
+    .listing-filters, .listing-filters input, .listing-filters select { width: 100%; }
+    .dialog-actions { justify-content: stretch; }
+    .dialog-actions p-button { flex: 1; }
+  }
+}

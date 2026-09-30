@@ -13,7 +13,7 @@
             <summary [pTooltip]="sidebarCollapsed() && !mobileMenuOpen() ? group.label : ''" tooltipPosition="right">
               <span class="nav-icon"><i class="pi" [class]="'pi ' + group.icon"></i></span>
               <span class="nav-label">{{ group.label }}</span>
-              <i class="pi pi-chevron-down arrow"></i>
+              <i class="pi pi-chevron-right arrow" aria-hidden="true"></i>
             </summary>
             <div class="nav-items">
               @for (item of visibleItems(group); track item.key) {
@@ -27,15 +27,16 @@
                       [attr.aria-controls]="item.key + '-submenu'"
                       [pTooltip]="sidebarCollapsed() && !mobileMenuOpen() ? item.label : ''"
                       tooltipPosition="right"
-                      (click)="toggleSubmenu(item)">
+                      (click)="toggleSubmenu(item, $event)">
                       <span class="nav-icon"><i class="pi" [class]="'pi ' + item.icon"></i></span>
                       <span class="nav-label">{{ item.label }}</span>
                       @if (!sidebarCollapsed() || mobileMenuOpen()) {
-                        <i class="pi pi-chevron-right arrow"></i>
+                        <i class="pi pi-chevron-right arrow" aria-hidden="true"></i>
                       }
                     </button>
                     @if (isSubmenuOpen(item)) {
-                      <div class="nav-submenu-panel" [id]="item.key + '-submenu'">
+                      <div class="nav-submenu-panel" [id]="item.key + '-submenu'"
+                        [style.top.px]="sidebarCollapsed() && !mobileMenuOpen() ? submenuFlyoutTop() : null">
                         @for (child of visibleChildren(item); track child.key) {
                           <a class="nav-link" [routerLink]="itemRoute(child)" routerLinkActive="active" (click)="closeNavigation()">
                             <span class="nav-icon"><i class="pi" [class]="'pi ' + child.icon"></i></span>

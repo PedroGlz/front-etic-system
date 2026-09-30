@@ -11,6 +11,7 @@ export const routes: Routes = [
       { path: 'inspecciones', loadChildren: () => import('@features/inspecciones/inspecciones.routes').then((m) => m.INSPECCIONES_ROUTES) },
       { path: 'plantillas-reportes', loadChildren: () => import('@features/plantillas-reportes/plantillas-reportes.routes').then((m) => m.PLANTILLAS_REPORTES_ROUTES) },
       { path: 'legacy-import', loadChildren: () => import('@features/legacy-import/legacy-import.routes').then((m) => m.LEGACY_IMPORT_ROUTES) },
+      { path: 'licensing', loadChildren: () => import('@features/licensing/licensing.routes').then((m) => m.LICENSING_ROUTES) },
       { path: 'catalogos/clientes', loadChildren: () => import('@features/clientes/clientes.routes').then((m) => m.CLIENTES_ROUTES) },
       { path: 'catalogos/grupos-sitios', loadChildren: () => import('@features/grupos-sitios/grupos-sitios.routes').then((m) => m.GRUPOS_SITIOS_ROUTES) },
       { path: 'catalogos/sitios', loadChildren: () => import('@features/sitios/sitios.routes').then((m) => m.SITIOS_ROUTES) },

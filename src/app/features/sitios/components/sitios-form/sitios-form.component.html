@@ -57,34 +57,24 @@
         <textarea id="description" rows="3" maxlength="1000" formControlName="description"></textarea>
       </div>
 
-      <div class="form-field">
-        <label for="contact1">Contacto 1</label>
-        <input pInputText id="contact1" maxlength="200" formControlName="contact1" />
-      </div>
-
-      <div class="form-field">
-        <label for="contactRole1">Puesto contacto 1</label>
-        <input pInputText id="contactRole1" maxlength="200" formControlName="contactRole1" />
-      </div>
-
-      <div class="form-field">
-        <label for="contact2">Contacto 2</label>
-        <input pInputText id="contact2" maxlength="200" formControlName="contact2" />
-      </div>
-
-      <div class="form-field">
-        <label for="contactRole2">Puesto contacto 2</label>
-        <input pInputText id="contactRole2" maxlength="200" formControlName="contactRole2" />
-      </div>
-
-      <div class="form-field">
-        <label for="contact3">Contacto 3</label>
-        <input pInputText id="contact3" maxlength="200" formControlName="contact3" />
-      </div>
-
-      <div class="form-field">
-        <label for="contactRole3">Puesto contacto 3</label>
-        <input pInputText id="contactRole3" maxlength="200" formControlName="contactRole3" />
+      <div class="contacts-section" formArrayName="contacts">
+        <div class="contacts-header">
+          <strong>Contactos</strong>
+          <p-button type="button" label="Agregar contacto" icon="pi pi-plus" [outlined]="true" (onClick)="store().addContact()" />
+        </div>
+        @for (contact of store().form.controls.contacts.controls; track contact; let index = $index) {
+          <div class="contact-row" [formGroupName]="index">
+            <div class="form-field">
+              <label [for]="'contactName' + index">Contacto {{ index + 1 }}</label>
+              <input pInputText [id]="'contactName' + index" maxlength="200" formControlName="name" />
+            </div>
+            <div class="form-field">
+              <label [for]="'contactRole' + index">Puesto</label>
+              <input pInputText [id]="'contactRole' + index" maxlength="200" formControlName="role" />
+            </div>
+            <p-button type="button" icon="pi pi-trash" severity="danger" [text]="true" (onClick)="store().removeContact(index)" />
+          </div>
+        }
       </div>
     </div>
 

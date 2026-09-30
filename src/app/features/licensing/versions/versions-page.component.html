@@ -1,0 +1,30 @@
+<app-module-table-shell eyebrow="LICENCIAMIENTO" title="Versiones / APK" description="Publica y administra los archivos instalables de cada aplicación." [total]="records().length">
+  <p-button header-actions label="Subir APK" icon="pi pi-upload" (onClick)="dialog.set(true)" />
+  <div toolbar-right class="listing-filters"><input pInputText aria-label="Buscar versiones" placeholder="Buscar versiones" (input)="table.filterGlobal($any($event.target).value, 'contains')" /></div>
+  <p-table #table [value]="records()" [loading]="loading()" [globalFilterFields]="['applicationName','versionName','versionCode','sha256']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]" responsiveLayout="scroll" styleClass="p-datatable-sm app-data-table licensing-table" [tableStyle]="{'min-width':'72rem'}">
+    <ng-template #header><tr><th>Aplicación</th><th>Versión</th><th>VersionCode</th><th>Tamaño</th><th>SHA-256</th><th>Publicado</th><th>Fecha</th><th>Acciones</th></tr></ng-template>
+    <ng-template #body let-row><tr>
+      <td class="main-cell">{{ row.applicationName }}</td><td>{{ row.versionName }}</td><td>{{ row.versionCode }}</td>
+      <td>{{ row.fileSize / 1048576 | number:'1.2-2' }} MB</td>
+      <td class="hash" [title]="row.sha256">{{ row.sha256 }}</td>
+      <td><p-tag [value]="row.published ? 'Publicada' : 'No publicada'" [severity]="row.published ? 'success' : 'secondary'" /></td>
+      <td>{{ row.createdAt }}</td>
+      <td class="actions"><p-button icon="pi pi-download" [text]="true" [rounded]="true" size="small" (onClick)="download(row)" ariaLabel="Descargar APK" pTooltip="Descargar APK" />
+        <p-button [icon]="row.published ? 'pi pi-eye-slash' : 'pi pi-eye'" [text]="true" [rounded]="true" size="small" (onClick)="toggle(row)" [ariaLabel]="row.published ? 'Despublicar versión' : 'Publicar versión'" [pTooltip]="row.published ? 'Despublicar' : 'Publicar'" /></td>
+    </tr></ng-template>
+    <ng-template #emptymessage><tr><td colspan="8" class="empty"><i class="pi pi-box" aria-hidden="true"></i>No hay versiones para mostrar.</td></tr></ng-template>
+  </p-table>
+</app-module-table-shell>
+<p-dialog header="Subir versión APK" [visible]="dialog()" (visibleChange)="!$event ? dialog.set(false) : null" [modal]="true" styleClass="licensing-dialog" [style]="{width:'min(94vw,680px)'}">
+  <form [formGroup]="form" class="entity-form" (ngSubmit)="save()">
+    <div class="form-field full-width"><label for="application">Aplicación *</label><select id="application" formControlName="applicationId"><option value="">Selecciona</option>@for(app of applications();track app.id){<option [value]="app.id">{{ app.name }}</option>}</select></div>
+    <div class="date-grid"><div class="form-field"><label for="versionName">Versión *</label><input id="versionName" pInputText formControlName="versionName" /></div>
+      <div class="form-field"><label for="versionCode">VersionCode *</label><input id="versionCode" pInputText type="number" min="1" formControlName="versionCode" /></div></div>
+    <div class="form-field"><label for="apk">Archivo APK *</label><input id="apk" type="file" accept=".apk" (change)="selectFile($event)" /></div>
+    <div class="form-field"><label for="android">Android mínimo</label><input id="android" pInputText formControlName="minimumAndroid" /></div>
+    <div class="form-field full-width"><label for="notes">Notas de versión</label><textarea id="notes" formControlName="releaseNotes" rows="3"></textarea></div>
+    <label class="option-field"><input type="checkbox" formControlName="mandatory" /> Actualización obligatoria</label>
+    <label class="option-field"><input type="checkbox" formControlName="published" /> Publicar al subir</label>
+    <div class="dialog-actions"><p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialog.set(false)" /><p-button type="submit" label="Guardar" [loading]="saving()" /></div>
+  </form>
+</p-dialog>

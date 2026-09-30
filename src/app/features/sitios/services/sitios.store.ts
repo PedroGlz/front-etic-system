@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ClienteLookup, GrupoSitioLookup } from '@shared/contracts/catalog-lookups.model';
@@ -18,12 +18,11 @@ type SitioForm = FormGroup<{
   neighborhood: FormControl<string>;
   state: FormControl<string>;
   municipality: FormControl<string>;
-  contact1: FormControl<string>;
-  contactRole1: FormControl<string>;
-  contact2: FormControl<string>;
-  contactRole2: FormControl<string>;
-  contact3: FormControl<string>;
-  contactRole3: FormControl<string>;
+  contacts: FormArray<FormGroup<{
+    id: FormControl<string>;
+    name: FormControl<string>;
+    role: FormControl<string>;
+  }>>;
 }>;
 
 @Injectable()
@@ -79,6 +78,14 @@ export class SitiosStore {
 
   onClientChange(): void {
     this.form.controls.siteGroupId.setValue('');
+  }
+
+  addContact(): void {
+    this.form.controls.contacts.push(this.createContactForm());
+  }
+
+  removeContact(index: number): void {
+    this.form.controls.contacts.removeAt(index);
   }
 
   save(): void {
@@ -144,6 +151,9 @@ export class SitiosStore {
 
   private payload(): SitioRequest {
     const values = this.form.getRawValue();
+    const contacts = values.contacts
+      .map((contact) => ({ id: contact.id || null, name: this.blankToNull(contact.name), role: this.blankToNull(contact.role) }))
+      .filter((contact) => contact.name !== null || contact.role !== null);
     return {
       ...values,
       siteGroupId: this.blankToNull(values.siteGroupId),
@@ -152,12 +162,7 @@ export class SitiosStore {
       neighborhood: this.blankToNull(values.neighborhood),
       state: this.blankToNull(values.state),
       municipality: this.blankToNull(values.municipality),
-      contact1: this.blankToNull(values.contact1),
-      contactRole1: this.blankToNull(values.contactRole1),
-      contact2: this.blankToNull(values.contact2),
-      contactRole2: this.blankToNull(values.contactRole2),
-      contact3: this.blankToNull(values.contact3),
-      contactRole3: this.blankToNull(values.contactRole3),
+      contacts,
     };
   }
 
@@ -171,12 +176,17 @@ export class SitiosStore {
       neighborhood: new FormControl(record?.neighborhood ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
       state: new FormControl(record?.state ?? '', { nonNullable: true, validators: [Validators.maxLength(150)] }),
       municipality: new FormControl(record?.municipality ?? '', { nonNullable: true, validators: [Validators.maxLength(150)] }),
-      contact1: new FormControl(record?.contact1 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
-      contactRole1: new FormControl(record?.contactRole1 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
-      contact2: new FormControl(record?.contact2 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
-      contactRole2: new FormControl(record?.contactRole2 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
-      contact3: new FormControl(record?.contact3 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
-      contactRole3: new FormControl(record?.contactRole3 ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
+      contacts: new FormArray(
+        (record?.contacts ?? []).map((contact) => this.createContactForm(contact)),
+      ),
+    });
+  }
+
+  private createContactForm(contact?: { id?: string | null; name?: string | null; role?: string | null }) {
+    return new FormGroup({
+      id: new FormControl(contact?.id ?? '', { nonNullable: true }),
+      name: new FormControl(contact?.name ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
+      role: new FormControl(contact?.role ?? '', { nonNullable: true, validators: [Validators.maxLength(200)] }),
     });
   }
 

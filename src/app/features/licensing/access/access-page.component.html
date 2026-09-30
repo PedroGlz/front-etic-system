@@ -1,0 +1,28 @@
+<app-module-table-shell eyebrow="LICENCIAMIENTO" title="Usuarios autorizados" description="Controla quién puede ver y descargar cada aplicación." [total]="records().length">
+  <p-button header-actions label="Autorizar usuario" icon="pi pi-user-plus" (onClick)="open()" />
+  <div toolbar-right class="listing-filters"><input pInputText aria-label="Buscar accesos" placeholder="Buscar accesos" (input)="table.filterGlobal($any($event.target).value, 'contains')" /><select aria-label="Filtrar por estado" (change)="table.filter($any($event.target).value, 'status', 'equals')"><option value="">Todos los estados</option><option value="ACTIVE">Activos</option><option value="SUSPENDED">Suspendidos</option><option value="REVOKED">Revocados</option></select></div>
+  <p-table #table [value]="records()" [loading]="loading()" [globalFilterFields]="['userId','applicationName','status']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]" responsiveLayout="scroll" styleClass="p-datatable-sm app-data-table licensing-table" [tableStyle]="{'min-width':'62rem'}">
+    <ng-template #header><tr><th>Usuario</th><th>Aplicación</th><th>Estado</th><th>Desde</th><th>Hasta</th><th>Máx. dispositivos</th><th>Acciones</th></tr></ng-template>
+    <ng-template #body let-row><tr>
+      <td class="main-cell">{{ userName(row.userId) }}</td><td>{{ row.applicationName }}</td>
+      <td><p-tag [value]="row.status === 'ACTIVE' ? 'Activo' : row.status === 'SUSPENDED' ? 'Suspendido' : 'Revocado'" [severity]="row.status === 'ACTIVE' ? 'success' : row.status === 'SUSPENDED' ? 'warn' : 'danger'" /></td>
+      <td>{{ row.validFrom }}</td><td>{{ row.validUntil || 'Sin vencimiento' }}</td><td>{{ row.maxDevices }}</td>
+      <td class="actions"><p-button icon="pi pi-pencil" [text]="true" [rounded]="true" size="small" (onClick)="open(row)" ariaLabel="Editar acceso" pTooltip="Editar" />
+        <p-button icon="pi pi-check" [text]="true" [rounded]="true" size="small" severity="success" [disabled]="row.status === 'ACTIVE'" (onClick)="changeStatus(row, 'ACTIVE')" ariaLabel="Activar acceso" pTooltip="Activar" />
+        <p-button icon="pi pi-pause" [text]="true" [rounded]="true" size="small" severity="warn" [disabled]="row.status === 'SUSPENDED'" (onClick)="changeStatus(row, 'SUSPENDED')" ariaLabel="Suspender acceso" pTooltip="Suspender" />
+        <p-button icon="pi pi-ban" [text]="true" [rounded]="true" size="small" severity="danger" [disabled]="row.status === 'REVOKED'" (onClick)="changeStatus(row, 'REVOKED')" ariaLabel="Revocar acceso" pTooltip="Revocar" /></td>
+    </tr></ng-template>
+    <ng-template #emptymessage><tr><td colspan="7" class="empty"><i class="pi pi-users" aria-hidden="true"></i>No hay accesos para mostrar.</td></tr></ng-template>
+  </p-table>
+</app-module-table-shell>
+<p-dialog [header]="editing() ? 'Editar acceso' : 'Autorizar usuario'" [visible]="dialog()" (visibleChange)="!$event ? dialog.set(false) : null" [modal]="true" styleClass="licensing-dialog" [style]="{width:'min(94vw,680px)'}">
+  <form [formGroup]="form" class="entity-form" (ngSubmit)="save()">
+    <div class="form-field"><label for="user">Usuario *</label><select id="user" formControlName="userId" [disabled]="!!editing()"><option value="">Selecciona</option>@for(user of users();track user.id){<option [value]="user.id">{{ user.name }} ({{ user.username }})</option>}</select></div>
+    <div class="form-field"><label for="application">Aplicación *</label><select id="application" formControlName="applicationId" [disabled]="!!editing()"><option value="">Selecciona</option>@for(app of applications();track app.id){<option [value]="app.id">{{ app.name }}</option>}</select></div>
+    <div class="form-field full-width"><label for="status">Estado</label><select id="status" formControlName="status"><option value="ACTIVE">Activo</option><option value="SUSPENDED">Suspendido</option><option value="REVOKED">Revocado</option></select></div>
+    <div class="date-grid"><div class="form-field"><label for="from">Desde *</label><input id="from" pInputText type="date" formControlName="validFrom" /></div>
+      <div class="form-field"><label for="until">Hasta</label><input id="until" pInputText type="date" formControlName="validUntil" /></div></div>
+    <div class="form-field full-width"><label for="maxDevices">Máximo de dispositivos *</label><input id="maxDevices" pInputText type="number" min="1" formControlName="maxDevices" /></div>
+    <div class="dialog-actions"><p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialog.set(false)" /><p-button type="submit" label="Guardar" [loading]="saving()" /></div>
+  </form>
+</p-dialog>

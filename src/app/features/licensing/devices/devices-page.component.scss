@@ -1,0 +1,13 @@
+@use '../licensing-page' as *;
+@include licensing-page;
+.device-filters { width: min(100%, 58rem); }
+.device-filters p-button { flex: 0 0 auto; }
+.device-detail { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: 0; }
+.device-detail div { min-width: 0; padding: .8rem; border: 1px solid var(--brand-border-default); border-radius: .55rem; }
+.device-detail .wide { grid-column: 1/-1; }
+.device-detail dt { color: var(--brand-text-secondary); font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+.device-detail dd { margin: .3rem 0 0; overflow-wrap: anywhere; color: var(--brand-text-primary); }
+.mono { font-family: ui-monospace,monospace; font-size: .8rem; }
+.enrollment-result { display: flex; flex-direction: column; gap: 1rem; text-align: center; }
+.enrollment-result strong { padding: 1rem; border: 1px dashed var(--brand-primary); border-radius: .65rem; color: var(--brand-primary); font: 700 1.35rem ui-monospace,monospace; letter-spacing: .08em; }
+@media(max-width:650px){.device-detail{grid-template-columns:1fr}.device-detail .wide{grid-column:auto}.device-filters p-button{width:100%}}

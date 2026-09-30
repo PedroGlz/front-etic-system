@@ -221,3 +221,52 @@ html.app-dark .inspection-datepicker-input {
   color: #e4edf5 !important;
   border-color: #3b556a !important;
 }
+
+.licensing-dialog .p-dialog-content {
+  max-height: min(72dvh, 680px);
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.licensing-table .p-datatable-thead > tr > th {
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+
+.licensing-table .p-datatable-tbody > tr > td {
+  padding-block: .8rem;
+}
+
+@media (max-width: 650px) {
+  .licensing-dialog .p-dialog-content { padding: 1rem; }
+  .licensing-table .p-paginator { flex-wrap: wrap; gap: .25rem; }
+}
+app-main-layout nav,
+app-main-layout .sidebar-collapsed .nav-submenu-panel {
+  scrollbar-color: rgb(96 165 250 / 42%) transparent;
+  scrollbar-width: thin;
+}
+
+app-main-layout nav::-webkit-scrollbar,
+app-main-layout .sidebar-collapsed .nav-submenu-panel::-webkit-scrollbar {
+  width: 6px;
+  height: 0;
+}
+
+app-main-layout nav::-webkit-scrollbar-track,
+app-main-layout .sidebar-collapsed .nav-submenu-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+app-main-layout nav::-webkit-scrollbar-thumb,
+app-main-layout .sidebar-collapsed .nav-submenu-panel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(96 165 250 / 34%);
+}
+
+app-main-layout nav:hover::-webkit-scrollbar-thumb,
+app-main-layout .sidebar-collapsed .nav-submenu-panel:hover::-webkit-scrollbar-thumb {
+  background: rgb(96 165 250 / 58%);
+}
