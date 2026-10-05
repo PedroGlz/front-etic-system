@@ -29,7 +29,6 @@ export class VersionsPageComponent {
   readonly form = new FormGroup({
     applicationId: new FormControl('', { nonNullable: true, validators: Validators.required }),
     versionName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(80)] }),
-    versionCode: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(1)] }),
     minimumAndroid: new FormControl(''),
     releaseNotes: new FormControl(''),
     mandatory: new FormControl(false, { nonNullable: true }),
@@ -64,7 +63,6 @@ export class VersionsPageComponent {
     const body = new FormData();
     body.append('applicationId', value.applicationId);
     body.append('versionName', value.versionName);
-    body.append('versionCode', String(value.versionCode));
     body.append('minimumAndroid', value.minimumAndroid ?? '');
     body.append('releaseNotes', value.releaseNotes ?? '');
     body.append('mandatory', String(value.mandatory));

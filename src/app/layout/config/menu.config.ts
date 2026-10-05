@@ -43,26 +43,4 @@ export const APP_MENU_GROUPS: MenuGroup[] = [
       { key: 'ubicaciones', label: 'Ubicaciones', icon: 'pi-map-marker' },
     ],
   },
-  {
-    label: 'Sistema',
-    icon: 'pi-cog',
-    adminOnly: true,
-    items: [
-      {
-        key: 'licensing-menu',
-        label: 'Licenciamiento',
-        icon: 'pi-key',
-        adminOnly: true,
-        children: [
-          { key: 'licensing-applications', label: 'Aplicaciones', icon: 'pi-mobile', route: '/licensing/applications' },
-          { key: 'licensing-versions', label: 'Versiones / APK', icon: 'pi-upload', route: '/licensing/versions' },
-          { key: 'licensing-access', label: 'Usuarios autorizados', icon: 'pi-user-plus', route: '/licensing/access' },
-          { key: 'licensing-devices', label: 'Dispositivos', icon: 'pi-tablet', route: '/licensing/devices' },
-          { key: 'licensing-licenses', label: 'Licencias', icon: 'pi-id-card', route: '/licensing/licenses' },
-        ],
-      },
-      { key: 'usuarios', label: 'Usuarios', icon: 'pi-user' },
-      { key: 'grupos', label: 'Grupos', icon: 'pi-users' },
-    ],
-  },
 ];

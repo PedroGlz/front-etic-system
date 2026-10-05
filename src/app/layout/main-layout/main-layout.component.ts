@@ -27,13 +27,13 @@ export class MainLayoutComponent {
   ) {}
 
   visibleItems(group: MenuGroup): MenuItem[] {
-    const isAdministrator = this.authService.currentUser()?.groupName === 'Administradores';
+    const isAdministrator = this.authService.isAdministrator();
     if (group.adminOnly && !isAdministrator) return [];
     return group.items.filter((item) => !item.adminOnly || isAdministrator);
   }
 
   visibleChildren(item: MenuItem): MenuItem[] {
-    const isAdministrator = this.authService.currentUser()?.groupName === 'Administradores';
+    const isAdministrator = this.authService.isAdministrator();
     return (item.children ?? []).filter((child) => !child.adminOnly || isAdministrator);
   }
 

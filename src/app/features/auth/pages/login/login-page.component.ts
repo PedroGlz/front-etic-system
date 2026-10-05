@@ -38,7 +38,7 @@ export class LoginPageComponent {
       next: (user) => {
         this.loading.set(false);
         void Swal.fire({ icon: 'success', title: `Bienvenido, ${user.name}`, timer: 1400, showConfirmButton: false });
-        const target = user.groupName === 'Administradores' ? 'clientes' : 'fabricantes';
+        const target = this.authService.isAdministrator() ? 'clientes' : 'fabricantes';
         void this.router.navigate(['/catalogos', target]);
       },
       error: (error: HttpErrorResponse) => {

@@ -16,7 +16,6 @@ export const CATALOGS_ROUTES: Routes = [
   { path: 'recomendaciones-generales', data: { catalogKey: 'recomendaciones-generales' }, loadComponent: () => import('@features/recomendaciones-generales/pages/recomendaciones-generales-list/recomendaciones-generales-list.component').then((m) => m.RecomendacionesGeneralesListComponent) },
   { path: 'tipos-inspeccion', canActivate: [adminGuard], data: { catalogKey: 'tipos-inspeccion' }, loadComponent: () => import('@features/tipos-inspeccion/pages/tipos-inspeccion-list/tipos-inspeccion-list.component').then((m) => m.TiposInspeccionListComponent) },
   { path: 'tipos-prioridad', canActivate: [adminGuard], data: { catalogKey: 'tipos-prioridad' }, loadComponent: () => import('@features/tipos-prioridad/pages/tipos-prioridad-list/tipos-prioridad-list.component').then((m) => m.TiposPrioridadListComponent) },
-  { path: 'grupos', canActivate: [adminGuard], data: { catalogKey: 'grupos' }, loadComponent: () => import('@features/grupos/pages/grupos-list/grupos-list.component').then((m) => m.GruposListComponent) },
   { path: 'tipos-ambiente', data: { catalogKey: 'tipos-ambiente' }, loadComponent: () => import('@features/tipos-ambiente/pages/tipos-ambiente-list/tipos-ambiente-list.component').then((m) => m.TiposAmbienteListComponent) },
   { path: 'tipos-falla', data: { catalogKey: 'tipos-falla' }, loadComponent: () => import('@features/tipos-falla/pages/tipos-falla-list/tipos-falla-list.component').then((m) => m.TiposFallaListComponent) },
 ];

@@ -11,6 +11,6 @@ export interface ManualDeviceRequest extends DeviceRequest { initialStatus:'PEND
 export interface EnrollmentCodeResponse { code:string; expiresAt:string; }
 export interface ManualDeviceCreated { device:LicensedDevice; enrollmentCode:string; expiresAt:string; }
 export interface LicenseRequest { applicationId:string; deviceId:string; userId:string|null; validFrom:string; validUntil:string; status:LicenseStatus; }
-export interface ApplicationVersion { id:string; applicationId:string; applicationName:string; versionName:string; versionCode:number; originalFileName:string; sha256:string; fileSize:number; minimumAndroid:string|null; releaseNotes:string|null; mandatory:boolean; published:boolean; createdAt:string; }
+export interface ApplicationVersion { id:string; applicationId:string; applicationName:string; versionName:string; versionCode:number|null; originalFileName:string; sha256:string; fileSize:number; minimumAndroid:string|null; releaseNotes:string|null; mandatory:boolean; published:boolean; createdAt:string; }
 export interface UserApplicationAccess { id:string; userId:string; applicationId:string; applicationName:string; status:'ACTIVE'|'SUSPENDED'|'REVOKED'; validFrom:string; validUntil:string|null; maxDevices:number; createdAt:string; }
 export interface AccessRequest { userId:string; applicationId:string; status:string; validFrom:string; validUntil:string|null; maxDevices:number; }

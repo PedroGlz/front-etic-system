@@ -3,10 +3,17 @@ export interface AuthenticatedUser {
   username: string;
   name: string;
   email: string | null;
-  groupId: string | null;
-  groupName: string | null;
-  title: string | null;
-  certificationLevel: string | null;
+  firstName: string;
+  lastName: string | null;
+  system: string;
+  roles: string[];
+  permissions: string[];
+  systemAdmin: boolean;
+}
+
+export interface LoginResponse {
+  token: string;
+  user: Omit<AuthenticatedUser, 'name'>;
 }
 
 export interface LoginRequest {

@@ -4,7 +4,7 @@ import { AuthService } from '@core/auth/services/auth.service';
 
 export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  return authService.currentUser()?.groupName === 'Administradores'
+  return authService.isAdministrator()
     ? true
     : inject(Router).createUrlTree(['/catalogos/fabricantes']);
 };

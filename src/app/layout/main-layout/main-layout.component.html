@@ -75,7 +75,7 @@
           [attr.title]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'"
           [ariaLabel]="themeService.mode() === 'dark' ? 'Usar tema claro' : 'Usar tema oscuro'" />
         <span class="avatar">{{ authService.currentUser()?.name?.charAt(0) ?? 'U' }}</span>
-        <div><strong>{{ authService.currentUser()?.name }}</strong><small>{{ authService.currentUser()?.groupName }}</small></div>
+        <div><strong>{{ authService.currentUser()?.name }}</strong><small>{{ authService.currentUser()?.roles?.join(', ') }}</small></div>
         <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" ariaLabel="Cerrar sesión" />
       </div>
     </header>
