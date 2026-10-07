@@ -40,7 +40,7 @@ export class AuthService {
     } catch { return null; }
   }
 
-  isAdministrator(): boolean { return this.currentUserSignal()?.systemAdmin === true; }
+  isAdministrator(): boolean { return this.isAuthenticated(); }
 
   private normalize(user: Omit<AuthenticatedUser, 'name'>): AuthenticatedUser {
     return { ...user, name: [user.firstName, user.lastName].filter(Boolean).join(' ') };
