@@ -10,12 +10,7 @@
     <div class="grid">
       <label>
         <span>Cliente</span>
-        <select formControlName="clientId" [disabled]="store().isEditing()" (change)="store().onClientChange()">
-          <option value="">Selecciona un cliente</option>
-          @for (option of store().clientOptions(); track option.id) {
-            <option [value]="option.id">{{ option.label }}</option>
-          }
-        </select>
+        <p-select formControlName="clientId" [options]="store().clientOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un cliente" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" (onChange)="store().onClientChange()" />
         @if (store().isInvalid('clientId')) {
           <small>El cliente es obligatorio.</small>
         }
@@ -23,12 +18,7 @@
 
       <label>
         <span>Grupo de sitios</span>
-        <select formControlName="siteGroupId" [disabled]="store().isEditing()" (change)="store().onSiteGroupChange()">
-          <option value="">Selecciona un grupo</option>
-          @for (option of store().siteGroupOptions(); track option.id) {
-            <option [value]="option.id">{{ option.label }}</option>
-          }
-        </select>
+        <p-select formControlName="siteGroupId" [options]="store().siteGroupOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un grupo" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" [disabled]="!store().form.controls.clientId.value" (onChange)="store().onSiteGroupChange()" />
         @if (store().isInvalid('siteGroupId')) {
           <small>El grupo de sitios es obligatorio.</small>
         }
@@ -38,12 +28,7 @@
     <div class="grid">
       <label>
         <span>Sitio</span>
-        <select formControlName="siteId" [disabled]="store().isEditing()">
-          <option value="">Selecciona un sitio</option>
-          @for (option of store().siteOptions(); track option.id) {
-            <option [value]="option.id">{{ option.label }}</option>
-          }
-        </select>
+        <p-select formControlName="siteId" [options]="store().siteOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un sitio" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" [disabled]="!store().form.controls.siteGroupId.value" />
         @if (store().isInvalid('siteId')) {
           <small>El sitio es obligatorio.</small>
         }

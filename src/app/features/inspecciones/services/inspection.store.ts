@@ -58,10 +58,10 @@ export class InspectionStore {
     }).subscribe({
       next: ({ inspections, references }) => {
         this.inspections.set(inspections);
-        this.clients.set(references.clients.map((item) => this.service.clientToOption(item)).filter((item) => item.status === 'Activo'));
-        this.siteGroups.set(references.siteGroups.map((item) => this.service.siteGroupToOption(item)).filter((item) => item.status === 'Activo'));
-        this.sites.set(references.sites.map((item) => this.service.siteToOption(item)).filter((item) => item.status === 'Activo'));
-        this.statuses.set(references.statuses.map((item) => this.service.toOption(item)).filter((item) => item.status === 'Activo'));
+        this.clients.set(this.sortOptions(references.clients.map((item) => this.service.clientToOption(item)).filter((item) => item.status === 'Activo')));
+        this.siteGroups.set(this.sortOptions(references.siteGroups.map((item) => this.service.siteGroupToOption(item)).filter((item) => item.status === 'Activo')));
+        this.sites.set(this.sortOptions(references.sites.map((item) => this.service.siteToOption(item)).filter((item) => item.status === 'Activo')));
+        this.statuses.set(this.sortOptions(references.statuses.map((item) => this.service.toOption(item)).filter((item) => item.status === 'Activo')));
         this.loading.set(false);
       },
       error: (error: HttpErrorResponse) => {
@@ -401,6 +401,10 @@ export class InspectionStore {
 
   private buildExportFileName(inspection: InspectionSummary): string {
     return `ETIC_${inspection.inspectionNumber ?? '0'}_${this.slug(inspection.clientName)}_${this.slug(inspection.siteName)}.zip`;
+  }
+
+  private sortOptions(options: CatalogOption[]): CatalogOption[] {
+    return [...options].sort((first, second) => first.label.localeCompare(second.label, 'es', { sensitivity: 'base' }));
   }
 
   private showExportProcessingAlert(inspection: InspectionSummary): void {
