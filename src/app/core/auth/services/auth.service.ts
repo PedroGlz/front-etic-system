@@ -15,7 +15,7 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<AuthenticatedUser> {
     return this.authApi.login(request).pipe(map((response) => {
-      if (response.user.system !== 'ETIC_ONLINE' || !response.user.roles.length) throw new Error('Acceso ETIC_ONLINE requerido');
+      if (response.user.system !== 'ETIC_ONLINE') throw new Error('Acceso ETIC_ONLINE requerido');
       localStorage.setItem(TOKEN_STORAGE_KEY, response.token);
       return this.normalize(response.user);
     }), tap((user) => this.storeUser(user)));
@@ -43,7 +43,7 @@ export class AuthService {
   isAdministrator(): boolean { return this.isAuthenticated(); }
 
   private normalize(user: Omit<AuthenticatedUser, 'name'>): AuthenticatedUser {
-    return { ...user, name: [user.firstName, user.lastName].filter(Boolean).join(' ') };
+    return { ...user, roles: Array.isArray(user.roles) ? user.roles : [], permissions: Array.isArray(user.permissions) ? user.permissions : [], name: [user.firstName, user.lastName].filter(Boolean).join(' ') };
   }
 
   validateSession(): Observable<AuthenticatedUser> {
@@ -73,8 +73,8 @@ export class AuthService {
 
     try {
       const user = JSON.parse(stored) as AuthenticatedUser;
-      if (user.system !== 'ETIC_ONLINE' || !Array.isArray(user.roles) || !this.token()) throw new Error('Sesión legacy o expirada');
-      return user;
+      if (user.system !== 'ETIC_ONLINE' || !this.token()) throw new Error('Sesión legacy o expirada');
+      return { ...user, roles: Array.isArray(user.roles) ? user.roles : [], permissions: Array.isArray(user.permissions) ? user.permissions : [] };
     } catch {
       localStorage.removeItem(USER_STORAGE_KEY);
       localStorage.removeItem(TOKEN_STORAGE_KEY);
