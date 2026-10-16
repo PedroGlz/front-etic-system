@@ -16,9 +16,15 @@ import { ThemeService } from '@core/services/theme.service';
 })
 export class LoginPageComponent {
   readonly loading = signal(false);
+  readonly passwordChangeRequired = signal(false);
   readonly form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
+  readonly passwordForm = new FormGroup({
+    currentPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    newPassword: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+    confirmation: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   constructor(
@@ -35,8 +41,14 @@ export class LoginPageComponent {
 
     this.loading.set(true);
     this.authService.login(this.form.getRawValue()).subscribe({
-      next: (user) => {
+      next: (result) => {
         this.loading.set(false);
+        if ('passwordChangeRequired' in result) {
+          this.passwordForm.controls.currentPassword.setValue(this.form.controls.password.value);
+          this.passwordChangeRequired.set(true);
+          return;
+        }
+        const user = result;
         void Swal.fire({ icon: 'success', title: `Bienvenido, ${user.name}`, timer: 1400, showConfirmButton: false });
         const target = this.authService.isAdministrator() ? 'clientes' : 'fabricantes';
         void this.router.navigate(['/catalogos', target]);
@@ -45,6 +57,17 @@ export class LoginPageComponent {
         this.loading.set(false);
         void Swal.fire('Acceso denegado', error.error?.detail ?? 'Usuario o contraseña incorrectos', 'error');
       },
+    });
+  }
+
+  changeRequiredPassword(): void {
+    if (this.passwordForm.invalid) { this.passwordForm.markAllAsTouched(); return; }
+    const value = this.passwordForm.getRawValue();
+    if (value.newPassword !== value.confirmation) { void Swal.fire('Revisa las contraseñas', 'La confirmación no coincide.', 'warning'); return; }
+    this.loading.set(true);
+    this.authService.changeRequiredPassword(value.currentPassword, value.newPassword).subscribe({
+      next: () => { this.loading.set(false); this.passwordChangeRequired.set(false); this.form.reset(); this.passwordForm.reset(); void Swal.fire('Contraseña actualizada', 'Inicia sesión con tu nueva contraseña.', 'success'); },
+      error: (error: HttpErrorResponse) => { this.loading.set(false); void Swal.fire('No fue posible actualizarla', error.error?.detail ?? 'Verifica la contraseña temporal y los requisitos.', 'error'); },
     });
   }
 }

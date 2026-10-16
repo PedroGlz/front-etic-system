@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable, tap, map, of } from 'rxjs';
-import { AuthenticatedUser, LoginRequest } from '@core/auth/models/auth.model';
+import { AuthenticatedUser, LoginRequest, LoginResult } from '@core/auth/models/auth.model';
 import { AuthApi } from '@core/auth/data-access/auth.api';
 
 const USER_STORAGE_KEY = 'etic-user';
@@ -13,12 +13,19 @@ export class AuthService {
 
   constructor(private readonly authApi: AuthApi) {}
 
-  login(request: LoginRequest): Observable<AuthenticatedUser> {
+  login(request: LoginRequest): Observable<LoginResult> {
     return this.authApi.login(request).pipe(map((response) => {
       if (response.user.system !== 'ETIC_ONLINE') throw new Error('Acceso ETIC_ONLINE requerido');
       localStorage.setItem(TOKEN_STORAGE_KEY, response.token);
+      if (response.passwordChangeRequired) return { passwordChangeRequired: true as const };
       return this.normalize(response.user);
-    }), tap((user) => this.storeUser(user)));
+    }), tap((result) => { if (!('passwordChangeRequired' in result)) this.storeUser(result); }));
+  }
+
+  changeRequiredPassword(currentPassword: string, newPassword: string): Observable<void> {
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (!token) throw new Error('No existe una credencial temporal vigente.');
+    return this.authApi.changeRequiredPassword(currentPassword, newPassword, token).pipe(tap(() => this.clearUser()));
   }
 
   logout(): Observable<void> {

@@ -22,7 +22,15 @@
     <div class="login-card">
       <div class="login-content">
         <div class="mobile-login-logo"><img src="/img/sistema/ETIC_Logo_Sin_Texto.svg" alt="ETIC"></div>
-        <header class="login-header"><h2>Bienvenido</h2><p>Accede a tu portal corporativo</p></header>
+        <header class="login-header"><h2>{{ passwordChangeRequired() ? 'Crea una nueva contraseña' : 'Bienvenido' }}</h2><p>{{ passwordChangeRequired() ? 'Debes actualizar la contraseña temporal antes de continuar' : 'Accede a tu portal corporativo' }}</p></header>
+        @if (passwordChangeRequired()) {
+        <form [formGroup]="passwordForm" (ngSubmit)="changeRequiredPassword()">
+          <div class="form-group"><label for="currentPassword">Contraseña temporal <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-lock"></i><input pInputText id="currentPassword" type="password" formControlName="currentPassword" autocomplete="current-password"></div></div>
+          <div class="form-group"><label for="newPassword">Nueva contraseña <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-key"></i><input pInputText id="newPassword" type="password" formControlName="newPassword" autocomplete="new-password"></div></div>
+          <div class="form-group"><label for="confirmation">Confirmar contraseña <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-check"></i><input pInputText id="confirmation" type="password" formControlName="confirmation" autocomplete="new-password"></div></div>
+          <p-button type="submit" label="Actualizar contraseña" icon="pi pi-check" [loading]="loading()" />
+        </form>
+        } @else {
         <form [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-group">
             <label for="username">Usuario <strong>*</strong></label>
@@ -37,6 +45,7 @@
           <p-button type="submit" label="Iniciar sesión" icon="pi pi-arrow-right" iconPos="right" [loading]="loading()" />
           <span class="security-note"><i class="pi pi-shield"></i> Acceso exclusivo para personal autorizado</span>
         </form>
+        }
       </div>
       <footer class="login-footer"><span>Versión 1.0</span></footer>
     </div>
