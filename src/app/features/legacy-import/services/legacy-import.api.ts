@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LEGACY_IMPORTS_API_URL } from '@core/config/api-endpoints';
-import { LegacyEtlReport, LegacyImportAnalysis, LegacyImportJobStatus, LegacyImportUploadResponse } from '../models/legacy-import.model';
+import { LegacyEtlReport, LegacyHomologationRequest, LegacyHomologationReview, LegacyImportAnalysis, LegacyImportJobStatus, LegacyImportUploadResponse } from '../models/legacy-import.model';
 
 @Injectable()
 export class LegacyImportApi {
@@ -31,8 +31,13 @@ export class LegacyImportApi {
     return this.http.get<LegacyImportJobStatus | null>(`${LEGACY_IMPORTS_API_URL}/active`, { withCredentials: true });
   }
 
-  execute(id: string): Observable<void> {
-    return this.http.post<void>(`${LEGACY_IMPORTS_API_URL}/${id}/execute`, {}, { withCredentials: true });
+  homologation(id: string, inspectionId?: string): Observable<LegacyHomologationReview> {
+    const params = inspectionId ? { inspectionId } : undefined;
+    return this.http.get<LegacyHomologationReview>(`${LEGACY_IMPORTS_API_URL}/${id}/homologation`, { params, withCredentials: true });
+  }
+
+  execute(id: string, request: LegacyHomologationRequest): Observable<void> {
+    return this.http.post<void>(`${LEGACY_IMPORTS_API_URL}/${id}/execute`, request, { withCredentials: true });
   }
 
   result(id: string): Observable<LegacyEtlReport> {

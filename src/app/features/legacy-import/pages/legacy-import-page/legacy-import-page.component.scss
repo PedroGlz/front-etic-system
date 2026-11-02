@@ -143,6 +143,22 @@ th {
 th:first-child,
 td:first-child { text-align: left; }
 
+.reference-summary,
+.dialog-actions,
+.priority-row { display: flex; align-items: center; gap: 1rem; }
+.reference-summary { justify-content: space-between; padding-bottom: .8rem; border-bottom: 1px solid var(--p-content-border-color); }
+.inspection-selector { display: grid; gap: .35rem; margin-top: 1rem; color: var(--p-text-color); }
+.reference-summary span, dt { color: var(--p-text-muted-color); }
+.comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.comparison-grid section { padding: 1rem; border: 1px solid var(--p-content-border-color); border-radius: 8px; background: var(--p-content-background); }
+.comparison-grid dl { display: grid; gap: .8rem; }
+.comparison-grid dl div { display: grid; gap: .2rem; }
+.comparison-grid dd { margin: 0; overflow-wrap: anywhere; }
+.comparison-grid label { display: grid; gap: .35rem; margin-bottom: .8rem; color: var(--p-text-color); }
+.priority-review { margin-top: 1rem; }
+.priority-row { display: grid; grid-template-columns: 1fr 1fr; margin-top: .7rem; }
+.dialog-actions { justify-content: flex-end; margin-top: 1.2rem; }
+
 @media (max-width: 600px) {
   header { flex-direction: column; }
   .status {
@@ -150,4 +166,5 @@ td:first-child { text-align: left; }
     flex-direction: column;
     gap: .25rem;
   }
+  .comparison-grid, .priority-row { grid-template-columns: 1fr; }
 }

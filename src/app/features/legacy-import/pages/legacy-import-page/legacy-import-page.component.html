@@ -10,3 +10,22 @@
     <p>Problemas destino: <strong>{{ result.targetProblems }}</strong> · Familias crónicas: <strong>{{ result.chronicFamilies }}</strong> · Relaciones históricas: <strong>{{ result.historyRelations }}</strong></p></article> }
   @if (report()) { <button pButton type="button" severity="secondary" icon="pi pi-download" label="Descargar reporte" (click)="downloadReport()"></button> }
 </section>
+
+<p-dialog header="Revisar y homologar inspección histórica" [visible]="homologationVisible()" (visibleChange)="!$event ? homologationVisible.set(false) : null" [modal]="true" [closable]="!busy()" [closeOnEscape]="!busy()" styleClass="homologation-dialog" [style]="{width:'min(96vw,980px)'}">
+  @if (homologation(); as review) {
+    <div class="reference-summary"><strong>Inspección de referencia #{{ review.inspectionNumber }}</strong><span>ID: {{ review.inspectionId }}</span></div>
+    <label class="inspection-selector">Inspección a homologar<p-select [ngModel]="selectedInspectionId()" (ngModelChange)="changeInspection($event)" [options]="inspectionOptions()" optionLabel="label" optionValue="inspectionId" placeholder="Selecciona una inspección" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" /></label>
+    <div class="comparison-grid">
+      <section><h3>Valor original del legado</h3><dl><div><dt>Cliente / razón social</dt><dd>{{ review.customerName }}</dd></div><div><dt>ID cliente preservado</dt><dd>{{ review.customerId }}</dd></div><div><dt>Sitio</dt><dd>{{ review.siteName }}</dd></div><div><dt>ID sitio original</dt><dd>{{ review.siteId }}</dd></div></dl></section>
+      <section><h3>Valor homologado</h3>
+        <label>Usar razón social de cliente activo<p-select [ngModel]="selectedCustomerLegalName()" (ngModelChange)="selectExistingLegalName($event)" [options]="review.customers" optionLabel="label" optionValue="label" placeholder="Selecciona o escribe manualmente" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" /></label>
+        <label>Razón social<input pInputText [ngModel]="legalName()" (ngModelChange)="legalName.set($event)" [fluid]="true" /></label>
+        <label>Grupo de sitios<p-select [ngModel]="siteGroupId()" (ngModelChange)="changeGroup($event)" [options]="groupOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un grupo" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" /></label>
+        <label>Sitio<p-select [ngModel]="siteId()" (ngModelChange)="siteId.set($event)" [options]="siteOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un sitio" [disabled]="!siteGroupId()" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" /></label>
+      </section>
+    </div>
+    @if (review.inactivePriorities.length) { <section class="priority-review"><h3>Prioridades inactivas</h3>@for (priority of review.inactivePriorities; track priority.sourceId) { <div class="priority-row"><span><strong>Original:</strong> {{ priority.sourceLabel }} ({{ priority.sourceId }})</span><p-select [ngModel]="priorityMappings()[priority.sourceId]" (ngModelChange)="setPriority(priority.sourceId, $event)" [options]="review.priorities" optionLabel="label" optionValue="id" placeholder="Prioridad activa sustituta" [fluid]="true" appendTo="body" /></div> }</section> }
+    @if (review.priorityBlockers.length) { <div class="alerts error"><strong>No es posible homologar prioridades de esta inspección</strong><ul>@for (message of review.priorityBlockers; track message) { <li>{{ message }}</li> }</ul></div> }
+    <div class="dialog-actions"><button pButton type="button" severity="secondary" label="Cancelar" [disabled]="busy()" (click)="homologationVisible.set(false)"></button><button pButton type="button" label="Confirmar y transformar" icon="pi pi-database" [disabled]="!canConfirmHomologation()" (click)="confirmHomologation()"></button></div>
+  }
+</p-dialog>

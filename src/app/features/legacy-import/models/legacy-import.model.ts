@@ -48,6 +48,33 @@ export interface LegacyImportJobStatus {
 }
 
 export interface LegacyImportUploadResponse { id: string; status: LegacyImportStatus; }
+export interface LegacyHomologationOption { id: string; label: string; parentId: string | null; }
+export interface LegacyInspectionOption { inspectionId: string; inspectionNumber: number | null; inspectionDate: string | null; customerName: string | null; }
+export interface LegacyInactivePriority { sourceId: string; sourceLabel: string; }
+export interface LegacyHomologationReview {
+  inspectionId: string;
+  inspectionNumber: number | null;
+  automaticInspectionId: string;
+  inspections: LegacyInspectionOption[];
+  customerId: string;
+  customerName: string;
+  siteId: string;
+  siteName: string;
+  inactivePriorities: LegacyInactivePriority[];
+  priorityBlockers: string[];
+  customers: LegacyHomologationOption[];
+  priorities: LegacyHomologationOption[];
+  siteGroups: LegacyHomologationOption[];
+  sites: LegacyHomologationOption[];
+}
+export interface LegacyHomologationRequest {
+  inspectionId: string;
+  legalName: string;
+  siteGroupId: string;
+  siteId: string;
+  automaticSelection: boolean;
+  priorityMappings: Record<string, string>;
+}
 export interface TableReconciliation { table: string; source: number; inserted: number; updated: number; skipped: number; skippedDestinationNewer: number; skippedSameDate: number; skippedNoComparableDate: number; warnings: number; errors: number; orphans: number; }
 export interface LegacyRecordOutcome { table: string; id: string; action: string; reason: string; sourceDate: string | null; destinationDate: string | null; }
 export interface LegacyEtlReport {
