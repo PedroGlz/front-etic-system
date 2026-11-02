@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import Swal from 'sweetalert2';
 import { AuthService } from '@core/auth/services/auth.service';
+import { LoginTransitionService } from '@core/services/login-transition.service';
 import { ThemeService } from '@core/services/theme.service';
 
 @Component({
@@ -30,6 +31,7 @@ export class LoginPageComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
+    readonly loginTransition: LoginTransitionService,
     readonly themeService: ThemeService,
   ) {}
 
@@ -39,11 +41,12 @@ export class LoginPageComponent {
       return;
     }
 
-    this.loading.set(true);
+    if (this.loginTransition.active()) return;
+    this.loginTransition.start();
     this.authService.login(this.form.getRawValue()).subscribe({
       next: (result) => {
-        this.loading.set(false);
         if ('passwordChangeRequired' in result) {
+          this.loginTransition.finish();
           this.passwordForm.controls.currentPassword.setValue(this.form.controls.password.value);
           this.passwordChangeRequired.set(true);
           return;
@@ -51,10 +54,15 @@ export class LoginPageComponent {
         const user = result;
         void Swal.fire({ icon: 'success', title: `Bienvenido, ${user.name}`, timer: 1400, showConfirmButton: false });
         const target = this.authService.isAdministrator() ? 'clientes' : 'fabricantes';
-        void this.router.navigate(['/catalogos', target]);
+        void this.router.navigate(['/catalogos', target]).then((navigated) => {
+          if (!navigated) this.loginTransition.finish();
+        }).catch(() => {
+          this.loginTransition.finish();
+          void Swal.fire('No fue posible ingresar', 'No se pudo abrir la pantalla principal.', 'error');
+        });
       },
       error: (error: HttpErrorResponse) => {
-        this.loading.set(false);
+        this.loginTransition.finish();
         void Swal.fire('Acceso denegado', error.error?.detail ?? 'Usuario o contraseña incorrectos', 'error');
       },
     });

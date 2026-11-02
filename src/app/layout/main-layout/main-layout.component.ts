@@ -1,9 +1,10 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { afterNextRender, Component, HostListener, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '@core/auth/services/auth.service';
 import { ThemeService } from '@core/services/theme.service';
+import { LoginTransitionService } from '@core/services/login-transition.service';
 import { APP_MENU_GROUPS } from '@layout/config/menu.config';
 import { MenuGroup, MenuItem } from '@layout/models/navigation.model';
 
@@ -24,7 +25,10 @@ export class MainLayoutComponent {
     readonly authService: AuthService,
     readonly themeService: ThemeService,
     private readonly router: Router,
-  ) {}
+    private readonly loginTransition: LoginTransitionService,
+  ) {
+    afterNextRender(() => this.loginTransition.finish());
+  }
 
   visibleItems(group: MenuGroup): MenuItem[] {
     const isAdministrator = this.authService.isAdministrator();

@@ -42,7 +42,7 @@
             <div class="input-wrapper"><i class="pi pi-lock" aria-hidden="true"></i><input pInputText id="password" type="password" formControlName="password" autocomplete="current-password" placeholder="Ingresa tu contraseña"></div>
             @if (form.controls.password.touched && form.controls.password.invalid) { <small>La contraseña es obligatoria.</small> }
           </div>
-          <p-button type="submit" label="Iniciar sesión" icon="pi pi-arrow-right" iconPos="right" [loading]="loading()" />
+          <p-button type="submit" label="Iniciar sesión" icon="pi pi-arrow-right" iconPos="right" [disabled]="loginTransition.active()" />
           <span class="security-note"><i class="pi pi-shield"></i> Acceso exclusivo para personal autorizado</span>
         </form>
         }
