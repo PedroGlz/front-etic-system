@@ -38,6 +38,9 @@ header p,
   box-shadow: var(--p-overlay-popover-shadow);
 }
 
+.panel > button { margin-top: .75rem; margin-right: .75rem; }
+.panel > p-progressbar { display: block; margin: .75rem 0 1rem; }
+
 input[type='file'] {
   display: block;
   margin: .8rem 0;
@@ -119,6 +122,7 @@ input[type='file']:disabled::file-selector-button {
 
 .status span { color: var(--p-text-muted-color); }
 .status span:last-child { color: var(--p-text-color); }
+.operation-notice { padding: .65rem; border-radius: 6px; background: color-mix(in srgb, var(--p-primary-color) 10%, var(--p-content-background)); }
 .table-wrap { overflow-x: auto; }
 
 table {
@@ -155,9 +159,17 @@ td:first-child { text-align: left; }
 .comparison-grid dl div { display: grid; gap: .2rem; }
 .comparison-grid dd { margin: 0; overflow-wrap: anywhere; }
 .comparison-grid label { display: grid; gap: .35rem; margin-bottom: .8rem; color: var(--p-text-color); }
+.catalog-choice { display: grid; gap: .65rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--p-content-border-color); }
+.catalog-choice label { margin-bottom: 0; }
+.catalog-choice small, .comparison-grid section > small { color: var(--p-text-muted-color); }
+.catalog-choice p-selectbutton { max-width: 100%; }
 .priority-review { margin-top: 1rem; }
 .priority-row { display: grid; grid-template-columns: 1fr 1fr; margin-top: .7rem; }
-.dialog-actions { justify-content: flex-end; margin-top: 1.2rem; }
+.dialog-actions { justify-content: flex-end; flex-wrap: wrap; margin-top: 1.2rem; }
+.force-global { display: flex; gap: .6rem; margin-top: .8rem; font-weight: 600; }
+.analysis-overlay { position: fixed; inset: 0; z-index: 14000; display: grid; place-items: center; background: rgb(15 23 34 / 68%); }
+.analysis-loader { display: grid; justify-items: center; gap: 1rem; padding: 1.4rem; border-radius: 10px; background: var(--p-content-background); color: var(--p-text-color); }
+.analysis-loader p-progressbar { width: 100%; }
 
 @media (max-width: 600px) {
   header { flex-direction: column; }
@@ -167,4 +179,6 @@ td:first-child { text-align: left; }
     gap: .25rem;
   }
   .comparison-grid, .priority-row { grid-template-columns: 1fr; }
+  .catalog-choice p-selectbutton { font-size: .9rem; }
+  .dialog-actions { align-items: stretch; flex-direction: column-reverse; }
 }
