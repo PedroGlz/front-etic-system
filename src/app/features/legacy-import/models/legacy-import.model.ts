@@ -37,7 +37,9 @@ export interface LegacyImportAnalysis {
   ambientes: number;
   relacionesEquipoFalla: number;
   alerts: LegacyValidationIssue[];
+  inspectionPresence: LegacyInspectionPresence[];
 }
+export interface LegacyInspectionPresence { inspectionId: string; inspectionNumber: number | null; customerName: string | null; siteName: string | null; existing: boolean; }
 
 export interface LegacyImportJobStatus {
   id: string;
@@ -46,10 +48,24 @@ export interface LegacyImportJobStatus {
   progress: number;
   errorMessage: string | null;
 }
+export interface LegacyImportError {
+  processId: string;
+  filename: string | null;
+  inspectionId: string | null;
+  inspectionNumber: number | null;
+  stage: string;
+  status: string;
+  message: string;
+  rootCause: string | null;
+  causes: string[];
+  exceptionType: string | null;
+  technicalDetail: string | null;
+  occurredAt: string | null;
+}
 
 export interface LegacyImportUploadResponse { id: string; status: LegacyImportStatus; }
 export interface LegacyHomologationOption { id: string; label: string; parentId: string | null; clientId?: string | null; defaultValue?: boolean; }
-export interface LegacyInspectionOption { inspectionId: string; inspectionNumber: number | null; inspectionDate: string | null; customerName: string | null; }
+export interface LegacyInspectionOption { inspectionId: string; inspectionNumber: number | null; inspectionDate: string | null; customerName: string | null; siteName: string | null; existing: boolean; }
 export interface LegacyInactivePriority { sourceId: string; sourceLabel: string; missing: boolean; }
 export interface LegacyPriorityImpact {
   locationId: string;
@@ -87,6 +103,7 @@ export interface LegacyHomologationRequest {
   siteId: string | null;
   siteName: string | null;
   automaticSelection: boolean;
+  confirmExistingInspections: boolean;
   priorityMappings: Record<string, string>;
   forceGlobalPriorityUpdate: boolean;
   confirmRelationshipChanges: boolean;

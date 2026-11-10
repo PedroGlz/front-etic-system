@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LEGACY_IMPORTS_API_URL } from '@core/config/api-endpoints';
-import { LegacyEtlReport, LegacyHomologationRequest, LegacyHomologationReview, LegacyImportAnalysis, LegacyImportJobStatus, LegacyImportUploadResponse } from '../models/legacy-import.model';
+import { LegacyEtlReport, LegacyHomologationRequest, LegacyHomologationReview, LegacyImportAnalysis, LegacyImportError, LegacyImportJobStatus, LegacyImportUploadResponse } from '../models/legacy-import.model';
 
 @Injectable()
 export class LegacyImportApi {
@@ -46,5 +46,13 @@ export class LegacyImportApi {
 
   markdown(id: string): Observable<Blob> {
     return this.http.get(`${LEGACY_IMPORTS_API_URL}/${id}/report.md`, { responseType: 'blob', withCredentials: true });
+  }
+
+  error(id: string): Observable<LegacyImportError> {
+    return this.http.get<LegacyImportError>(`${LEGACY_IMPORTS_API_URL}/${id}/error`, { withCredentials: true });
+  }
+
+  errorReport(id: string): Observable<Blob> {
+    return this.http.get(`${LEGACY_IMPORTS_API_URL}/${id}/error.txt`, { responseType: 'blob', withCredentials: true });
   }
 }
