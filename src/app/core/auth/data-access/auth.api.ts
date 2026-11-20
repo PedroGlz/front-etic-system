@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { API_BASE_URL } from '@core/config/api-endpoints';
 import { AuthenticatedUser, LoginRequest, LoginResponse } from '@core/auth/models/auth.model';
 import { environment } from '../../../../environments/environment';
+export interface PasswordResetResult { status: 'ACCEPTED' | 'RATE_LIMITED' | 'PROCESSING_FAILED'; message: string; retryAfterSeconds: number }
 
 @Injectable({ providedIn: 'root' })
 export class AuthApi {
@@ -18,8 +19,8 @@ export class AuthApi {
     return this.http.put<void>(`${environment.authApiBaseUrl}/auth/required-password`, { currentPassword, newPassword }, { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) });
   }
 
-  requestPasswordReset(identifier: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${environment.authApiBaseUrl}/auth/password-reset-requests`, { identifier, system: 'ETIC_ONLINE' });
+  requestPasswordReset(identifier: string): Observable<PasswordResetResult> {
+    return this.http.post<PasswordResetResult>(`${environment.authApiBaseUrl}/auth/password-reset-requests`, { identifier, system: 'ETIC_ONLINE' });
   }
 
   currentUser(): Observable<AuthenticatedUser> {

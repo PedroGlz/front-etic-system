@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable, tap, map, of } from 'rxjs';
 import { AuthenticatedUser, LoginRequest, LoginResult } from '@core/auth/models/auth.model';
-import { AuthApi } from '@core/auth/data-access/auth.api';
+import { AuthApi, PasswordResetResult } from '@core/auth/data-access/auth.api';
 
 const USER_STORAGE_KEY = 'etic-user';
 const TOKEN_STORAGE_KEY = 'etic-web-jwt';
@@ -28,7 +28,7 @@ export class AuthService {
     return this.authApi.changeRequiredPassword(currentPassword, newPassword, token).pipe(tap(() => this.clearUser()));
   }
 
-  requestPasswordReset(identifier: string): Observable<{ message: string }> {
+  requestPasswordReset(identifier: string): Observable<PasswordResetResult> {
     return this.authApi.requestPasswordReset(identifier);
   }
 

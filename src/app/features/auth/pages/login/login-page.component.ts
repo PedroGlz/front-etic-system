@@ -92,8 +92,9 @@ export class LoginPageComponent {
     if (this.recoveryForm.invalid || this.loading()) { this.recoveryForm.markAllAsTouched(); return; }
     this.loading.set(true);
     this.authService.requestPasswordReset(this.recoveryForm.controls.identifier.value.trim()).subscribe({
-      next: (result) => { this.loading.set(false); this.recovery.set(false); this.recoveryForm.reset(); void Swal.fire('Solicitud procesada', result.message, 'success'); },
-      error: () => { this.loading.set(false); this.recovery.set(false); this.recoveryForm.reset(); void Swal.fire('Solicitud procesada', 'Si los datos corresponden a una cuenta registrada, recibirás una contraseña temporal en el correo configurado.', 'success'); },
+      next: (result) => { this.loading.set(false); if(result.status==='ACCEPTED'){this.recovery.set(false);this.recoveryForm.reset();void Swal.fire('Solicitud recibida',result.message,'success');}else if(result.status==='RATE_LIMITED')void Swal.fire('Espera antes de reintentar',`${result.message} ${this.waitText(result.retryAfterSeconds)}`,'warning');else void Swal.fire('No se pudo completar la solicitud',result.message,'error'); },
+      error: (error: HttpErrorResponse) => { this.loading.set(false); void Swal.fire('No se pudo completar la solicitud',error.error?.detail ?? error.error?.message ?? 'Reintenta más tarde o contacta a soporte.','error'); },
     });
   }
+  private waitText(seconds:number):string{const value=Math.max(1,Math.ceil(seconds));return value>=60?`Intenta nuevamente en ${Math.ceil(value/60)} min.`:`Intenta nuevamente en ${value} s.`;}
 }
