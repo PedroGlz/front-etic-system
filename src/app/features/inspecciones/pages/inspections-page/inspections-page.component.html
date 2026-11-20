@@ -48,8 +48,8 @@
         <td><div class="table-cell-text">{{ inspection.clientName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteGroupName ?? '—' }}</div></td>
         <td><div class="table-cell-text">{{ inspection.siteName ?? '—' }}</div></td>
-        <td><div class="table-cell-text">{{ inspection.startDate ? (inspection.startDate | date:'dd/MM/yyyy') : '—' }}</div></td>
-        <td><div class="table-cell-text">{{ inspection.endDate ? (inspection.endDate | date:'dd/MM/yyyy') : '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.startDate ? (inspection.startDate | calendarDate) : '—' }}</div></td>
+        <td><div class="table-cell-text">{{ inspection.endDate ? (inspection.endDate | calendarDate) : '—' }}</div></td>
         <td>
           <p-tag [value]="inspection.statusName ?? 'Sin estatus'" [severity]="statusSeverity(inspection.statusName)" />
         </td>

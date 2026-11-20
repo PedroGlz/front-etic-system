@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,10 +11,11 @@ import { InspectionStore } from '@features/inspecciones/services/inspection.stor
 import { InspectionSummary } from '@features/inspecciones/models/inspection.model';
 import { ModuleTableShellComponent } from '@shared/components/module-table-shell/module-table-shell.component';
 import { CatalogColumnFilterInteractionDirective } from '@features/catalogs/public-api';
+import { CalendarDatePipe } from '@shared/calendar-date.pipe';
 
 @Component({
   selector: 'app-inspections-page',
-  imports: [DatePipe, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, InspectionFormDialogComponent, CatalogColumnFilterInteractionDirective],
+  imports: [CalendarDatePipe, ButtonModule, DialogModule, InputTextModule, TableModule, TagModule, ModuleTableShellComponent, InspectionFormDialogComponent, CatalogColumnFilterInteractionDirective],
   templateUrl: './inspections-page.component.html',
   styleUrl: './inspections-page.component.scss',
   providers: [InspectionApi, InspectionService, InspectionStore],

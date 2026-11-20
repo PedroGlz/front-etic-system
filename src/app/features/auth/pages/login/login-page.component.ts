@@ -18,6 +18,7 @@ import { ThemeService } from '@core/services/theme.service';
 export class LoginPageComponent {
   readonly loading = signal(false);
   readonly passwordChangeRequired = signal(false);
+  readonly recovery = signal(false);
   readonly form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -26,6 +27,9 @@ export class LoginPageComponent {
     currentPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     newPassword: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
     confirmation: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
+  readonly recoveryForm = new FormGroup({
+    identifier: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   constructor(
@@ -76,6 +80,20 @@ export class LoginPageComponent {
     this.authService.changeRequiredPassword(value.currentPassword, value.newPassword).subscribe({
       next: () => { this.loading.set(false); this.passwordChangeRequired.set(false); this.form.reset(); this.passwordForm.reset(); void Swal.fire('Contraseña actualizada', 'Inicia sesión con tu nueva contraseña.', 'success'); },
       error: (error: HttpErrorResponse) => { this.loading.set(false); void Swal.fire('No fue posible actualizarla', error.error?.detail ?? 'Verifica la contraseña temporal y los requisitos.', 'error'); },
+    });
+  }
+
+  openRecovery(): void {
+    this.recoveryForm.controls.identifier.setValue(this.form.controls.username.value);
+    this.recovery.set(true);
+  }
+
+  requestPasswordReset(): void {
+    if (this.recoveryForm.invalid || this.loading()) { this.recoveryForm.markAllAsTouched(); return; }
+    this.loading.set(true);
+    this.authService.requestPasswordReset(this.recoveryForm.controls.identifier.value.trim()).subscribe({
+      next: (result) => { this.loading.set(false); this.recovery.set(false); this.recoveryForm.reset(); void Swal.fire('Solicitud procesada', result.message, 'success'); },
+      error: () => { this.loading.set(false); this.recovery.set(false); this.recoveryForm.reset(); void Swal.fire('Solicitud procesada', 'Si los datos corresponden a una cuenta registrada, recibirás una contraseña temporal en el correo configurado.', 'success'); },
     });
   }
 }

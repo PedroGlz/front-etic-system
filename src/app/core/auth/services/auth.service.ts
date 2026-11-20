@@ -28,6 +28,10 @@ export class AuthService {
     return this.authApi.changeRequiredPassword(currentPassword, newPassword, token).pipe(tap(() => this.clearUser()));
   }
 
+  requestPasswordReset(identifier: string): Observable<{ message: string }> {
+    return this.authApi.requestPasswordReset(identifier);
+  }
+
   logout(): Observable<void> {
     this.clearUser();
     return of(void 0);

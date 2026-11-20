@@ -18,6 +18,10 @@ export class AuthApi {
     return this.http.put<void>(`${environment.authApiBaseUrl}/auth/required-password`, { currentPassword, newPassword }, { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) });
   }
 
+  requestPasswordReset(identifier: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${environment.authApiBaseUrl}/auth/password-reset-requests`, { identifier, system: 'ETIC_ONLINE' });
+  }
+
   currentUser(): Observable<AuthenticatedUser> {
     return this.http.get<AuthenticatedUser>(`${API_BASE_URL}/web/me`, { withCredentials: true });
   }

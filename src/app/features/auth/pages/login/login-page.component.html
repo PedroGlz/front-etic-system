@@ -22,13 +22,19 @@
     <div class="login-card">
       <div class="login-content">
         <div class="mobile-login-logo"><img src="/img/sistema/ETIC_Logo_Sin_Texto.svg" alt="ETIC"></div>
-        <header class="login-header"><h2>{{ passwordChangeRequired() ? 'Crea una nueva contraseña' : 'Bienvenido' }}</h2><p>{{ passwordChangeRequired() ? 'Debes actualizar la contraseña temporal antes de continuar' : 'Accede a tu portal corporativo' }}</p></header>
+        <header class="login-header"><h2>{{ passwordChangeRequired() ? 'Crea una nueva contraseña' : recovery() ? 'Recuperar contraseña' : 'Bienvenido' }}</h2><p>{{ passwordChangeRequired() ? 'Debes actualizar la contraseña temporal antes de continuar' : recovery() ? 'Recibirás una contraseña temporal si tu cuenta tiene acceso a ETIC Online' : 'Accede a tu portal corporativo' }}</p></header>
         @if (passwordChangeRequired()) {
         <form [formGroup]="passwordForm" (ngSubmit)="changeRequiredPassword()">
           <div class="form-group"><label for="currentPassword">Contraseña temporal <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-lock"></i><input pInputText id="currentPassword" type="password" formControlName="currentPassword" autocomplete="current-password"></div></div>
           <div class="form-group"><label for="newPassword">Nueva contraseña <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-key"></i><input pInputText id="newPassword" type="password" formControlName="newPassword" autocomplete="new-password"></div></div>
           <div class="form-group"><label for="confirmation">Confirmar contraseña <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-check"></i><input pInputText id="confirmation" type="password" formControlName="confirmation" autocomplete="new-password"></div></div>
           <p-button type="submit" label="Actualizar contraseña" icon="pi pi-check" [loading]="loading()" />
+        </form>
+        } @else if (recovery()) {
+        <form [formGroup]="recoveryForm" (ngSubmit)="requestPasswordReset()">
+          <div class="form-group"><label for="recoveryIdentifier">Usuario o correo <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-envelope" aria-hidden="true"></i><input pInputText id="recoveryIdentifier" formControlName="identifier" autocomplete="username" [attr.aria-invalid]="recoveryForm.controls.identifier.touched && recoveryForm.controls.identifier.invalid" placeholder="Ingresa tu usuario o correo"></div>@if (recoveryForm.controls.identifier.touched && recoveryForm.controls.identifier.invalid) { <small>El usuario o correo es obligatorio.</small> }</div>
+          <p-button type="submit" label="Enviar contraseña temporal" icon="pi pi-send" [loading]="loading()" [disabled]="loading()" />
+          <p-button type="button" label="Volver al inicio de sesión" [text]="true" severity="secondary" (onClick)="recovery.set(false)" />
         </form>
         } @else {
         <form [formGroup]="form" (ngSubmit)="submit()">
@@ -43,6 +49,7 @@
             @if (form.controls.password.touched && form.controls.password.invalid) { <small>La contraseña es obligatoria.</small> }
           </div>
           <p-button type="submit" label="Iniciar sesión" icon="pi pi-arrow-right" iconPos="right" [disabled]="loginTransition.active()" />
+          <p-button type="button" label="¿Olvidaste tu contraseña?" [text]="true" severity="secondary" (onClick)="openRecovery()" />
           <span class="security-note"><i class="pi pi-shield"></i> Acceso exclusivo para personal autorizado</span>
         </form>
         }
