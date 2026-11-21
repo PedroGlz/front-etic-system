@@ -28,7 +28,7 @@
     <div class="grid">
       <label>
         <span>Sitio</span>
-        <p-select formControlName="siteId" [options]="store().siteOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un sitio" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" [disabled]="!store().form.controls.siteGroupId.value" />
+        <p-select formControlName="siteId" [options]="store().siteOptions()" optionLabel="label" optionValue="id" placeholder="Selecciona un sitio" [filter]="true" filterBy="label" [fluid]="true" appendTo="body" [disabled]="!store().form.controls.siteGroupId.value" (onChange)="store().onSiteChange()" />
         @if (store().isInvalid('siteId')) {
           <small>El sitio es obligatorio.</small>
         }
@@ -43,6 +43,33 @@
         </select>
       </label> -->
     </div>
+
+    @if (!store().isEditing() && store().form.controls.siteId.value) {
+      <section class="previous-inspection" aria-live="polite">
+        <div class="previous-inspection__heading">
+          <i class="pi pi-history" aria-hidden="true"></i>
+          <div>
+            <strong>Inspección anterior del sitio</strong>
+            <span>Referencia informativa; estos datos no se copiarán.</span>
+          </div>
+        </div>
+
+        @if (store().loadingPreviousInspection()) {
+          <div class="previous-inspection__state"><i class="pi pi-spin pi-spinner"></i> Consultando historial…</div>
+        } @else if (store().previousInspectionError()) {
+          <div class="previous-inspection__state previous-inspection__state--error">No fue posible consultar la inspección anterior.</div>
+        } @else if (store().previousInspection(); as previous) {
+          <dl class="previous-inspection__data">
+            <div><dt>Folio</dt><dd>#{{ previous.inspectionNumber }}</dd></div>
+            <div><dt>Inicio</dt><dd>{{ previous.startDate ? (previous.startDate | date:'dd/MM/yyyy') : '—' }}</dd></div>
+            <div><dt>Cierre</dt><dd>{{ previous.endDate ? (previous.endDate | date:'dd/MM/yyyy') : '—' }}</dd></div>
+            <div><dt>Estatus</dt><dd>{{ previous.statusName || '—' }}</dd></div>
+          </dl>
+        } @else {
+          <div class="previous-inspection__state">Este sitio no tiene inspecciones anteriores.</div>
+        }
+      </section>
+    }
 
     <div class="grid">
       <label>

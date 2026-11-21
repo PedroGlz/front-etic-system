@@ -42,6 +42,9 @@ export class InspectionStore {
   readonly importing = signal(false);
   readonly importingInspection = signal<InspectionSummary | null>(null);
   readonly editingInspection = signal<InspectionSummary | null>(null);
+  readonly previousInspection = signal<InspectionSummary | null>(null);
+  readonly loadingPreviousInspection = signal(false);
+  readonly previousInspectionError = signal(false);
 
   form: InspectionFormGroup = this.createForm();
 
@@ -86,6 +89,7 @@ export class InspectionStore {
       startDate: new Date(),
       endDate: '',
     });
+    this.clearPreviousInspection();
     this.dialogVisible.set(true);
   }
 
@@ -359,10 +363,44 @@ export class InspectionStore {
   onClientChange(): void {
     this.form.controls.siteGroupId.setValue('');
     this.form.controls.siteId.setValue('');
+    this.clearPreviousInspection();
   }
 
   onSiteGroupChange(): void {
     this.form.controls.siteId.setValue('');
+    this.clearPreviousInspection();
+  }
+
+  onSiteChange(): void {
+    const siteId = this.form.controls.siteId.value;
+    this.clearPreviousInspection();
+    if (!siteId || this.editingInspection()) {
+      return;
+    }
+
+    this.loadingPreviousInspection.set(true);
+    this.service.previousBySite(siteId).subscribe({
+      next: (inspection) => {
+        if (this.form.controls.siteId.value !== siteId) {
+          return;
+        }
+        this.previousInspection.set(inspection);
+        this.loadingPreviousInspection.set(false);
+      },
+      error: () => {
+        if (this.form.controls.siteId.value !== siteId) {
+          return;
+        }
+        this.loadingPreviousInspection.set(false);
+        this.previousInspectionError.set(true);
+      },
+    });
+  }
+
+  private clearPreviousInspection(): void {
+    this.previousInspection.set(null);
+    this.loadingPreviousInspection.set(false);
+    this.previousInspectionError.set(false);
   }
 
   isInvalid(controlName: keyof InspectionFormGroup['controls']): boolean {

@@ -25,6 +25,10 @@ export class InspectionService {
     return this.api.create(payload);
   }
 
+  previousBySite(siteId: string): Observable<InspectionSummary | null> {
+    return this.api.previousBySite(siteId);
+  }
+
   update(id: string, payload: InspectionUpsertRequest): Observable<InspectionSummary> {
     return this.api.update(id, payload);
   }

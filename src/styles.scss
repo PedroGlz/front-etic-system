@@ -31,6 +31,18 @@
   --brand-border-default: #cbd5df;
   --brand-border-hover: #91b4c6;
   --brand-border-focus: #1753e7;
+  --status-success-bg: #e8f7ef;
+  --status-success-text: #087443;
+  --status-success-border: #a8ddc2;
+  --status-info-bg: #eaf1ff;
+  --status-info-text: #174ea6;
+  --status-info-border: #b7cdf7;
+  --status-warning-bg: #fff7e6;
+  --status-warning-text: #7a4a00;
+  --status-warning-border: #efd18b;
+  --status-danger-bg: #fff0ee;
+  --status-danger-text: #b42318;
+  --status-danger-border: #efb7b1;
 }
 
 html.app-dark {
@@ -39,6 +51,25 @@ html.app-dark {
   --brand-primary-active: #bfdbfe;
   --brand-primary-focus: rgba(96, 165, 250, 0.25);
   --brand-primary-contrast: #172331;
+  --brand-surface-0: #172331;
+  --brand-text-primary: #dbe7f1;
+  --brand-text-secondary: #9eb0c0;
+  --brand-text-muted: #9eb0c0;
+  --brand-border-default: #415365;
+  --brand-border-hover: #5c7185;
+  --brand-border-focus: #60a5fa;
+  --status-success-bg: #15392b;
+  --status-success-text: #79d6ad;
+  --status-success-border: #286246;
+  --status-info-bg: #1d334d;
+  --status-info-text: #a9d1ff;
+  --status-info-border: #365777;
+  --status-warning-bg: #3b2f18;
+  --status-warning-text: #ffd18a;
+  --status-warning-border: #69542a;
+  --status-danger-bg: #442422;
+  --status-danger-text: #ffb4aa;
+  --status-danger-border: #75403c;
 }
 
 * { box-sizing: border-box; }
@@ -59,6 +90,11 @@ button, input, textarea, select { font: inherit; }
 .app-data-table .p-datatable-tbody > tr > td {
   vertical-align: middle;
 }
+.app-data-table .p-datatable-tbody > tr.p-highlight > td { background: var(--brand-primary-50) !important; color: var(--brand-text-primary) !important; }
+.app-data-table td .actions, .app-data-table .table-cell-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .5rem; }
+.app-data-table .p-paginator { display: flex; flex-wrap: wrap; gap: .25rem; border-top: 1px solid var(--brand-border-default); }
+.app-data-table .p-paginator button:not(:disabled):hover { background: var(--brand-surface-100); }
+.app-data-table .p-paginator button.p-paginator-page-selected { background: var(--brand-primary-50); color: var(--brand-primary); }
 
 .app-data-table .selection-column {
   width: 3.25rem;
@@ -207,6 +243,8 @@ html.app-dark .p-datatable-tbody > tr:hover > td {
   background: #203449 !important;
   color: #f1f7fb !important;
 }
+html.app-dark .app-data-table .p-datatable-tbody > tr.p-highlight > td { background: #203449 !important; color: #f1f7fb !important; }
+html.app-dark .app-data-table .p-paginator button:not(:disabled):hover { background: #203449; }
 
 html.app-dark .p-paginator {
   border-top-color: #2a3b4c !important;

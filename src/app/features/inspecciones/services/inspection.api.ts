@@ -25,6 +25,11 @@ export class InspectionApi {
     return this.http.post<InspectionSummary>(INSPECTIONS_API_URL, payload, { withCredentials: true });
   }
 
+  previousBySite(siteId: string): Observable<InspectionSummary | null> {
+    const params = new HttpParams().set('siteId', siteId);
+    return this.http.get<InspectionSummary | null>(`${INSPECTIONS_API_URL}/anterior`, { params, withCredentials: true });
+  }
+
   update(id: string, payload: InspectionUpsertRequest): Observable<InspectionSummary> {
     return this.http.put<InspectionSummary>(`${INSPECTIONS_API_URL}/${id}`, payload, { withCredentials: true });
   }

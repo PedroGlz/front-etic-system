@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -8,7 +9,7 @@ import { InspectionStore } from '@features/inspecciones/services/inspection.stor
 
 @Component({
   selector: 'app-inspection-form-dialog',
-  imports: [ReactiveFormsModule, DialogModule, ButtonModule, DatePickerModule, SelectModule],
+  imports: [DatePipe, ReactiveFormsModule, DialogModule, ButtonModule, DatePickerModule, SelectModule],
   templateUrl: './inspection-form-dialog.component.html',
   styleUrl: './inspection-form-dialog.component.scss',
 })

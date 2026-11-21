@@ -45,6 +45,64 @@ small {
   gap: .75rem;
 }
 
+.previous-inspection {
+  display: grid;
+  gap: .85rem;
+  padding: 1rem;
+  border: 1px solid var(--p-content-border-color, #cbd5e1);
+  border-radius: .85rem;
+  background: var(--p-content-background, #fff);
+  color: var(--p-text-color, #20384e);
+}
+
+.previous-inspection__heading {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+}
+
+.previous-inspection__heading > i {
+  margin-top: .15rem;
+  color: var(--p-primary-color, #2563eb);
+}
+
+.previous-inspection__heading div {
+  display: grid;
+  gap: .2rem;
+}
+
+.previous-inspection__heading span,
+.previous-inspection__state {
+  color: var(--p-text-muted-color, #64748b);
+  font-size: .85rem;
+}
+
+.previous-inspection__state--error {
+  color: var(--p-red-500, #b42318);
+}
+
+.previous-inspection__data {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 0;
+}
+
+.previous-inspection__data div {
+  display: grid;
+  gap: .2rem;
+}
+
+.previous-inspection__data dt {
+  color: var(--p-text-muted-color, #64748b);
+  font-size: .75rem;
+}
+
+.previous-inspection__data dd {
+  margin: 0;
+  font-weight: 700;
+}
+
 :host-context(.app-dark) label {
   color: #dbe7f1;
 }
@@ -59,5 +117,9 @@ small {
 @media (max-width: 760px) {
   .two-columns {
     grid-template-columns: 1fr;
+  }
+
+  .previous-inspection__data {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
