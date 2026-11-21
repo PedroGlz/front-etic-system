@@ -16,6 +16,8 @@ import { ThemeService } from '@core/services/theme.service';
   styleUrls: ['./login-page.component.scss', './login-brand.component.scss', './login-background.component.scss'],
 })
 export class LoginPageComponent {
+  private static readonly RECOVERY_ACCEPTED_MESSAGE = 'Recibimos tu solicitud para procesamiento. Revisa el correo asociado a la cuenta. El mensaje puede tardar unos minutos en llegar.';
+  private static readonly RECOVERY_COOLDOWN_MESSAGE = 'Ya recibimos una solicitud de restablecimiento recientemente. Espera 15 minutos antes de volver a intentarlo. Revisa el correo asociado a la cuenta.';
   readonly loading = signal(false);
   readonly passwordChangeRequired = signal(false);
   readonly recovery = signal(false);
@@ -95,9 +97,31 @@ export class LoginPageComponent {
     if (this.recoveryForm.invalid || this.loading()) { this.recoveryForm.markAllAsTouched(); return; }
     this.loading.set(true);
     this.authService.requestPasswordReset(this.recoveryForm.controls.identifier.value.trim()).subscribe({
-      next: (result) => { this.loading.set(false); if(result.status==='ACCEPTED'){this.recovery.set(false);this.recoveryForm.reset();this.noticeType.set('info');this.notice.set(result.message);}else if(result.status==='RATE_LIMITED'){this.noticeType.set('warning');this.notice.set(`${result.message} ${this.waitText(result.retryAfterSeconds)}`);}else{this.noticeType.set('error');this.notice.set(result.message);} },
-      error: (error: HttpErrorResponse) => { this.loading.set(false);this.noticeType.set('error');this.notice.set(error.error?.detail ?? error.error?.message ?? 'No fue posible procesar la solicitud. Intenta nuevamente más tarde.'); },
+      next: (result) => {
+        this.loading.set(false);
+        if (result.status === 'ACCEPTED') {
+          this.recovery.set(false);
+          this.recoveryForm.reset();
+          this.noticeType.set('info');
+          this.notice.set(LoginPageComponent.RECOVERY_ACCEPTED_MESSAGE);
+        } else if (result.status === 'RATE_LIMITED') {
+          this.noticeType.set('warning');
+          this.notice.set(LoginPageComponent.RECOVERY_COOLDOWN_MESSAGE);
+        } else {
+          this.noticeType.set('error');
+          this.notice.set(result.message || 'No fue posible procesar la solicitud. Intenta nuevamente más tarde.');
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loading.set(false);
+        if (error.status === 429) {
+          this.noticeType.set('warning');
+          this.notice.set(LoginPageComponent.RECOVERY_COOLDOWN_MESSAGE);
+          return;
+        }
+        this.noticeType.set('error');
+        this.notice.set(error.error?.detail ?? error.error?.message ?? 'No fue posible procesar la solicitud. Intenta nuevamente más tarde.');
+      },
     });
   }
-  private waitText(seconds:number):string{const value=Math.max(1,Math.ceil(seconds));return value>=60?`Intenta nuevamente en ${Math.ceil(value/60)} min.`:`Intenta nuevamente en ${value} s.`;}
 }

@@ -45,6 +45,7 @@ export class InspectionStore {
   readonly previousInspection = signal<InspectionSummary | null>(null);
   readonly loadingPreviousInspection = signal(false);
   readonly previousInspectionError = signal(false);
+  readonly previousInspectionErrorMessage = signal('');
 
   form: InspectionFormGroup = this.createForm();
 
@@ -387,12 +388,19 @@ export class InspectionStore {
         this.previousInspection.set(inspection);
         this.loadingPreviousInspection.set(false);
       },
-      error: () => {
+      error: (error: HttpErrorResponse) => {
         if (this.form.controls.siteId.value !== siteId) {
           return;
         }
         this.loadingPreviousInspection.set(false);
         this.previousInspectionError.set(true);
+        this.previousInspectionErrorMessage.set(this.previousInspectionLookupError(error));
+        console.error('No fue posible consultar la inspección anterior', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          backendMessage: error.error?.detail ?? error.error?.message ?? null,
+        });
       },
     });
   }
@@ -401,6 +409,26 @@ export class InspectionStore {
     this.previousInspection.set(null);
     this.loadingPreviousInspection.set(false);
     this.previousInspectionError.set(false);
+    this.previousInspectionErrorMessage.set('');
+  }
+
+  private previousInspectionLookupError(error: HttpErrorResponse): string {
+    if (error.status === 0) {
+      return 'No fue posible conectar con el servidor para consultar el historial del sitio.';
+    }
+    if (error.status === 401) {
+      return 'La sesión expiró. Inicia sesión nuevamente para consultar el historial.';
+    }
+    if (error.status === 403) {
+      return 'No tienes permiso para consultar el historial de este sitio.';
+    }
+    if (error.status === 404) {
+      return 'El servicio de historial de inspecciones no está disponible.';
+    }
+    if (error.status === 503) {
+      return 'La base de datos no está disponible. Intenta nuevamente más tarde.';
+    }
+    return 'No fue posible consultar la inspección anterior. Intenta nuevamente.';
   }
 
   isInvalid(controlName: keyof InspectionFormGroup['controls']): boolean {

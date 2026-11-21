@@ -34,7 +34,7 @@
         } @else if (recovery()) {
         <form [formGroup]="recoveryForm" (ngSubmit)="requestPasswordReset()">
           <div class="form-group"><label for="recoveryIdentifier">Usuario o correo <strong>*</strong></label><div class="input-wrapper"><i class="pi pi-envelope" aria-hidden="true"></i><input pInputText id="recoveryIdentifier" formControlName="identifier" autocomplete="username" [attr.aria-invalid]="recoveryForm.controls.identifier.touched && recoveryForm.controls.identifier.invalid" placeholder="Ingresa tu usuario o correo"></div>@if (recoveryForm.controls.identifier.touched && recoveryForm.controls.identifier.invalid) { <small>El usuario o correo es obligatorio.</small> }<p class="cooldown-note">Por seguridad, solo se procesa una recuperación cada 15 minutos entre los portales. Si ya la solicitaste, revisa el primer correo o vuelve a intentarlo después.</p></div>
-          <p-button type="submit" label="Enviar contraseña temporal" icon="pi pi-send" [loading]="loading()" [disabled]="loading()" />
+          <p-button type="submit" label="Recuperar contraseña" icon="pi pi-key" [loading]="loading()" [disabled]="loading()" />
           <p-button type="button" label="Volver al inicio de sesión" [text]="true" severity="secondary" (onClick)="recovery.set(false)" />
         </form>
         } @else {

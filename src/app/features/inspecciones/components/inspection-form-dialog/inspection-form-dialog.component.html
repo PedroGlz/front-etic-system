@@ -55,9 +55,9 @@
         </div>
 
         @if (store().loadingPreviousInspection()) {
-          <div class="previous-inspection__state"><i class="pi pi-spin pi-spinner"></i> Consultando historial…</div>
+          <div class="previous-inspection__state"><i class="pi pi-spin pi-spinner"></i> Consultando inspección anterior…</div>
         } @else if (store().previousInspectionError()) {
-          <div class="previous-inspection__state previous-inspection__state--error">No fue posible consultar la inspección anterior.</div>
+          <div class="previous-inspection__state previous-inspection__state--error" role="alert">{{ store().previousInspectionErrorMessage() }}</div>
         } @else if (store().previousInspection(); as previous) {
           <dl class="previous-inspection__data">
             <div><dt>Folio</dt><dd>#{{ previous.inspectionNumber }}</dd></div>
