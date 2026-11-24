@@ -135,6 +135,7 @@
 
   @if (store().dialogVisible()) {
     <p-dialog
+      styleClass="catalog-entity-dialog"
       [header]="store().editingId() ? 'Editar registro' : 'Nuevo registro'"
       [visible]="true"
       (visibleChange)="store().dialogVisible.set($event)"

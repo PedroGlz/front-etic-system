@@ -201,6 +201,56 @@ html:not(.app-dark) .p-inputtext { background: #fff !important; color: #20384e !
   z-index: 1300 !important;
 }
 
+.catalog-entity-dialog .p-dialog-header {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--brand-border-default);
+}
+
+.catalog-entity-dialog .p-dialog-content {
+  max-height: min(72dvh, 680px);
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+  background: var(--brand-surface-0);
+  color: var(--brand-text-primary);
+}
+
+.catalog-entity-dialog label,
+.catalog-entity-dialog .form-field label {
+  color: var(--brand-text-primary);
+}
+
+.catalog-entity-dialog input,
+.catalog-entity-dialog select,
+.catalog-entity-dialog textarea {
+  border-color: var(--brand-border-default);
+  background: var(--brand-surface-0);
+  color: var(--brand-text-primary);
+}
+
+.catalog-entity-dialog input::placeholder,
+.catalog-entity-dialog textarea::placeholder,
+.catalog-entity-dialog .field-help {
+  color: var(--brand-text-muted);
+}
+
+.catalog-entity-dialog small,
+.catalog-entity-dialog .form-field small {
+  color: var(--status-danger-text);
+}
+
+.catalog-entity-dialog .dialog-actions {
+  margin-top: .5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--brand-border-default);
+}
+
+@media (max-width: 650px) {
+  .catalog-entity-dialog .p-dialog-header,
+  .catalog-entity-dialog .p-dialog-content { padding-inline: 1rem; }
+  .catalog-entity-dialog .dialog-actions { align-items: stretch; flex-direction: column-reverse; }
+  .catalog-entity-dialog .dialog-actions .p-button { width: 100%; justify-content: center; }
+}
+
 html.app-dark body { background: #0f1722; color: #dbe7f1; }
 html.app-dark .swal2-popup { background: #172331; color: #e4edf5; }
 html.app-dark .p-dialog,

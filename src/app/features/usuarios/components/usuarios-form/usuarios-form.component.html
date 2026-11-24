@@ -1,4 +1,5 @@
 <p-dialog
+  styleClass="catalog-entity-dialog"
   [header]="store().isEditing() ? 'Editar usuario' : 'Nuevo usuario'"
   [visible]="store().dialogVisible()"
   (visibleChange)="!$event ? store().closeDialog() : null"
