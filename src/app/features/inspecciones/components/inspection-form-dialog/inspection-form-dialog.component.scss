@@ -123,3 +123,12 @@ small {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+:host ::ng-deep .p-dialog { border: 1px solid var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+:host ::ng-deep .p-dialog-header { padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+:host ::ng-deep .p-dialog-content { max-height: min(72dvh, 680px); overflow-y: auto; padding: 1.25rem 1.5rem 1.5rem; background: var(--brand-surface-0); color: var(--brand-text-primary); }
+label { color: var(--brand-text-primary); }
+select, input { border-color: var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+small { color: var(--status-danger-text); }
+.dialog-actions { padding-top: 1rem; border-top: 1px solid var(--brand-border-default); }
+@media (max-width: 650px) { :host ::ng-deep .p-dialog-header, :host ::ng-deep .p-dialog-content { padding-inline: 1rem; } .dialog-actions { align-items: stretch; flex-direction: column-reverse; } }

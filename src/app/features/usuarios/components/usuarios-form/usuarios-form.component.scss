@@ -70,3 +70,13 @@
 :host-context(.app-dark) .field-help {
   color: #9db0c0;
 }
+
+:host ::ng-deep .p-dialog { border: 1px solid var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+:host ::ng-deep .p-dialog-header { padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+:host ::ng-deep .p-dialog-content { max-height: min(72dvh, 680px); overflow-y: auto; padding: 1.25rem 1.5rem 1.5rem; background: var(--brand-surface-0); color: var(--brand-text-primary); }
+.form-field label { color: var(--brand-text-primary); }
+.form-field input, .form-field select { border-color: var(--brand-border-default); background: var(--brand-surface-0); color: var(--brand-text-primary); }
+.form-field input::placeholder, .field-help { color: var(--brand-text-muted); }
+.form-field strong, .form-field small { color: var(--status-danger-text); }
+.dialog-actions { border-top-color: var(--brand-border-default); }
+@media (max-width: 650px) { :host ::ng-deep .p-dialog-header, :host ::ng-deep .p-dialog-content { padding-inline: 1rem; } .dialog-actions { align-items: stretch; flex-direction: column-reverse; } }
